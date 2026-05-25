@@ -20,17 +20,7 @@ const shape = {
 export type TextOptions = Omit<TextMark, 'type'>;
 
 export const Text: MC<TextOptions> = (options) => {
-  const { cartesian = false } = options;
-  if (cartesian) return visualMark as Mark;
-  return ((index, scale, value, coordinate) => {
-    const { x: X, y: Y } = value;
-    const offset = createBandOffset(scale, value, options);
-    const P = Array.from(index, (i) => {
-      const p: Vector2 = [+X[i], +Y[i]];
-      return [coordinate.map(offset(p, i))] as Vector2[];
-    });
-    return [index, P];
-  }) as Mark;
+    throw new Error("STUB");
 };
 
 Text.props = {

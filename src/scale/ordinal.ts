@@ -5,7 +5,7 @@ import { OrdinalScale as OrdinalScaleSpec } from '../spec';
 export type OrdinalOptions = Omit<OrdinalScaleSpec, 'type'>;
 
 export const Ordinal: SC<OrdinalOptions> = (options) => {
-  return new OrdinalScale(options);
+    throw new Error("STUB");
 };
 
 Ordinal.props = {};

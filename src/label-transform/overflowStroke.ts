@@ -25,10 +25,7 @@ function getBoundsWithAnimation(element: DisplayObject) {
   cloneElement.style.visibility = 'hidden';
 
   animations.forEach((animation) => {
-    const keyframes = animation.effect.getKeyframes();
-    if (keyframes && keyframes.length > 0) {
-      cloneElement.attr(keyframes[keyframes.length - 1]);
-    }
+      throw new Error("STUB");
   });
 
   element.parentNode?.appendChild(cloneElement);
@@ -43,27 +40,5 @@ function getBoundsWithAnimation(element: DisplayObject) {
  * More about contract, see https://webaim.org/resources/contrastchecker/
  */
 export const OverflowStroke: LLC<OverflowStrokeOptions> = (options) => {
-  const { palette = ['#000', '#fff'], threshold = 2 } = options;
-
-  return (labels: DisplayObject[]) => {
-    labels.forEach((l) => {
-      const dependentElement = l.attr('dependentElement');
-      const labelFill = l.attributes.fill ?? l.parsedStyle.fill ?? '#fff';
-
-      const textBounds = parseAABB(getBoundsWithAnimation(l));
-      const elementBounds = parseAABB(getBoundsWithAnimation(dependentElement));
-
-      if (isOverflow(textBounds, elementBounds, threshold)) {
-        // Add stroke to make overflowing text more visible.
-        // Use the opposite color from palette for stroke.
-        const strokeColor = mostContrast(parseToRGB(labelFill), palette);
-
-        l.attr('stroke', strokeColor);
-      } else {
-        // Undefined can't set to attrs, have to remove.
-        l.removeAttribute('stroke');
-      }
-    });
-    return labels;
-  };
+    throw new Error("STUB");
 };

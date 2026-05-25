@@ -8,7 +8,7 @@ export type GroupYOptions = Omit<GroupYTransform, 'type'>;
  * The GroupY transform group data by x channel, and aggregate.
  */
 export const GroupY: TC<GroupYOptions> = (options = {}) => {
-  return Group({ ...options, channels: ['y', 'color', 'series'] });
+    throw new Error("STUB");
 };
 
 GroupY.props = {};

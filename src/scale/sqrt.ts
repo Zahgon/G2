@@ -5,7 +5,7 @@ import { ScaleComponent as SC } from '../runtime';
 export type SqrtOptions = Omit<SqrtScaleSpec, 'type'>;
 
 export const Sqrt: SC<SqrtOptions> = (options) => {
-  return new SqrtScale(options);
+    throw new Error("STUB");
 };
 
 Sqrt.props = {};

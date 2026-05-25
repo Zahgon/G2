@@ -5,7 +5,7 @@ import { LogScale as LogScaleSpec } from '../spec';
 export type LogOptions = Omit<LogScaleSpec, 'type'>;
 
 export const Log: SC<LogOptions> = (options) => {
-  return new LogScale(options);
+    throw new Error("STUB");
 };
 
 Log.props = {};

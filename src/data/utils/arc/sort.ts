@@ -1,9 +1,9 @@
 export function weight(a, b) {
-  return b.value - a.value;
+    throw new Error("STUB");
 }
 
 export function frequency(a, b) {
-  return b.frequency - a.frequency;
+    throw new Error("STUB");
 }
 
 export function id(a, b) {
@@ -11,5 +11,5 @@ export function id(a, b) {
 }
 
 export function name(a, b) {
-  return `${a.name}`.localeCompare(`${b.name}`);
+    throw new Error("STUB");
 }

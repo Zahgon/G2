@@ -73,27 +73,7 @@ function getPath(points: Vector2[], coordinate: Coordinate) {
 }
 
 export const Box: SC<BoxOptions> = (options, context) => {
-  const { coordinate, document } = context;
-  return (points, value, defaults) => {
-    const { color, transform } = value;
-    const {
-      color: defaultColor,
-      fill = defaultColor,
-      stroke = defaultColor,
-      ...rest
-    } = defaults;
-
-    const path = getPath(points, coordinate);
-
-    return select(document.createElement('path', {}))
-      .call(applyStyle, rest)
-      .style('d', path.toString())
-      .style('stroke', stroke)
-      .style('fill', color || fill)
-      .style('transform', transform)
-      .call(applyStyle, options)
-      .node();
-  };
+    throw new Error("STUB");
 };
 
 Box.props = {

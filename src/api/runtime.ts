@@ -75,20 +75,7 @@ export class Runtime<Spec extends G2Spec = G2Spec> extends CompositionNode {
   private _compositions: Record<string, new () => Node>;
 
   constructor(options: RuntimeOptions) {
-    const { container, canvas, renderer, plugins, lib, createCanvas, ...rest } =
-      options;
-    super(rest, 'view');
-    this._renderer = renderer || new CanvasRenderer();
-    this._plugins = plugins || [];
-    this._container = normalizeContainer(container);
-    this._emitter = new EventEmitter();
-    this._context = {
-      library: { ...lib, ...library },
-      emitter: this._emitter,
-      canvas,
-      createCanvas,
-    };
-    this._create();
+      throw new Error("STUB");
   }
 
   render(): Promise<Runtime<Spec>> {
@@ -100,32 +87,18 @@ export class Runtime<Spec extends G2Spec = G2Spec> extends CompositionNode {
     // @fixme The cancel render is not marked, which will cause additional rendered event.
     // @ref src/runtime/render.ts
     const finished = new Promise<Runtime<Spec>>((resolve, reject) =>
-      render(
-        this._computedOptions(),
-        this._context,
-        this._createResolve(resolve),
-        this._createReject(reject),
-      ),
+      { throw new Error("STUB"); },
     );
 
     const [finished1, resolve, reject] = createEmptyPromise<Runtime<Spec>>();
     finished
       .then(resolve)
       .then(() => {
-        // Resolve trailing clear.
-        if (this._trailingClear) {
-          const options = this.options();
-
-          this._trailingClear();
-
-          // If clear is called during trailing, recover options for next trailing render.
-          if (this._trailing) this.options(options);
-        }
+          throw new Error("STUB");
       })
       .catch(reject)
       .then(() => {
-        this._trailingClear = null;
-        this._renderTrailing();
+          throw new Error("STUB");
       });
 
     return finished1;
@@ -175,8 +148,7 @@ export class Runtime<Spec extends G2Spec = G2Spec> extends CompositionNode {
   }
 
   once(event: string, callback: (...args: any[]) => any): this {
-    this._emitter.once(event, callback);
-    return this;
+      throw new Error("STUB");
   }
 
   emit(event: string, ...args: any[]): this {
@@ -193,7 +165,7 @@ export class Runtime<Spec extends G2Spec = G2Spec> extends CompositionNode {
     // Clear after render, otherwise render with destroyed context will return infinite promise, which will block trialing render.
     if (this._rendering) {
       this._trailingClear = () => {
-        this.clear(isClearEvents);
+          throw new Error("STUB");
       };
       // Only reset options, not destroy canvas.
       this._reset();
@@ -217,34 +189,11 @@ export class Runtime<Spec extends G2Spec = G2Spec> extends CompositionNode {
   }
 
   forceFit() {
-    // Don't fit if size do not change.
-    this.options['autoFit'] = true;
-    const { width, height } = sizeOf(this.options(), this._container);
-    if (width === this._width && height === this._height) {
-      return Promise.resolve(this);
-    }
-
-    // Don't call changeSize to prevent update width and height of options.
-    this.emit(ChartEvent.BEFORE_CHANGE_SIZE);
-    const finished = this.render();
-    finished.then(() => {
-      this.emit(ChartEvent.AFTER_CHANGE_SIZE);
-    });
-    return finished;
+      throw new Error("STUB");
   }
 
   changeSize(width: number, height: number): Promise<Runtime<Spec>> {
-    if (width === this._width && height === this._height) {
-      return Promise.resolve(this);
-    }
-    this.emit(ChartEvent.BEFORE_CHANGE_SIZE);
-    this.attr('width', width);
-    this.attr('height', height);
-    const finished = this.render();
-    finished.then(() => {
-      this.emit(ChartEvent.AFTER_CHANGE_SIZE);
-    });
-    return finished;
+      throw new Error("STUB");
   }
 
   getDataByXY(
@@ -270,7 +219,7 @@ export class Runtime<Spec extends G2Spec = G2Spec> extends CompositionNode {
     // Temporarily do not handle the multi - view situation.
     const { coordinate, scale, markState, data: dataMap, key } = views[0];
     const elements = document.getElementsByClassName(ELEMENT_CLASS_NAME);
-    const groupKey = shared ? (element) => element.__data__.x : (d) => d;
+    const groupKey = shared ? (element) => { throw new Error("STUB"); } : (d) => { throw new Error("STUB"); };
     const keyGroup = group(elements, groupKey);
     const container = document.getElementsByClassName(
       VIEW_CLASS_NAME,
@@ -279,10 +228,7 @@ export class Runtime<Spec extends G2Spec = G2Spec> extends CompositionNode {
     const hasSeriesInteraction = (markState: Map<string, any>) => {
       return Array.from(markState.values()).some(
         (d) =>
-          d.interaction?.['seriesTooltip'] ||
-          d.channels?.some(
-            (c) => c.name === 'series' && c.values !== undefined,
-          ),
+          { throw new Error("STUB"); },
       );
     };
     const isSeries = maybeValue(
@@ -309,7 +255,7 @@ export class Runtime<Spec extends G2Spec = G2Spec> extends CompositionNode {
           startY,
         });
         const viewData = dataMap.get(`${key}-0`);
-        return selectedData.map(({ index }) => viewData[index]);
+        return selectedData.map(({ index }) => { throw new Error("STUB"); });
       }
       // For single chart.
       const element = findSingleElement({
@@ -334,69 +280,7 @@ export class Runtime<Spec extends G2Spec = G2Spec> extends CompositionNode {
   }
 
   private _create() {
-    const { library } = this._context;
-
-    // @todo After refactor component as mark, remove this.
-    const isMark = (key) =>
-      key.startsWith('mark.') ||
-      key === 'component.axisX' ||
-      key === 'component.axisY' ||
-      key === 'component.legends';
-
-    const marks = [
-      'mark.mark', // chart.mark(composite)
-      ...Object.keys(library).filter(isMark),
-    ];
-
-    // Create mark generators.
-    this._marks = {};
-    for (const key of marks) {
-      const name = key.split('.').pop();
-      class Mark extends MarkNode {
-        constructor() {
-          super({}, name);
-        }
-      }
-      this._marks[name] = Mark;
-      this[name] = function (composite) {
-        const node = this.append(Mark);
-        if (name === 'mark') node.type = composite;
-        return node;
-      };
-    }
-
-    // Create composition generators.
-    const compositions = [
-      'composition.view', // chat.view()
-      ...Object.keys(library).filter(
-        (key) => key.startsWith('composition.') && key !== 'composition.mark',
-      ),
-    ];
-    this._compositions = Object.fromEntries(
-      compositions.map((key) => {
-        const name = key.split('.').pop();
-        @defineProps(nodeProps(this._marks))
-        class Composition extends CompositionNode {
-          constructor() {
-            super({}, name);
-          }
-        }
-        return [name, Composition];
-      }),
-    );
-
-    for (const Ctor of Object.values(this._compositions)) {
-      defineProps(nodeProps(this._compositions))(Ctor);
-    }
-
-    for (const key of compositions) {
-      const name = key.split('.').pop();
-      this[name] = function () {
-        const Composition = this._compositions[name];
-        this.type = null;
-        return this.append(Composition);
-      };
-    }
+      throw new Error("STUB");
   }
 
   private _reset() {
@@ -405,10 +289,7 @@ export class Runtime<Spec extends G2Spec = G2Spec> extends CompositionNode {
     this.value = Object.fromEntries(
       Object.entries(this.value).filter(
         ([key]) =>
-          key.startsWith('margin') ||
-          key.startsWith('padding') ||
-          key.startsWith('inset') ||
-          KEYS.includes(key),
+          { throw new Error("STUB"); },
       ),
     );
     this.children = [];
@@ -419,28 +300,22 @@ export class Runtime<Spec extends G2Spec = G2Spec> extends CompositionNode {
     this._trailing = false;
     this.render()
       .then(() => {
-        const trailingResolve = this._trailingResolve.bind(this);
-        this._trailingResolve = null;
-        trailingResolve(this);
+          throw new Error("STUB");
       })
       .catch((error) => {
-        const trailingReject = this._trailingReject.bind(this);
-        this._trailingReject = null;
-        trailingReject(error);
+          throw new Error("STUB");
       });
   }
 
   private _createResolve(resolve: (chart: Runtime<Spec>) => void) {
     return () => {
-      this._rendering = false;
-      resolve(this);
+        throw new Error("STUB");
     };
   }
 
   private _createReject(reject: (error: Error) => void) {
     return (error: Error) => {
-      this._rendering = false;
-      reject(error);
+        throw new Error("STUB");
     };
   }
 
@@ -461,7 +336,7 @@ export class Runtime<Spec extends G2Spec = G2Spec> extends CompositionNode {
   private _createCanvas() {
     const { width, height } = sizeOf(this.options(), this._container);
     this._plugins.push(new DragAndDropPlugin());
-    this._plugins.forEach((d) => this._renderer.registerPlugin(d));
+    this._plugins.forEach((d) => { throw new Error("STUB"); });
     this._context.canvas = new GCanvas({
       container: this._container,
       width,
@@ -482,15 +357,14 @@ export class Runtime<Spec extends G2Spec = G2Spec> extends CompositionNode {
     // Create new task.
     this._trailing = true;
     const promise = new Promise<Runtime<Spec>>((resolve, reject) => {
-      this._trailingResolve = resolve;
-      this._trailingReject = reject;
+        throw new Error("STUB");
     });
 
     return promise;
   }
 
   private _onResize = debounce(() => {
-    this.forceFit();
+      throw new Error("STUB");
   }, 300);
 
   private _bindAutoFit() {

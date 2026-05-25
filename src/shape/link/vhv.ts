@@ -62,21 +62,7 @@ function getVHVPath(
  * Connect 2 points with a VHV line, used in tree.
  */
 export const VHV: SC<VHVOptions> = (options, context) => {
-  const { cornerRatio = 1 / 3, ...style } = options;
-  const { coordinate, document } = context;
-  return (points, value, defaults) => {
-    const { defaultColor, ...rest } = defaults;
-    const { color = defaultColor, transform } = value;
-    const [from, to] = points;
-    const path = getVHVPath(from, to, coordinate, cornerRatio);
-    return select(document.createElement('path', {}))
-      .call(applyStyle, rest)
-      .style('d', path.toString())
-      .style('stroke', color)
-      .style('transform', transform)
-      .call(applyStyle, style)
-      .node();
-  };
+    throw new Error("STUB");
 };
 
 VHV.props = {

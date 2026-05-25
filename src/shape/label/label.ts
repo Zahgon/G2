@@ -58,41 +58,7 @@ function getDefaultStyle(
  * @todo Support position option: middle...
  */
 export const Label: SC<LabelOptions> = (options, context) => {
-  const { coordinate, theme } = context;
-  const { render } = options;
-  return (points, value, style, labels) => {
-    const {
-      text,
-      x,
-      y,
-      transform: specifiedTS = '',
-      transformOrigin,
-      className = '',
-      ...overrideStyle
-    } = value;
-    const {
-      rotate = 0,
-      transform = '',
-      ...defaultStyle
-    } = getDefaultStyle(points, value, coordinate, theme, options, labels);
-
-    return select(new Advance())
-      .call(applyStyle, defaultStyle)
-      .style('text', `${text}`)
-      .style('className', `${className} g2-label`)
-      .style(
-        'innerHTML',
-        render ? render(text, value.datum, value.index) : undefined,
-      )
-      .style(
-        'labelTransform',
-        `${transform} rotate(${+rotate}) ${specifiedTS}`.trim(),
-      )
-      .style('labelTransformOrigin', transformOrigin)
-      .style('coordCenter', coordinate.getCenter())
-      .call(applyStyle, overrideStyle)
-      .node();
-  };
+    throw new Error("STUB");
 };
 
 Label.props = {

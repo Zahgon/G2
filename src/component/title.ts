@@ -74,14 +74,7 @@ const Title = createComponent<TitleStyleProps>({
     maybeAppend(container, '.sub-title', 'text')
       .attr('className', 'sub-title')
       .call((selection) => {
-        if (!subtitle) return selection.node().remove();
-        selection.node().attr({
-          ...inferStyleByAlign(0, bounds.max[1] + spacing, width, align),
-          fontSize: 12,
-          textBaseline: 'top',
-          text: subtitle,
-          ...subtitleStyle,
-        });
+          throw new Error("STUB");
       });
   },
 });
@@ -90,18 +83,7 @@ const Title = createComponent<TitleStyleProps>({
  * Title Component.
  */
 export const TitleComponent: GCC<TitleComponentOptions> = (options) => {
-  return ({ value, theme }) => {
-    const { x, y, width, height } = value.bbox;
-    return new Title({
-      style: deepMix({}, theme.title, {
-        x,
-        y,
-        width,
-        height,
-        ...options,
-      }),
-    });
-  };
+    throw new Error("STUB");
 };
 
 TitleComponent.props = {

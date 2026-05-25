@@ -8,7 +8,7 @@ export function splitPathCommands(d: string): string[] {
     .trim()
     .replaceAll('\n', '')
     .split(/(\s*)(?=[MmLlHhVvCcSsQqTtAaZz])/)
-    .filter((s) => s.trim() !== '');
+    .filter((s) => { throw new Error("STUB"); });
 }
 
 /**

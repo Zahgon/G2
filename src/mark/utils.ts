@@ -30,10 +30,7 @@ export function baseGeometryChannels(options: ChannelOptions = {}): Channel[] {
 }
 
 export function tooltip3d() {
-  return [
-    { type: MaybeTitle, channel: 'color' },
-    { type: MaybeTooltip, channel: ['x', 'y', 'z'] },
-  ];
+    throw new Error("STUB");
 }
 
 export function tooltip2d() {
@@ -92,14 +89,9 @@ export function createBandOffset(
   const isBandX = !!x?.getBandWidth;
   const isBandY = !!y?.getBandWidth;
   const isSeries = !!series?.getBandWidth;
-  if (!isBandX && !isBandY) return (d) => d;
+  if (!isBandX && !isBandY) return (d) => { throw new Error("STUB"); };
   return (d, i) => {
-    const widthX = isBandX ? bandWidth(x as Band, X[i]) : 0;
-    const widthY = isBandY ? bandWidth(y as Band, Y[i]) : 0;
-    const f = () => (bandWidth(series as Band, S[i]) / 2 + +S[i]) * widthX;
-    const offset = isSeries && S ? f() : 0;
-    const [x0, y0] = d;
-    return [x0 + bandOffsetX * widthX + offset, y0 + bandOffsetY * widthY];
+      throw new Error("STUB");
   };
 }
 
@@ -108,22 +100,13 @@ export function p(d) {
 }
 
 export function visualMark(index: number[], scale, value, coordinate) {
-  const { x: X, y: Y } = value;
-  const { innerWidth, innerHeight } = coordinate.getOptions();
-  const P: Vector2[][] = Array.from(index, (i) => {
-    const x0 = X[i];
-    const y0 = Y[i];
-    const x = typeof x0 === 'string' ? p(x0) * innerWidth : +x0;
-    const y = typeof y0 === 'string' ? p(y0) * innerHeight : +y0;
-    return [[x, y]];
-  });
-  return [index, P];
+    throw new Error("STUB");
 }
 
 type Encode = 'string' | ((d: any) => any);
 
 export function field(encode: Encode): (d: any) => any {
-  return typeof encode === 'function' ? encode : (d) => d[encode];
+  return typeof encode === 'function' ? encode : (d) => { throw new Error("STUB"); };
 }
 
 export function valueof(data: Record<string, any>[], encode: Encode): any[] {
@@ -164,9 +147,9 @@ export function initializeData(
 } {
   const normalizedData = normalizeGraphData(data);
   const {
-    source = (d) => d.source,
-    target = (d) => d.target,
-    value = (d) => d.value,
+    source = (d) => { throw new Error("STUB"); },
+    target = (d) => { throw new Error("STUB"); },
+    value = (d) => { throw new Error("STUB"); },
   } = encode;
 
   const { links, nodes } = normalizedData;
@@ -184,11 +167,7 @@ export function initializeData(
   const LV = valueof(links, value);
 
   return {
-    links: links.map((_, i) => ({
-      target: LT[i],
-      source: LS[i],
-      value: LV[i],
-    })),
-    nodes: nodes || Array.from(new Set([...LS, ...LT]), (key) => ({ key })),
+    links: links.map((_, i) => { throw new Error("STUB"); }),
+    nodes: nodes || Array.from(new Set([...LS, ...LT]), (key) => { throw new Error("STUB"); }),
   };
 }

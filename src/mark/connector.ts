@@ -15,7 +15,7 @@ const shape = {
 export type ConnectorOptions = Omit<ConnectorMark, 'type'>;
 
 export const Connector: MC<ConnectorOptions> = (...args) => {
-  return Link(...args);
+    throw new Error("STUB");
 };
 
 Connector.props = {

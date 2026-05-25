@@ -14,16 +14,7 @@ import { subObject } from '../../utils/helper';
 import { angleWithQuadrant, dist, sub } from '../../utils/vector';
 
 const DoublePath = createElement((g) => {
-  const { d1, d2, style1, style2 } = g.attributes;
-  const document = g.ownerDocument;
-  select(g)
-    .maybeAppend('line', () => document.createElement('path', {}))
-    .style('d', d1)
-    .call(applyStyle, style1);
-  select(g)
-    .maybeAppend('line1', () => document.createElement('path', {}))
-    .style('d', d2)
-    .call(applyStyle, style2);
+    throw new Error("STUB");
 });
 
 /**
@@ -79,84 +70,13 @@ export const Curve: SC<CurveOptions> = (options, context) => {
     gradient = false,
     // The color for each segment.
     gradientColor = 'between',
-    defined = (d) => !Number.isNaN(d) && d !== undefined && d !== null,
+    defined = (d) => { throw new Error("STUB"); },
     connect: connectNulls = false,
     ...style
   } = options;
   const { coordinate, document } = context;
   return (P, value, defaults) => {
-    // Compute styles.
-    const { color: defaultColor, lineWidth: defaultSize, ...rest } = defaults;
-    const {
-      color = defaultColor,
-      size = defaultSize,
-      seriesColor: sc,
-      seriesX: sx,
-      seriesY: sy,
-    } = value;
-
-    const transform = getTransform(coordinate, value);
-    const tpShape = isTranspose(coordinate);
-    const stroke =
-      gradient && sc
-        ? computeGradient(sc, sx, sy, gradient, gradientColor, tpShape)
-        : color;
-
-    const finalStyle = {
-      ...rest,
-      ...(stroke && { stroke }),
-      ...(size && { lineWidth: size }),
-      ...(transform && { transform }),
-      ...style,
-    };
-
-    // Compute points and segments.
-    let linePath;
-    if (isPolar(coordinate)) {
-      const center = coordinate.getCenter() as Vector2;
-      linePath = (points) =>
-        lineRadial()
-          .angle((_, idx) => angleWithQuadrant(sub(points[idx], center)))
-          .radius((_, idx) => dist(points[idx], center))
-          .defined(([x, y]) => defined(x) && defined(y))
-          .curve(curve)(points);
-    } else {
-      linePath = line()
-        .x((d) => d[0])
-        .y((d) => d[1])
-        .defined(([x, y]) => defined(x) && defined(y))
-        .curve(curve);
-    }
-    const [DP, MS] = segmentation(P, defined);
-    const connectStyle = subObject(finalStyle, 'connect');
-    const missing = !!MS.length;
-
-    // Draw one path of connected defined points.
-    if (!missing || (connectNulls && !Object.keys(connectStyle).length)) {
-      return select(document.createElement('path', {}))
-        .style('d', linePath(DP) || [])
-        .call(applyStyle, finalStyle)
-        .node();
-    }
-
-    // Draw one path of unconnected defined points.
-    if (missing && !connectNulls) {
-      return select(document.createElement('path', {}))
-        .style('d', linePath(P))
-        .call(applyStyle, finalStyle)
-        .node();
-    }
-
-    // Draw two path.
-    // One for unconnected defined points.
-    // One for connected segments.
-    const connectPath = (segments) => segments.map(linePath).join(',');
-    return select(new DoublePath())
-      .style('style1', { ...finalStyle, ...connectStyle })
-      .style('style2', finalStyle)
-      .style('d1', connectPath(MS))
-      .style('d2', linePath(P))
-      .node();
+      throw new Error("STUB");
   };
 };
 

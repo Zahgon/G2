@@ -1,7 +1,7 @@
 import { min } from '@antv/vendor/d3-array';
 
 function targetDepth(d) {
-  return d.target.depth;
+    throw new Error("STUB");
 }
 
 export function left(node) {
@@ -9,17 +9,13 @@ export function left(node) {
 }
 
 export function right(node, n) {
-  return n - 1 - node.height;
+    throw new Error("STUB");
 }
 
 export function justify(node, n) {
-  return node.sourceLinks.length ? node.depth : n - 1;
+    throw new Error("STUB");
 }
 
 export function center(node) {
-  return node.targetLinks.length
-    ? node.depth
-    : node.sourceLinks.length
-    ? (min(node.sourceLinks, targetDepth) as any) - 1
-    : 0;
+    throw new Error("STUB");
 }

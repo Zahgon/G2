@@ -5,7 +5,7 @@ import { Curve } from './curve';
 export type VHOptions = Record<string, any>;
 
 export const VH: SC<VHOptions> = (options, context) => {
-  return Curve({ curve: curveStepBefore, ...options }, context);
+    throw new Error("STUB");
 };
 
 VH.props = {

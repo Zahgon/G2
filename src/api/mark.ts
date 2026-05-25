@@ -21,13 +21,7 @@ export class MarkNode extends Node<Spec & { [key: string]: any }> {
    * Get mark from chart views.
    */
   getMark(): G2MarkState {
-    const chartView = this.getRoot()?.getView();
-    if (!chartView) return undefined;
-    const { markState } = chartView;
-    const markKey = Array.from(markState.keys()).find(
-      (item) => item.key === this.attr('key'),
-    );
-    return markState.get(markKey);
+      throw new Error("STUB");
   }
 
   /**
@@ -43,9 +37,7 @@ export class MarkNode extends Node<Spec & { [key: string]: any }> {
    * Get the scale instance by channel.
    */
   getScaleByChannel(channel: string): Scale {
-    const chartView = this.getRoot()?.getView();
-    if (!chartView) return undefined;
-    return chartView?.scale?.[channel];
+      throw new Error("STUB");
   }
 
   /**

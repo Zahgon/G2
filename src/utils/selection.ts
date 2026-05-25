@@ -108,19 +108,7 @@ export class Selection<T = any> {
   }
 
   selectFacetAll(selector: string | G2Element[]): Selection<T> {
-    const elements =
-      typeof selector === 'string'
-        ? this._parent.querySelectorAll<G2Element>(selector)
-        : selector;
-    return new Selection<T>(
-      this._elements,
-      null,
-      this._parent,
-      this._document,
-      undefined,
-      undefined,
-      elements,
-    );
+      throw new Error("STUB");
   }
 
   /**
@@ -136,7 +124,7 @@ export class Selection<T = any> {
 
   append(node: string | ((data: T, i: number) => G2Element)): Selection<T> {
     const callback =
-      typeof node === 'function' ? node : () => this.createElement(node);
+      typeof node === 'function' ? node : () => { throw new Error("STUB"); };
 
     const elements = [];
     if (this._data !== null) {
@@ -192,8 +180,8 @@ export class Selection<T = any> {
    */
   data<T = any>(
     data: T[],
-    id: (d: T, index?: number) => any = (d) => d,
-    groupId: (d: T, index?: number) => any = () => null,
+    id: (d: T, index?: number) => any = (d) => { throw new Error("STUB"); },
+    groupId: (d: T, index?: number) => any = () => { throw new Error("STUB"); },
   ): Selection<T> {
     // An Array of new data.
     const enter: T[] = [];
@@ -212,18 +200,18 @@ export class Selection<T = any> {
 
     // A Map from key to each element.
     const keyElement = new Map<string, G2Element>(
-      this._elements.map((d, i) => [id(d.__data__, i), d]),
+      this._elements.map((d, i) => { throw new Error("STUB"); }),
     );
 
     // A Map from key to exist element. The Update Selection
     // can get element from this map, this is for diff among
     // facets.
     const keyUpdateElement = new Map<string, G2Element>(
-      this._facetElements.map((d, i) => [id(d.__data__, i), d]),
+      this._facetElements.map((d, i) => { throw new Error("STUB"); }),
     );
 
     // A Map from groupKey to a group of elements.
-    const groupKeyElements = group(this._elements, (d) => groupId(d.__data__));
+    const groupKeyElements = group(this._elements, (d) => { throw new Error("STUB"); });
 
     // Diff data with selection(elements with data).
     // !!! Note
@@ -321,11 +309,11 @@ export class Selection<T = any> {
    * and merge them into one selection.
    */
   join(
-    enter: (selection: Selection<T>) => any = (d) => d,
-    update: (selection: Selection<T>) => any = (d) => d,
-    exit: (selection: Selection<T>) => any = (d) => d.remove(),
-    merge: (selection: Selection<T>) => any = (d) => d,
-    split: (selection: Selection<T>) => any = (d) => d.remove(),
+    enter: (selection: Selection<T>) => any = (d) => { throw new Error("STUB"); },
+    update: (selection: Selection<T>) => any = (d) => { throw new Error("STUB"); },
+    exit: (selection: Selection<T>) => any = (d) => { throw new Error("STUB"); },
+    merge: (selection: Selection<T>) => any = (d) => { throw new Error("STUB"); },
+    split: (selection: Selection<T>) => any = (d) => { throw new Error("STUB"); },
   ): Selection<T> {
     const newEnter = enter(this._enter);
     const newUpdate = update(this._update);
@@ -347,11 +335,8 @@ export class Selection<T = any> {
       this._elements[i].__removed__ = true;
       if (transition) {
         const T = Array.isArray(transition) ? transition : [transition];
-        Promise.all(T.map((d) => d.finished)).then(() => {
-          const element = this._elements[i];
-          if (element.__removed__) {
-            element.remove();
-          }
+        Promise.all(T.map((d) => { throw new Error("STUB"); })).then(() => {
+            throw new Error("STUB");
         });
       } else {
         const element = this._elements[i];
@@ -380,30 +365,30 @@ export class Selection<T = any> {
   }
 
   attr(key: string, value: any): Selection<T> {
-    const callback = typeof value !== 'function' ? () => value : value;
+    const callback = typeof value !== 'function' ? () => { throw new Error("STUB"); } : value;
     return this.each(function (d, i, element) {
-      if (value !== undefined) element[key] = callback(d, i, element);
+        throw new Error("STUB");
     });
   }
 
   style(key: string, value: any): Selection<T> {
-    const callback = typeof value !== 'function' ? () => value : value;
+    const callback = typeof value !== 'function' ? () => { throw new Error("STUB"); } : value;
     return this.each(function (d, i, element) {
-      if (value !== undefined) element.style[key] = callback(d, i, element);
+        throw new Error("STUB");
     });
   }
 
   transition(value: any): Selection<T> {
-    const callback = typeof value !== 'function' ? () => value : value;
+    const callback = typeof value !== 'function' ? () => { throw new Error("STUB"); } : value;
     const { _transitions: T } = this;
     return this.each(function (d, i, element) {
-      T[i] = callback(d, i, element);
+        throw new Error("STUB");
     });
   }
 
   on(event: string, handler: any) {
     this.each(function (d, i, element) {
-      element.addEventListener(event, handler);
+        throw new Error("STUB");
     });
     return this;
   }
@@ -425,7 +410,7 @@ export class Selection<T = any> {
   }
 
   transitions(): (GAnimation | GAnimation[])[] {
-    return this._transitions;
+      throw new Error("STUB");
   }
 
   parent(): DisplayObject {

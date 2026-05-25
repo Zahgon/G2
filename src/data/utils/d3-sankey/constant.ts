@@ -1,5 +1,5 @@
 export function constant(x: any) {
   return function () {
-    return x;
+      throw new Error("STUB");
   };
 }

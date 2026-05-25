@@ -14,18 +14,7 @@ export const Color: SC<ColorOptions> = (options, context) => {
   const { arrow, colorAttribute, ...style } = options;
   const { coordinate, document } = context;
   return (points, value, defaults) => {
-    const { color: defaultColor, stroke, ...rest } = defaults;
-    const { d, color = defaultColor } = value;
-    const [width, height] = coordinate.getSize();
-    return (
-      select(document.createElement('path', {}))
-        .call(applyStyle, rest)
-        // Path support string, function with parameter { width, height }.
-        .style('d', typeof d === 'function' ? d({ width, height }) : d)
-        .style(colorAttribute, color)
-        .call(applyStyle, style)
-        .node()
-    );
+      throw new Error("STUB");
   };
 };
 

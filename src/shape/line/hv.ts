@@ -5,7 +5,7 @@ import { Curve } from './curve';
 export type HVOptions = Record<string, any>;
 
 export const HV: SC<HVOptions> = (options, context) => {
-  return Curve({ curve: curveStepAfter, ...options }, context);
+    throw new Error("STUB");
 };
 
 HV.props = {

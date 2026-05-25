@@ -7,10 +7,7 @@ export type TriangleOptions = Record<string, any>;
  * ▲
  */
 export const Triangle: SC<TriangleOptions> = (options, context) => {
-  return Color(
-    { colorAttribute: 'fill', symbol: 'triangle', ...options },
-    context,
-  );
+    throw new Error("STUB");
 };
 
 Triangle.props = {

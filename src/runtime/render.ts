@@ -65,9 +65,11 @@ function Canvas(width: number, height: number): GCanvas {
 export function render<T extends G2ViewTree = G2ViewTree>(
   options: T,
   context: G2Context = {},
-  resolve = (): void => {},
+  resolve = (): void => {
+      throw new Error("STUB");
+  },
   reject = (e?: any): void => {
-    throw e;
+      throw new Error("STUB");
   },
 ): HTMLElement {
   const afterParsedOptions = parseOptionsExpr(options);
@@ -97,26 +99,12 @@ export function render<T extends G2ViewTree = G2ViewTree>(
   // Make sure that plot chart after container is ready for every time.
   const selection = select(canvas.document.documentElement);
   canvas.ready
-    .then(() => plot<T>({ ...keyed, width, height, depth }, selection, context))
+    .then(() => { throw new Error("STUB"); })
     .then(() => {
-      // Place the center of whole scene at z axis' origin.
-      if (depth) {
-        const [x, y] = canvas!.document.documentElement.getPosition();
-        // Since `render` method can be called for multiple times, use setPosition instead of translate here.
-        canvas!.document.documentElement.setPosition(x, y, -depth / 2);
-      }
-
-      // Wait for the next tick.
-      // FIXME: Use `rendered?` event instead of `requestAnimationFrame`.
-      canvas.requestAnimationFrame(() => {
-        canvas.requestAnimationFrame(() => {
-          emitter.emit(ChartEvent.AFTER_RENDER);
-          resolve?.();
-        });
-      });
+        throw new Error("STUB");
     })
     .catch((e) => {
-      reject?.(e);
+        throw new Error("STUB");
     });
 
   // Return the container HTML element wraps the canvas or svg element.
@@ -126,47 +114,14 @@ export function render<T extends G2ViewTree = G2ViewTree>(
 export function renderToMountedElement<T extends G2ViewTree = G2ViewTree>(
   options: T,
   context: G2Context = {},
-  resolve = () => {},
+  resolve = () => {
+      throw new Error("STUB");
+  },
   reject = (e?: any) => {
-    throw e;
+      throw new Error("STUB");
   },
 ): DisplayObject {
-  // Initialize the context if it is not provided.
-  const { width = 640, height = 480 } = options;
-  const keyed = inferKeys(options);
-  const {
-    group = new Group(),
-    emitter = new EventEmitter(),
-    library,
-  } = context;
-
-  if (!group?.parentElement) {
-    error(`renderToMountedElement can't render chart to unmounted group.`);
-  }
-
-  const selection = select(group);
-  context.group = group;
-  context.emitter = emitter;
-  context.externals = {};
-  context.canvas =
-    context.canvas || (group?.ownerDocument?.defaultView as GCanvas);
-
-  emitter.emit(ChartEvent.BEFORE_RENDER);
-  // Plot the chart and mutate context.
-  // Make sure that plot chart after container is ready for every time.
-  plot<T>({ ...keyed, width, height }, selection, context)
-    .then(() => {
-      context.canvas?.requestAnimationFrame(() => {
-        emitter.emit(ChartEvent.AFTER_RENDER);
-        resolve?.();
-      });
-    })
-    .catch((e) => {
-      reject?.(e);
-    });
-
-  // Return the Group wraps the canvas or svg element.
-  return group;
+    throw new Error("STUB");
 }
 
 export function destroy<T extends G2ViewTree = G2ViewTree>(
@@ -192,12 +147,7 @@ export function destroy<T extends G2ViewTree = G2ViewTree>(
 function destroyAllInteractions(canvas: GCanvas) {
   const viewGroups = canvas.getRoot().querySelectorAll(`.${VIEW_CLASS_NAME}`);
   viewGroups?.forEach((group) => {
-    const { nameInteraction = new Map() }: Record<string, any> = group;
-    if (nameInteraction?.size > 0) {
-      Array.from(nameInteraction?.values()).forEach((value: any) => {
-        value?.destroy();
-      });
-    }
+      throw new Error("STUB");
   });
 }
 

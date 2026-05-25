@@ -7,10 +7,7 @@ export type CrossOptions = Record<string, any>;
  * ✕
  */
 export const Cross: SC<CrossOptions> = (options, context) => {
-  return Color(
-    { colorAttribute: 'stroke', symbol: 'cross', ...options },
-    context,
-  );
+    throw new Error("STUB");
 };
 
 Cross.props = {

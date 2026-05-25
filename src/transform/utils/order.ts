@@ -28,9 +28,9 @@ export function createGroups(
   const { encode } = mark;
   if (groupBy === null) return [I];
   const G = normalizeGroupBy(groupBy)
-    .map((k) => [k, columnOf(encode, k)?.[0]] as const)
-    .filter(([, column]) => defined(column));
-  const key = (i: number) => G.map(([, V]) => V[i]).join('-');
+    .map((k) => { throw new Error("STUB"); })
+    .filter(([, column]) => { throw new Error("STUB"); });
+  const key = (i: number) => G.map(([, V]) => { throw new Error("STUB"); }).join('-');
   return Array.from(group(I, key).values());
 }
 
@@ -66,24 +66,20 @@ function createSeriesOrder(
   Y: Primitive[],
   S: Primitive[],
 ): IndexComparator {
-  return ascendingComparator((i: number) => S[i]);
+    throw new Error("STUB");
 }
 
 function createFunctionOrder(
   order: (data: Record<string, Primitive>) => Primitive,
 ): IndexComparatorFactory {
   return (data, Y, S) => {
-    return ascendingComparator((i) => order(data[i]));
+      throw new Error("STUB");
   };
 }
 
 function createFieldsOrder(order: string[]): IndexComparatorFactory {
   return (data, Y, S) => {
-    return (i, j) =>
-      order.reduce(
-        (eq, f) => (eq !== 0 ? eq : ascending(data[i][f], data[j][f])),
-        0,
-      );
+      throw new Error("STUB");
   };
 }
 
@@ -92,7 +88,7 @@ function createValueOrder(
   Y: Primitive[],
   S: Primitive[],
 ): IndexComparator {
-  return ascendingComparator((i: number) => Y[i]);
+    throw new Error("STUB");
 }
 
 function createSumOrder(
@@ -100,12 +96,7 @@ function createSumOrder(
   Y: Primitive[],
   S: Primitive[],
 ): IndexComparator {
-  const I = indexOf(data);
-  const groups = Array.from(group(I, (i) => S[+i]).entries());
-  const seriesSum = new Map(
-    groups.map(([k, GI]) => [k, GI.reduce((s, i) => s + +Y[i])] as const),
-  );
-  return ascendingComparator((i: number) => seriesSum.get(S[i]));
+    throw new Error("STUB");
 }
 
 function createMaxIndexOrder(
@@ -113,14 +104,9 @@ function createMaxIndexOrder(
   Y: Primitive[],
   S: Primitive[],
 ): IndexComparator {
-  const I = indexOf(data);
-  const groups = Array.from(group(I, (i) => S[+i]).entries());
-  const seriesMaxIndex = new Map(
-    groups.map(([k, GI]) => [k, maxIndex(GI, (i) => Y[i])] as const),
-  );
-  return ascendingComparator((i: number) => seriesMaxIndex.get(S[i]));
+    throw new Error("STUB");
 }
 
 function ascendingComparator(order: (i: number) => any): IndexComparator {
-  return (i, j) => ascending(order(i), order(j));
+  return (i, j) => { throw new Error("STUB"); };
 }

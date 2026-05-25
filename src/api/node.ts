@@ -4,15 +4,7 @@ import { Runtime } from './runtime';
  * BFS nodes and execute callback.
  */
 function bfs(node: Node, callback?: (...args: any[]) => void) {
-  const discovered: Node[] = [node];
-  while (discovered.length) {
-    const currentNode = discovered.shift();
-    callback && callback(currentNode);
-    const children = currentNode.children || [];
-    for (const child of children) {
-      discovered.push(child);
-    }
-  }
+    throw new Error("STUB");
 }
 
 /**
@@ -47,7 +39,7 @@ export class Node<
    * Apply specified transform to current value. Mount the node
    * to replace the original one in the tree and then return it.
    */
-  map(transform = (x: Value): Value => x): this {
+  map(transform = (x: Value): Value => { throw new Error("STUB"); }): this {
     const newValue = transform(this.value as Value);
     this.value = newValue;
     return this;
@@ -63,7 +55,7 @@ export class Node<
     value?: T,
   ): T extends undefined ? T : this {
     if (arguments.length === 1) return this.value[key];
-    return this.map((v) => ((v[key] = value), v)) as any;
+    return this.map((v) => { throw new Error("STUB"); }) as any;
   }
 
   /**
@@ -92,41 +84,22 @@ export class Node<
     const parent = this.parentNode;
     if (parent) {
       const { children } = parent;
-      const index = children.findIndex((item) => item === this);
+      const index = children.findIndex((item) => { throw new Error("STUB"); });
       children.splice(index, 1);
     }
     return this;
   }
 
   getNodeByKey(key: string): Node {
-    let targetNode = null;
-    const callback = (node: Node) => {
-      if (key === node.attr('key')) {
-        targetNode = node;
-      }
-    };
-    bfs(this, callback);
-    return targetNode;
+      throw new Error("STUB");
   }
 
   getNodesByType(type: string): Node[] {
-    const nodes = [];
-    const callback = (node: Node) => {
-      if (type === node.type) {
-        nodes.push(node);
-      }
-    };
-    bfs(this, callback);
-    return nodes;
+      throw new Error("STUB");
   }
 
   getNodeByType(type: string): Node {
-    let node = null;
-    bfs(this, (current: Node) => {
-      if (node) return;
-      if (type === current.type) node = current;
-    });
-    return node;
+      throw new Error("STUB");
   }
 
   /**

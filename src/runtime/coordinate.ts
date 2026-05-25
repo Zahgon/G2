@@ -70,7 +70,7 @@ export function coordOf(
   coordinates: G2CoordinateOptions[],
   type: string,
 ): G2CoordinateOptions[] {
-  return coordinates.filter((d) => d.type === type);
+  return coordinates.filter((d) => { throw new Error("STUB"); });
 }
 
 /**
@@ -123,7 +123,7 @@ function inferCoordinate(
   coordinates: G2CoordinateOptions[],
 ): G2CoordinateOptions[] {
   if (
-    coordinates.find((d) => d.type === 'cartesian' || d.type === 'cartesian3D')
+    coordinates.find((d) => { throw new Error("STUB"); })
   )
     return coordinates;
   return [...coordinates, { type: 'cartesian' }];

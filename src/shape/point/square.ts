@@ -7,10 +7,7 @@ export type SquareOptions = Record<string, any>;
  * ■
  */
 export const Square: SC<SquareOptions> = (options, context) => {
-  return Color(
-    { colorAttribute: 'fill', symbol: 'square', ...options },
-    context,
-  );
+    throw new Error("STUB");
 };
 
 Square.props = {

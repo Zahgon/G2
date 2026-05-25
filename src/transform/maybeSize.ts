@@ -9,15 +9,7 @@ export type MaybeSizeOptions = Record<string, never>;
  * This is useful for point geometry.
  */
 export const MaybeSize: TC<MaybeSizeOptions> = () => {
-  return (I, mark) => {
-    const { encode } = mark;
-    const { size } = encode;
-    if (size !== undefined) return [I, mark];
-    return [
-      I,
-      deepMix({}, mark, { encode: { size: visualColumn(constant(I, 3)) } }),
-    ];
-  };
+    throw new Error("STUB");
 };
 
 MaybeSize.props = {};

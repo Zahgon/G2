@@ -11,11 +11,11 @@ const DEFAULT_LAYOUT_OPTIONS: ArcOptions = {
   y: 0,
   thickness: 0.05, // width of the node, (0, 1)
   marginRatio: 0.1, // margin ratio, [0, 1)
-  id: (node) => node.key,
-  source: (edge) => edge.source,
-  target: (edge) => edge.target,
-  sourceWeight: (edge) => edge.value || 1,
-  targetWeight: (edge) => edge.value || 1,
+  id: (node) => { throw new Error("STUB"); },
+  source: (edge) => { throw new Error("STUB"); },
+  target: (edge) => { throw new Error("STUB"); },
+  sourceWeight: (edge) => { throw new Error("STUB"); },
+  targetWeight: (edge) => { throw new Error("STUB"); },
   sortBy: null, // optional, id | weight | frequency | {function}
 };
 
@@ -62,99 +62,7 @@ const DEFAULT_LABEL_OPTIONS = {
 export type ChordOptions = Omit<ChordMark, 'type'>;
 
 export const Chord: CC<ChordOptions> = (options, context) => {
-  const {
-    data,
-    encode = {},
-    scale,
-    style = {},
-    layout = {},
-    nodeLabels = [],
-    linkLabels = [],
-    animate = {},
-    tooltip = {},
-  } = options;
-
-  // Initialize data, generating nodes by link if is not specified.
-  const { nodes, links } = initializeData(data, encode);
-
-  // Extract encode for node and link.
-  const nodeEncode = subObject(encode, 'node');
-  const linkEncode = subObject(encode, 'link');
-  const { key: nodeKey = (d) => d.key, color = nodeKey } = nodeEncode;
-  const { linkEncodeColor = (d) => d.source } = linkEncode;
-  const {
-    nodeWidthRatio = DEFAULT_LAYOUT_OPTIONS.thickness,
-    nodePaddingRatio = DEFAULT_LAYOUT_OPTIONS.marginRatio,
-    ...restLayout
-  } = layout;
-
-  const { nodes: nodeData, edges: linkData } = Arc({
-    ...DEFAULT_LAYOUT_OPTIONS,
-    id: field(nodeKey),
-    thickness: nodeWidthRatio,
-    marginRatio: nodePaddingRatio,
-    ...restLayout,
-    weight: true,
-  })({ nodes, edges: links });
-
-  // Extract label style and apply defaults.
-  const { text = nodeKey, ...labelStyle } = subObject(style, 'label');
-
-  const nodeTooltip = subTooltip(
-    tooltip,
-    'node',
-    {
-      title: '',
-      items: [(d) => ({ name: d.key, value: d.value })],
-    },
-    true,
-  );
-  const linkTooltip = subTooltip(tooltip, 'link', {
-    title: '',
-    items: [(d) => ({ name: `${d.source} -> ${d.target}`, value: d.value })],
-  });
-
-  const { height, width } = context;
-
-  const minimumLen = Math.min(height, width);
-
-  return [
-    deepMix({}, DEFAULT_LINK_OPTIONS, {
-      data: linkData,
-      encode: { ...linkEncode, color: linkEncodeColor },
-      labels: linkLabels,
-      style: {
-        fill: linkEncodeColor ? undefined : '#aaa',
-        ...subObject(style, 'link'),
-      },
-      tooltip: linkTooltip,
-      animate: maybeAnimation(animate, 'link'),
-    }),
-    deepMix({}, DEFAULT_NODE_OPTIONS, {
-      data: nodeData,
-      encode: { ...nodeEncode, color },
-      scale,
-      style: subObject(style, 'node'),
-      coordinate: {
-        type: 'polar',
-        // Leave enough rendering space for the label.
-        outerRadius: (minimumLen - 20) / minimumLen,
-        startAngle: -Math.PI * 2,
-        endAngle: 0,
-      },
-      labels: [
-        {
-          ...DEFAULT_LABEL_OPTIONS,
-          text,
-          ...labelStyle,
-        },
-        ...nodeLabels,
-      ],
-      tooltip: nodeTooltip,
-      animate: maybeAnimation(animate, 'node'),
-      axis: false,
-    }),
-  ] as MarkOptions[];
+    throw new Error("STUB");
 };
 
 Chord.props = {};

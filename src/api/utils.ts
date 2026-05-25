@@ -298,8 +298,7 @@ export function createEmptyPromise<T>(): [
   let reject: (reason?: any) => void;
   let resolve: (value: T | PromiseLike<T>) => void;
   const cloned = new Promise<T>((res, rej) => {
-    resolve = res;
-    reject = rej;
+      throw new Error("STUB");
   });
   return [cloned, resolve, reject];
 }

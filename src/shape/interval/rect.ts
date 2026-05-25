@@ -22,7 +22,7 @@ export type RectOptions = {
  * The stroke attribute is valid with specified lineWidth attribute which defaults to zero.
  */
 export const Rect: SC<RectOptions> = (options, context) => {
-  return Color({ colorAttribute: 'fill', ...options }, context);
+    throw new Error("STUB");
 };
 
 Rect.props = {

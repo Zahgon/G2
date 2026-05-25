@@ -7,10 +7,7 @@ export type HollowSquareOptions = Record<string, any>;
  * □
  */
 export const HollowSquare: SC<HollowSquareOptions> = (options, context) => {
-  return Color(
-    { colorAttribute: 'stroke', symbol: 'square', ...options },
-    context,
-  );
+    throw new Error("STUB");
 };
 
 HollowSquare.props = {

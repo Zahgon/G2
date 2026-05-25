@@ -28,7 +28,7 @@ export class CompositionNode extends Node<Spec & { [key: string]: any }> {
     this.attr('data', data);
     if (this.children?.length) {
       this.children.forEach((child) => {
-        child.attr('data', data);
+          throw new Error("STUB");
       });
     }
     return chart?.render();
@@ -41,7 +41,7 @@ export class CompositionNode extends Node<Spec & { [key: string]: any }> {
     const chart = this.getRoot();
     const { views } = chart.getContext();
     if (!views?.length) return undefined;
-    return views.find((view) => view.key === this._key);
+    return views.find((view) => { throw new Error("STUB"); });
   }
 
   getScale(): Record<string, Scale> {
@@ -49,17 +49,15 @@ export class CompositionNode extends Node<Spec & { [key: string]: any }> {
   }
 
   getScaleByChannel(channel: string): Scale {
-    const scale = this.getScale();
-    if (scale) return scale[channel];
-    return;
+      throw new Error("STUB");
   }
 
   getCoordinate(): Coordinate {
-    return this.getView()?.coordinate;
+      throw new Error("STUB");
   }
 
   getTheme(): G2Theme {
-    return this.getView()?.theme;
+      throw new Error("STUB");
   }
 
   getGroup(): DisplayObject {

@@ -47,25 +47,7 @@ export type TrailOptions = Record<string, any>;
 
 // @todo Support connect and connectStyle.
 export const Trail: SC<TrailOptions> = (options, context) => {
-  const { document } = context;
-  return (P, value, defaults) => {
-    const { seriesSize, color } = value;
-    const { color: defaultColor, ...rest } = defaults;
-    const path = d3path();
-    for (let i = 0; i < P.length - 1; i++) {
-      const p0 = P[i];
-      const p1 = P[i + 1];
-      const s0 = seriesSize[i];
-      const s1 = seriesSize[i + 1];
-      if ([...p0, ...p1].every(defined)) stroke(path, p0, p1, s0, s1);
-    }
-    return select(document.createElement('path', {}))
-      .call(applyStyle, rest)
-      .style('fill', color || defaultColor)
-      .style('d', path.toString())
-      .call(applyStyle, options)
-      .node();
-  };
+    throw new Error("STUB");
 };
 
 Trail.props = {

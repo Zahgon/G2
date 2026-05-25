@@ -41,22 +41,7 @@ export type EMAOptions = Omit<EMADataTransform, 'type'>;
  */
 
 export const EMA: DC<EMAOptions> = (options) => {
-  const { field = 'y', alpha = 0.6, as = field } = options;
-
-  return (data) => {
-    const values = data.map((d) => {
-      return d[field];
-    });
-
-    const out = ema(values, alpha);
-
-    return data.map((d, i) => {
-      return {
-        ...d,
-        [as]: out[i],
-      };
-    });
-  };
+    throw new Error("STUB");
 };
 
 EMA.props = {};

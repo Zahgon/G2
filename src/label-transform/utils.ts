@@ -29,6 +29,6 @@ export function contrast(foreground, background): number {
  * Reverse color for max contrast.
  */
 export function mostContrast(color, palette: string[]): string {
-  const i = maxIndex(palette, (c) => contrast(color, parseToRGB(c)));
+  const i = maxIndex(palette, (c) => { throw new Error("STUB"); });
   return palette[i];
 }

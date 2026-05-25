@@ -8,7 +8,7 @@ export type ArcOptions = Omit<Record<string, any>, 'type'>;
  */
 export const Arc: DC<ArcOptions> = (options) => {
   return (data) => {
-    return ArcLayout(options)(data);
+      throw new Error("STUB");
   };
 };
 

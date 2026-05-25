@@ -11,11 +11,11 @@ export function createElement<T = Record<string, any>>(
     typeof descriptor === 'function' ? descriptor : descriptor.render;
   return class extends CustomElement<T> {
     connectedCallback() {
-      this.draw();
+        throw new Error("STUB");
     }
 
     attributeChangedCallback() {
-      this.draw();
+        throw new Error("STUB");
     }
 
     draw() {

@@ -29,10 +29,7 @@ export function angleWithQuadrant([x, y]: Vector2): number {
 }
 
 export function angleBetween(v0: Vector2, v1: Vector2): number {
-  const a0 = angle(v0);
-  const a1 = angle(v1);
-  if (a0 < a1) return a1 - a0;
-  return Math.PI * 2 - (a0 - a1);
+    throw new Error("STUB");
 }
 
 export function calcBBox(points: Vector2[]) {

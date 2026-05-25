@@ -2,7 +2,7 @@ import { createXKey } from './utils';
 import { ElementSelect } from './elementSelect';
 
 export function ElementSelectByX(options) {
-  return ElementSelect({ ...options, createGroup: createXKey });
+    throw new Error("STUB");
 }
 
 ElementSelectByX.props = {

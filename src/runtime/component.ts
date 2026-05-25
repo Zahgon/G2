@@ -70,8 +70,7 @@ export function inferComponent(
   >('component', library);
 
   const displayedScales = scales.filter(({ guide }) => {
-    if (guide === null) return false;
-    return true;
+      throw new Error("STUB");
   });
 
   const components = [];
@@ -106,66 +105,7 @@ export function inferComponent(
   const inferredComponents = inferComponentsType(displayedScales, coordinates);
 
   inferredComponents.forEach(([type, relativeScales]) => {
-    const { props } = createGuideComponent(type);
-    const {
-      defaultPosition,
-      defaultPlane = 'xy',
-      defaultOrientation,
-      defaultSize,
-      defaultOrder,
-      defaultLength,
-      defaultPadding: DP = [0, 0],
-      defaultCrossPadding: DCP = [0, 0],
-    } = props;
-    // @todo to be confirm if the scale can be merged.
-    // const scale: G2ScaleOptions = Object.assign({}, ...relativeScales);
-    const scale: G2ScaleOptions = deepMix({}, ...relativeScales);
-    const { guide: guideOptions, field } = scale;
-    // A scale may have multiple guides.
-    const guides = Array.isArray(guideOptions) ? guideOptions : [guideOptions];
-    for (const partialGuide of guides) {
-      const [position, orientation] = inferComponentPositionAndOrientation(
-        type,
-        defaultPosition,
-        defaultOrientation,
-        partialGuide,
-        relativeScales,
-        displayedScales,
-        coordinates,
-      );
-
-      // Skip if position and orientation are not specified.
-      // @example the last axis of radar chart
-      if (!position && !orientation) continue;
-
-      const isVertical = position === 'left' || position === 'right';
-      const defaultPadding = isVertical ? DP[1] : DP[0];
-      const defaultCrossPadding = isVertical ? DCP[1] : DCP[0];
-
-      const {
-        size,
-        order = defaultOrder,
-        length = defaultLength,
-        padding = defaultPadding,
-        crossPadding = defaultCrossPadding,
-      } = partialGuide;
-
-      components.push({
-        title: field,
-        ...partialGuide,
-        defaultSize,
-        length,
-        position,
-        plane: defaultPlane,
-        orientation,
-        padding,
-        order,
-        crossPadding,
-        size,
-        type,
-        scales: relativeScales,
-      });
-    }
+      throw new Error("STUB");
   });
 
   return components;
@@ -199,16 +139,14 @@ export function renderComponent(
 
 export function normalizeComponents(components: G2GuideComponentOptions[]) {
   return components.map((d) => {
-    const component = deepMix(d, d.style);
-    delete component.style;
-    return component;
+      throw new Error("STUB");
   });
 }
 
 export function flatComponents(
   components: G2GuideComponentOptions[],
 ): G2GuideComponentOptions[] {
-  return components.flatMap((d) => (d.type == 'group' ? d.children : d));
+    throw new Error("STUB");
 }
 
 // Wrap legends into a group component.
@@ -232,47 +170,7 @@ export function groupComponents(
   // Update attributes of group components,
   // and maybe flatten group components without enough room.
   return grouped.flatMap(([, components]) => {
-    if (components.length === 1) return components[0];
-
-    // If crossSize defined, group components only when has
-    // enough room.
-    if (crossSize !== undefined) {
-      // Compute total length.
-      const DL = components
-        .filter((d) => d.length !== undefined)
-        .map((d) => d.length);
-      const totalLength = sum(DL);
-
-      // If there is no enough room for components,
-      // do not group.
-      if (totalLength > crossSize) {
-        components.forEach((d) => (d.group = Symbol('independent')));
-        return components;
-      }
-
-      // Group legends and update legend length.
-      const emptyLength = crossSize - totalLength;
-      const emptyCount = components.length - DL.length;
-      const length = emptyLength / emptyCount;
-      components.forEach((d) => {
-        if (d.length !== undefined) return;
-        d.length = length;
-      });
-    }
-
-    // Create a group component.
-    const size = max(components, (d) => d.size);
-    const order = max(components, (d) => d.order);
-    const crossPadding = max(components, (d) => d.crossPadding);
-    const position = components[0].position;
-    return {
-      type: 'group',
-      size,
-      order,
-      position,
-      children: components,
-      crossPadding,
-    };
+      throw new Error("STUB");
   });
 }
 
@@ -285,52 +183,26 @@ function inferLegendComponentType(
   const isConstantSize = (type, name) => type === 'constant' && name === 'size';
   const accepts = scales.filter(
     ({ type, name }) =>
-      typeof type === 'string' &&
-      channels.includes(name) &&
-      !isConstantSize(type, name), // Do not support constant size scale.
+      { throw new Error("STUB"); }, // Do not support constant size scale.
   );
 
   // Group scales by fields.
-  const constants = accepts.filter(({ type }) => type === 'constant');
-  const nonConstants = accepts.filter(({ type }) => type !== 'constant');
+  const constants = accepts.filter(({ type }) => { throw new Error("STUB"); });
+  const nonConstants = accepts.filter(({ type }) => { throw new Error("STUB"); });
   const groupKey = (d) => (d.field ? d.field : Symbol('independent'));
   const fieldScales = groups(nonConstants, groupKey)
-    .map(([key, scales]) => [key, [...scales, ...constants]] as const)
-    .filter(([, scales]) => scales.some((scale) => scale.type !== 'constant'));
+    .map(([key, scales]) => { throw new Error("STUB"); })
+    .filter(([, scales]) => { throw new Error("STUB"); });
   const scalesByField = new Map(fieldScales) as Map<string, G2ScaleOptions[]>;
 
   // Skip empty scales.
   if (scalesByField.size === 0) return [];
 
   // Infer components.
-  const sort = (arr: string[][]) => arr.sort(([a], [b]) => a.localeCompare(b));
+  const sort = (arr: string[][]) => arr.sort(([a], [b]) => { throw new Error("STUB"); });
   const components = Array.from(scalesByField)
     .map(([, scs]) => {
-      const combinations = combine(scs).sort((a, b) => b.length - a.length);
-      const options = combinations.map((combination) => ({
-        combination,
-        option: combination.map((scale) => [scale.name, getScaleType(scale)]),
-      }));
-
-      // For category legend.
-      for (const { option, combination } of options) {
-        // If every scale is constant, do not display legend.
-        if (option.every((d) => d[1] === 'constant')) continue;
-        if (option.every((d) => d[1] === 'discrete' || d[1] === 'constant')) {
-          return ['legendCategory', combination] as [string, G2ScaleOptions[]];
-        }
-      }
-
-      // For reset legend.
-      // @todo Remove this.
-      for (const [componentType, accords] of LEGEND_INFER_STRATEGIES) {
-        for (const { option, combination } of options) {
-          if (accords.some((accord) => isEqual(sort(accord), sort(option)))) {
-            return [componentType, combination] as [string, G2ScaleOptions[]];
-          }
-        }
-      }
-      return null;
+        throw new Error("STUB");
     })
     .filter(defined);
 
@@ -353,34 +225,7 @@ function inferAxisComponentType(
 ) {
   return scales
     .map((scale) => {
-      const { name } = scale;
-      // todo wait for gui provide helix axis
-      if (isHelix(coordinates) || isTheta(coordinates)) return null;
-      if (
-        isTranspose(coordinates) &&
-        (isPolar(coordinates) || isRadial(coordinates))
-      )
-        return null;
-      // infer axis
-      if (name.startsWith('x')) {
-        if (isPolar(coordinates)) return ['axisArc', [scale]];
-        if (isRadial(coordinates)) return ['axisLinear', [scale]];
-        return [isTranspose(coordinates) ? 'axisY' : 'axisX', [scale]];
-      }
-      if (name.startsWith('y')) {
-        if (isPolar(coordinates)) return ['axisLinear', [scale]];
-        if (isRadial(coordinates)) return ['axisArc', [scale]];
-        return [isTranspose(coordinates) ? 'axisX' : 'axisY', [scale]];
-      }
-      // Only support linear axis for z.
-      if (name.startsWith('z')) {
-        return ['axisZ', [scale]];
-      }
-      if (name.startsWith('position')) {
-        if (isRadar(coordinates)) return ['axisRadar', [scale]];
-        if (!isPolar(coordinates)) return ['axisY', [scale]];
-      }
-      return null;
+        throw new Error("STUB");
     })
     .filter(defined) as [string | GCC, G2ScaleOptions[]][];
 }
@@ -389,7 +234,7 @@ function inferComponentsType(
   scales: G2ScaleOptions[],
   coordinates: G2CoordinateOptions[],
 ): [string | GCC, G2ScaleOptions[]][] {
-  const availableScales = scales.filter((scale) => isValidScale(scale));
+  const availableScales = scales.filter((scale) => { throw new Error("STUB"); });
   return [
     ...inferLegendComponentType(availableScales, coordinates),
     ...inferAxisComponentType(availableScales, coordinates),
@@ -436,7 +281,7 @@ function inferAxisPositionAndOrientation(
   // so we won't render the last axis repeatably.
   if (type === 'axisRadar') {
     const positions = scales.filter((scale) =>
-      scale.name.startsWith('position'),
+      { throw new Error("STUB"); },
     );
     const index = matchPosition(name);
     if (index === null) return [null, null];
@@ -566,15 +411,11 @@ function inferScrollableComponents(
     };
   }
   return scales
-    .filter((d) => d.slider || d.scrollbar)
+    .filter((d) => { throw new Error("STUB"); })
     .flatMap((scale) => {
-      const { slider, scrollbar, name: channelName } = scale;
-      return [
-        normalized('slider', channelName, scale, slider),
-        normalized('scrollbar', channelName, scale, scrollbar),
-      ];
+        throw new Error("STUB");
     })
-    .filter((d) => !!d);
+    .filter((d) => { throw new Error("STUB"); });
 }
 
 // !!! Note Mutate component.size and component.
@@ -600,7 +441,9 @@ export function computeComponentSize(
     if (t.startsWith('slider')) return computeSliderSize;
     if (t === 'title') return computeTitleSize;
     if (t.startsWith('scrollbar')) return computeScrollbarSize;
-    return () => {};
+    return () => {
+        throw new Error("STUB");
+    };
   };
   return createCompute()(
     component,
@@ -620,25 +463,7 @@ function computeGroupSize(
   theme: G2Theme,
   library: G2Library,
 ) {
-  const { children } = component;
-  const maxCrossPadding = max(
-    children,
-    (d: G2GuideComponentOptions) => d.crossPadding,
-  );
-  children.forEach((d) => (d.crossPadding = maxCrossPadding));
-  children.forEach((child) =>
-    computeComponentSize(
-      child,
-      crossSize,
-      crossPadding,
-      position,
-      theme,
-      library,
-    ),
-  );
-  const maxSize = max(children, (d: G2GuideComponentOptions) => d.size);
-  component.size = maxSize;
-  children.forEach((d) => (d.size = maxSize));
+    throw new Error("STUB");
 }
 
 function computeScrollbarSize(
@@ -649,8 +474,7 @@ function computeScrollbarSize(
   theme: G2Theme,
   library: G2Library,
 ) {
-  const { trackSize = 6 } = deepMix({}, theme.scrollbar, component);
-  component.size = trackSize;
+    throw new Error("STUB");
 }
 
 function computeTitleSize(
@@ -661,22 +485,7 @@ function computeTitleSize(
   theme: G2Theme,
   library: G2Library,
 ) {
-  const {
-    title,
-    subtitle,
-    spacing = 0,
-    ...style
-  } = deepMix({}, theme.title, component);
-  if (title) {
-    const titleStyle = subObject(style, 'title');
-    const titleBBox = computeLabelSize(title, titleStyle);
-    component.size = titleBBox.height;
-  }
-  if (subtitle) {
-    const subtitleStyle = subObject(style, 'subtitle');
-    const subtitleBBox = computeLabelSize(subtitle, subtitleStyle);
-    component.size += spacing + subtitleBBox.height;
-  }
+    throw new Error("STUB");
 }
 
 function computeSliderSize(
@@ -687,13 +496,7 @@ function computeSliderSize(
   theme: G2Theme,
   library: G2Library,
 ) {
-  const styleOf = () => {
-    const { slider } = theme;
-    return deepMix({}, slider, component);
-  };
-  const { trackSize, handleIconSize } = styleOf();
-  const size = Math.max(trackSize, handleIconSize * 2.4);
-  component.size = size;
+    throw new Error("STUB");
 }
 
 function computeAxisSize(
@@ -704,73 +507,7 @@ function computeAxisSize(
   theme: G2Theme,
   library: G2Library,
 ) {
-  // If padding is auto, use hide as the labelTransform by default
-  // to avoid overlap between labels.
-  component.transform = component.transform || [{ type: 'hide' }];
-
-  // Vertical or horizontal.
-  const isVertical = position === 'left' || position === 'right';
-
-  // Get styles to be applied.
-  const style = styleOf(component, position, theme);
-  const {
-    tickLength = 0,
-    labelSpacing = 0,
-    titleSpacing = 0,
-    labelAutoRotate,
-    ...rest
-  } = style;
-
-  // Compute Labels.
-  const scale = createScale(component, library);
-  const labelBBoxes = computeLabelsBBox(rest, scale);
-
-  // Compute dynamic tickLength if it's a function
-  let maxTickLength = tickLength;
-  if (typeof component.tickLength === 'function') {
-    const ticks = scale.getTicks?.() || scale.getOptions().domain;
-    const tickLengths = ticks.map((d, i, array) =>
-      component.tickLength(d, i, array),
-    );
-    maxTickLength = Math.max(...tickLengths, 0);
-  }
-
-  const paddingTick = maxTickLength + labelSpacing;
-  if (labelBBoxes && labelBBoxes.length) {
-    const maxLabelWidth = max(labelBBoxes, (d) => d.width);
-    const maxLabelHeight = max(labelBBoxes, (d) => d.height);
-    if (isVertical) {
-      component.size = maxLabelWidth + paddingTick;
-    } else {
-      const { tickFilter, labelTransform } = component;
-      // If the labels can't be placed horizontally, and labelTransform is unset,
-      // rotate 90 deg to display them.
-      if (
-        overflowX(scale, labelBBoxes, crossSize, crossPadding, tickFilter) &&
-        !labelTransform &&
-        labelAutoRotate !== false &&
-        labelAutoRotate !== null
-      ) {
-        component.labelTransform = 'rotate(90)';
-        component.size = maxLabelWidth + paddingTick;
-      } else {
-        component.labelTransform = component.labelTransform ?? 'rotate(0)';
-        component.size = maxLabelHeight + paddingTick;
-      }
-    }
-  } else {
-    component.size = maxTickLength;
-  }
-
-  // Compute title.
-  const titleBBox = computeTitleBBox(rest);
-  if (titleBBox) {
-    if (isVertical) {
-      component.size += titleSpacing + titleBBox.width;
-    } else {
-      component.size += titleSpacing + titleBBox.height;
-    }
-  }
+    throw new Error("STUB");
 }
 
 function computeContinuousLegendSize(
@@ -781,48 +518,7 @@ function computeContinuousLegendSize(
   theme: G2Theme,
   library: G2Library,
 ) {
-  // Get styles.
-  const styleOf = () => {
-    const { legendContinuous } = theme;
-    return deepMix({}, legendContinuous, component);
-  };
-  const { labelSpacing = 0, titleSpacing = 0, ...rest } = styleOf();
-
-  // Vertical or horizontal.
-  const isVertical = position === 'left' || position === 'right';
-
-  // Ribbon styles.
-  const ribbonStyles = subObject(rest, 'ribbon');
-  const { size: ribbonSize } = ribbonStyles;
-
-  const handleIconStyles = subObject(rest, 'handleIcon');
-  const { size: handleIconSize } = handleIconStyles;
-
-  const mainSize = Math.max(
-    ribbonSize,
-    handleIconSize * 2.4, // height = width * 2.4
-  );
-
-  component.size = mainSize;
-
-  // Compute labels.
-  const scale = createScale(component, library);
-  const labelBBoxes = computeLabelsBBox(rest, scale);
-  if (labelBBoxes) {
-    const key = isVertical ? 'width' : 'height';
-    const size = max(labelBBoxes, (d) => d[key]);
-    component.size += size + labelSpacing;
-  }
-
-  // Compute title.
-  const titleBBox = computeTitleBBox(rest);
-  if (titleBBox) {
-    if (isVertical) {
-      component.size = Math.max(component.size, titleBBox.width);
-    } else {
-      component.size += titleSpacing + titleBBox.height;
-    }
-  }
+    throw new Error("STUB");
 }
 
 function computeCategoryLegendSize(
@@ -833,206 +529,7 @@ function computeCategoryLegendSize(
   theme: G2Theme,
   library: G2Library,
 ) {
-  const styleOf = () => {
-    const { legendCategory } = theme;
-    const { title } = component;
-    const [defaultTitle, specifiedTitle] = Array.isArray(title)
-      ? [title, undefined]
-      : [undefined, title];
-    return deepMix({ title: defaultTitle }, legendCategory, {
-      ...component,
-      title: specifiedTitle,
-    });
-  };
-
-  const {
-    focus,
-    itemSpacing,
-    focusMarkerSize,
-    itemMarkerSize,
-    titleSpacing,
-    rowPadding,
-    colPadding,
-    maxCols = Infinity,
-    maxRows = Infinity,
-    ...rest
-  } = styleOf();
-
-  const { cols, length } = component;
-
-  const getRows = (rows) => Math.min(rows, maxRows);
-  const getCols = (cols) => Math.min(cols, maxCols);
-
-  // Vertical or horizontal.
-  const isVertical = position === 'left' || position === 'right';
-
-  const crossSize =
-    length === undefined
-      ? crossSize0 + (isVertical ? 0 : crossPadding[0] + crossPadding[1])
-      : length;
-
-  // Create scale.
-  const scale = createScale(component, library);
-
-  // If render is provided, use HTML to render.
-  const { render } = component;
-  if (render && typeof document !== 'undefined') {
-    const domain = scale.getOptions().domain;
-    const { labelFormatter } = rest;
-    const formatLabel = (d: any) => {
-      if (!labelFormatter) return `${d}`;
-      return typeof labelFormatter === 'string'
-        ? format(labelFormatter)(d)
-        : labelFormatter(d);
-    };
-
-    const items = domain.map((d, i) => ({
-      id: d,
-      index: i,
-      label: formatLabel(d),
-      value: d,
-      color: scale.map(d),
-    }));
-
-    const html = render(items, rest);
-    const container = document.createElement('div');
-    const { width, height } = component;
-
-    const style: Partial<CSSStyleDeclaration> = {
-      position: 'absolute',
-      visibility: 'hidden',
-      top: '-9999px',
-    };
-
-    if (width) style.width = `${width}px`;
-    else if (!isVertical) style.width = `${crossSize}px`;
-
-    if (height) style.height = `${height}px`;
-    else if (isVertical) style.height = `${crossSize}px`;
-
-    Object.assign(container.style, style);
-
-    if (typeof html === 'string') {
-      container.innerHTML = html;
-    } else if (html instanceof HTMLElement) {
-      container.appendChild(html);
-    }
-    document.body.appendChild(container);
-    const bbox = container.getBoundingClientRect();
-    document.body.removeChild(container);
-    component.size = isVertical ? bbox.width : bbox.height;
-    return;
-  }
-
-  // Compute title.
-  const titleBBox = computeTitleBBox(rest);
-
-  const labelBBoxes = computeLabelsBBox(rest, scale, 'itemLabel');
-
-  // Compute itemValue sizes if itemValue is configured
-  const valueBBoxes =
-    rest.itemValueText !== undefined
-      ? computeLabelsBBox(rest, scale, 'itemValue')
-      : null;
-
-  const height =
-    Math.max(
-      labelBBoxes[0].height,
-      itemMarkerSize,
-      // Also consider itemValue height if it exists
-      ...(valueBBoxes?.[0] ? [valueBBoxes[0].height] : []),
-    ) + rowPadding;
-
-  const widthOf = (labelWidth, padding = 0) => {
-    // Calculate total width including marker, label, value (if exists), and focus icon
-    let totalWidth = itemMarkerSize + labelWidth + itemSpacing[0] + padding;
-
-    // Add itemValue width if it exists
-    if (valueBBoxes?.[0]) {
-      totalWidth += valueBBoxes[0].width + itemSpacing[1];
-    }
-
-    // Add focus icon width if focus is enabled
-    if (focus) {
-      totalWidth += focusMarkerSize + itemSpacing[2];
-    }
-
-    return totalWidth;
-  };
-
-  // Only support grid layout for vertical area.
-  const computeVerticalSize = () => {
-    let maxSize = -Infinity;
-    let pos = 0;
-    let cols = 1;
-    let rows = 0;
-    let maxRows = -Infinity;
-    let maxPos = -Infinity;
-    const titleHeight = titleBBox ? titleBBox.height : 0;
-    const maxHeight = crossSize - titleHeight;
-    for (const { width } of labelBBoxes) {
-      const w = widthOf(width, colPadding);
-      maxSize = Math.max(maxSize, w);
-      if (pos + height > maxHeight) {
-        cols++;
-        maxRows = Math.max(maxRows, rows);
-        maxPos = Math.max(maxPos, pos);
-        rows = 1;
-        pos = height;
-      } else {
-        pos += height;
-        rows++;
-      }
-    }
-    if (cols <= 1) {
-      maxRows = rows;
-      maxPos = pos;
-    }
-    component.size = maxSize * getCols(cols);
-    component.length = maxPos + titleHeight;
-    deepMix(component, { cols: getCols(cols), gridRow: maxRows });
-  };
-
-  // Horizontal grid layout.
-  const computeHorizontalGrid = () => {
-    const rows = Math.ceil(labelBBoxes.length / cols);
-    const maxWidth = max(labelBBoxes, (d) => widthOf(d.width)) * cols;
-    component.size = height * getRows(rows) - rowPadding;
-    component.length = Math.min(maxWidth, crossSize);
-  };
-
-  // Horizontal flex layout.
-  const computeHorizontalFlex = () => {
-    let rows = 1;
-    let pos = 0;
-    let maxPos = -Infinity;
-    for (const { width } of labelBBoxes) {
-      const w = widthOf(width, colPadding);
-      if (pos + w > crossSize) {
-        maxPos = Math.max(maxPos, pos);
-        pos = w;
-        rows++;
-      } else {
-        pos += w;
-      }
-    }
-    if (rows === 1) maxPos = pos;
-    component.size = height * getRows(rows) - rowPadding;
-    component.length = maxPos;
-  };
-
-  if (isVertical) computeVerticalSize();
-  else if (typeof cols === 'number') computeHorizontalGrid();
-  else computeHorizontalFlex();
-
-  // Compute titles.
-  if (titleBBox) {
-    if (isVertical) {
-      component.size = Math.max(component.size, titleBBox.width);
-    } else {
-      component.size += titleSpacing + titleBBox.height;
-    }
-  }
+    throw new Error("STUB");
 }
 
 export function createScale(
@@ -1046,7 +543,7 @@ export function createScale(
   // Init scale, the tickCount of axis has higher priority than scale.
   const { scales, tickCount, tickMethod } = component;
   const scaleOptions = scales.find(
-    (d) => d.type !== 'constant' && d.type !== 'identity',
+    (d) => { throw new Error("STUB"); },
   );
   if (tickCount !== undefined) scaleOptions.tickCount = tickCount;
   if (tickMethod !== undefined) scaleOptions.tickMethod = tickMethod;
@@ -1065,26 +562,20 @@ export function computeLabelsBBox(
   const labels = labelsOf(scale, labelFormatter, tickFilter);
   const labelStyle = subObject(style, key);
   const labelStyles = labels.map((d, i) =>
-    Object.fromEntries(
-      Object.entries(labelStyle).map(([key, value]) => [
-        key,
-        typeof value === 'function' ? value(d, i, labels) : value,
-      ]),
-    ),
+    { throw new Error("STUB"); },
   );
   const labelBBoxes = labels.map((d, i) => {
-    const normalizeStyle = labelStyles[i];
-    return computeLabelSize(d, normalizeStyle);
+      throw new Error("STUB");
   });
 
   // Cache boxes to avoid computed twice.
   // @todo GUI use untransformed bbox, so it can't cache if
   // label.style has transform attributes.
-  const hasTransform = labelStyles.some((d) => d.transform);
+  const hasTransform = labelStyles.some((d) => { throw new Error("STUB"); });
   if (!hasTransform) {
-    const I = labels.map((_, i) => i);
+    const I = labels.map((_, i) => { throw new Error("STUB"); });
     component.indexBBox = new Map(
-      I.map((i) => [i, [labels[i], labelBBoxes[i]]]),
+      I.map((i) => { throw new Error("STUB"); }),
     );
   }
 
@@ -1138,21 +629,19 @@ function labelsOf(
   tickFilter,
 ): (string | DisplayObject)[] {
   const T = ticksOf(scale, tickFilter);
-  const ticks = T.map((d) => (typeof d === 'number' ? prettyNumber(d) : d));
+  const ticks = T.map((d) => { throw new Error("STUB"); });
   const formatter = labelFormatter
     ? typeof labelFormatter === 'string'
       ? format(labelFormatter)
       : labelFormatter
     : scale.getFormatter
     ? scale.getFormatter()
-    : (d) => `${d}`;
+    : (d) => { throw new Error("STUB"); };
   return ticks.map(formatter);
 }
 
 function offsetOf(scale: Scale, d: any): number {
-  if (!scale.getBandWidth) return 0;
-  const offset = scale.getBandWidth(d) / 2;
-  return offset;
+    throw new Error("STUB");
 }
 
 function overflowX(
@@ -1162,38 +651,7 @@ function overflowX(
   crossPadding: [number, number],
   tickFilter: (d: any) => boolean,
 ): boolean {
-  // If actual size bigger than container size, overflow.
-  const totalSize = sum(labelBBoxes, (d) => d.width);
-  if (totalSize > crossSize) return true;
-
-  // Clone scale to get visual position for labels.
-  const scaleX = scale.clone();
-  scaleX.update({ range: [0, crossSize] });
-  const ticks = ticksOf(scale, tickFilter);
-  const X = ticks.map((d) => scaleX.map(d) + offsetOf(scaleX, d));
-
-  const I = ticks.map((_, i) => i);
-  const startX = -crossPadding[0];
-  const endX = crossSize + crossPadding[1];
-  const extent = (x, bbox) => {
-    const { width } = bbox;
-    return [x - width / 2, x + width / 2];
-  };
-
-  // Collision detection.
-  for (let i = 0; i < I.length; i++) {
-    const x = X[i];
-    const [x0, x1] = extent(x, labelBBoxes[i]);
-    // If a label is out of plot area, overflow.
-    if (x0 < startX || x1 > endX) return true;
-    const y = X[i + 1];
-    if (y) {
-      // If two labels intersect, overflow.
-      const [y0] = extent(y, labelBBoxes[i + 1]);
-      if (x1 > y0) return true;
-    }
-  }
-  return false;
+    throw new Error("STUB");
 }
 
 function computeLabelSize(

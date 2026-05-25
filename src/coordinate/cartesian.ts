@@ -6,6 +6,6 @@ export type CartesianOptions = Omit<CartesianCoordinate, 'polar'>;
 /**
  * Default coordinate transformation for all charts.
  */
-export const Cartesian: CC<CartesianOptions> = () => [['cartesian']];
+export const Cartesian: CC<CartesianOptions> = () => { throw new Error("STUB"); };
 
 Cartesian.props = {};

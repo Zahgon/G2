@@ -223,10 +223,7 @@ function oneToOne(
 
     const animation = pathShape.animate(keyframes, timeEffect);
     animation.onfinish = () => {
-      // Should keep the original path definition.
-      copyAttributes(pathShape, to);
-      pathShape.style.d = toPath;
-      pathShape.style.transform = 'none';
+        throw new Error("STUB");
     };
 
     // Remove transform because it already applied in path
@@ -254,13 +251,7 @@ function oneToMultiple(
   from.style.visibility = 'hidden';
   const D = split(from, to.length);
   return to.map((shape, i) => {
-    const path = new Path({
-      style: {
-        d: D[i],
-        ...attributeOf(from, attributeKeys),
-      },
-    });
-    return oneToOne(shape, path, shape, timeEffect);
+      throw new Error("STUB");
   });
 }
 
@@ -283,13 +274,7 @@ function multipleToOne(
   ];
   const animation = to.animate(keyframes, timeEffect);
   const animations = from.map((shape, i) => {
-    const path = new Path({
-      style: {
-        d: D[i],
-        fill: to.style.fill,
-      },
-    });
-    return oneToOne(shape, shape, path, timeEffect);
+      throw new Error("STUB");
   });
   return [...animations, animation];
 }
@@ -299,26 +284,7 @@ function multipleToOne(
  * @todo Support more split function.
  */
 export const Morphing: AC<MorphingOptions> = (options) => {
-  return (from, to, defaults) => {
-    const split = normalizeSplit(options.split);
-    const timeEffect = { ...defaults, ...options };
-    const { length: fl } = from;
-    const { length: tl } = to;
-    if ((fl === 1 && tl === 1) || (fl > 1 && tl > 1)) {
-      const [f] = from;
-      const [t] = to;
-      return oneToOne(f, f, t, timeEffect);
-    }
-    if (fl === 1 && tl > 1) {
-      const [f] = from;
-      return oneToMultiple(f, to, timeEffect, split);
-    }
-    if (fl > 1 && tl === 1) {
-      const [t] = to;
-      return multipleToOne(from, t, timeEffect, split);
-    }
-    return null;
-  };
+    throw new Error("STUB");
 };
 
 Morphing.props = {};

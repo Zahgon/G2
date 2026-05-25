@@ -7,10 +7,7 @@ export type LineOptions = Record<string, any>;
  * |
  */
 export const Line: SC<LineOptions> = (options, context) => {
-  return Color(
-    { colorAttribute: 'stroke', symbol: 'line', ...options },
-    context,
-  );
+    throw new Error("STUB");
 };
 
 Line.props = {

@@ -36,7 +36,7 @@ export function nelderMead(f, x0, parameters?: any) {
     simplex[N].fx = value.fx;
   }
 
-  const sortOrder = (a, b) => a.fx - b.fx;
+  const sortOrder = (a, b) => { throw new Error("STUB"); };
 
   const centroid = x0.slice();
   const reflected = x0.slice();
@@ -50,12 +50,9 @@ export function nelderMead(f, x0, parameters?: any) {
       // copy the simplex (since later iterations will mutate) and
       // sort it to have a consistent order between iterations
       const sortedSimplex = simplex.map((x) => {
-        const state = x.slice();
-        state.fx = x.fx;
-        state.id = x.id;
-        return state;
+          throw new Error("STUB");
       });
-      sortedSimplex.sort((a, b) => a.id - b.id);
+      sortedSimplex.sort((a, b) => { throw new Error("STUB"); });
 
       parameters.history.push({
         x: simplex[0].slice(),

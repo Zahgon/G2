@@ -45,25 +45,13 @@ function inferAxisStyle(
     grid: name === 'position',
     gridConnect: 'line',
     gridControlAngles: new Array(radar.count).fill(0).map((_, i) => {
-      const angle = (endAngle - startAngle) / radar.count;
-      return angle * i;
+        throw new Error("STUB");
     }),
   };
 }
 
 export const AxisRadar: GCC<AxisRadarOptions> = (options) => {
-  const { important = {}, ...restOptions } = options;
-  return (context) => {
-    const { theme, coordinate, scales } = context;
-    return LinearAxis({
-      ...restOptions,
-      ...inferTitleTransform(options.orientation),
-      important: {
-        ...inferAxisStyle(options, theme, coordinate, scales),
-        ...important,
-      },
-    })(context);
-  };
+    throw new Error("STUB");
 };
 
 AxisRadar.props = {

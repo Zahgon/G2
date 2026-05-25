@@ -103,25 +103,7 @@ export function extractSingleAxisScaleInfo(
   scaleX: RuntimeScale,
   scaleY: RuntimeScale,
 ): SingleAxisScaleInfo {
-  const currentScale = shouldFilterXAxis ? scaleY : scaleX;
-  const targetScale = shouldFilterXAxis ? scaleX : scaleY;
-  const isSourceDiscrete = isOrdinalScale(currentScale);
-  const isTargetDiscrete = isOrdinalScale(targetScale);
-
-  const targetOriginalDomain = targetScale.getOptions().domain;
-  const shouldPreserveZeroBaseline =
-    !isTargetDiscrete &&
-    targetOriginalDomain &&
-    targetOriginalDomain.length >= 2 &&
-    targetOriginalDomain[0] === 0;
-
-  return {
-    currentScale,
-    targetScale,
-    isSourceDiscrete,
-    isTargetDiscrete,
-    shouldPreserveZeroBaseline,
-  };
+    throw new Error("STUB");
 }
 
 /**
@@ -142,52 +124,7 @@ export function extractMultiAxisScaleInfo(
   scaleY: RuntimeScale,
   channelDomain: Record<string, unknown[]>,
 ): MultiAxisScaleInfo {
-  const currentScale = shouldFilterXAxis ? scaleY : scaleX;
-
-  /**
-   * Retrieves scale domains for a specific axis type (x or y).
-   * Supports both primary axes (x, y) and numbered variants (x1, x2, y1, y2).
-   */
-  const getAxisScaleDomains = (axisType: 'x' | 'y') => {
-    const axisScales: Record<string, unknown[]> = {};
-    Object.keys(channelDomain).forEach((key) => {
-      if (key === axisType || key.match(new RegExp(`^${axisType}\\d+$`))) {
-        axisScales[key] = channelDomain[key];
-      }
-    });
-    return axisScales;
-  };
-
-  const targetScaleDomain = shouldFilterXAxis
-    ? getAxisScaleDomains('x')
-    : getAxisScaleDomains('y');
-  const targetScaleKeys = Object.keys(targetScaleDomain);
-
-  const targetScales = targetScaleKeys.map((item) => scale[item]);
-  const isSourceDiscrete = isOrdinalScale(currentScale);
-  const isTargetDiscrete = targetScales.map((targetScale) =>
-    isOrdinalScale(targetScale),
-  );
-
-  const shouldPreserveZeroBaseline = targetScales.map((targetScale, index) => {
-    const targetOriginalDomain = targetScale.getOptions().domain;
-    const isDiscrete = isTargetDiscrete[index];
-    return (
-      !isDiscrete &&
-      targetOriginalDomain &&
-      targetOriginalDomain.length >= 2 &&
-      targetOriginalDomain[0] === 0
-    );
-  });
-
-  return {
-    currentScale,
-    targetScales,
-    isSourceDiscrete,
-    isTargetDiscrete,
-    shouldPreserveZeroBaseline,
-    targetScaleKeys,
-  };
+    throw new Error("STUB");
 }
 
 /**
@@ -197,8 +134,7 @@ export function extractMultiAxisScaleInfo(
  * @returns Sorted array with unique values
  */
 function getUniqueSortedValues(values: number[]): number[] {
-  const uniqueValues = Array.from(new Set(values));
-  return uniqueValues.sort((a, b) => a - b);
+    throw new Error("STUB");
 }
 
 /**
@@ -212,13 +148,7 @@ function calculateFilteredDomain({
   filteredValues,
   shouldPreserveZeroBaseline,
 }: CalculateFilteredDomainOptions): unknown[] {
-  if (isTargetDiscrete) {
-    return getUniqueSortedValues(filteredValues);
-  } else {
-    const min = Math.min(...filteredValues);
-    const max = Math.max(...filteredValues);
-    return shouldPreserveZeroBaseline ? [0, max] : [min, max];
-  }
+    throw new Error("STUB");
 }
 
 /**
@@ -226,13 +156,7 @@ function calculateFilteredDomain({
  * Handles Date objects, strings, and numbers.
  */
 function convertToNumeric(value: unknown): number {
-  if (value instanceof Date) {
-    return value.getTime();
-  }
-  if (typeof value === 'string') {
-    return parseFloat(value);
-  }
-  return Number(value);
+    throw new Error("STUB");
 }
 
 /**
@@ -257,97 +181,7 @@ export function filterMarkDataByDomain(
   adaptiveMode: AdaptiveFilterMode = 'filter',
   shouldFilterXAxis = false,
 ): unknown[] {
-  if (isFalsyValue(adaptiveMode)) {
-    return [];
-  }
-
-  const sourceChannel = shouldFilterXAxis ? 'y' : 'x';
-  const targetChannel = shouldFilterXAxis ? 'x' : 'y';
-  const allFilteredTargetValues: number[] = [];
-
-  for (const markData of markDataPairs) {
-    const { channelData } = markData;
-    const sourceValues = channelData[sourceChannel] || [];
-    const targetValues = channelData[targetChannel] || [];
-
-    // Handle different data structures based on channel type:
-    // X channel: one-dimensional array [x1, x2, x3, ...]
-    // Y channel: two-dimensional array [[y1, y2, y3, ...]]
-
-    // Normalize source values to one-dimensional array
-    const normalizedSourceValues = Array.isArray(sourceValues[0])
-      ? sourceValues[0] // If it's 2D array (Y channel), take first sub-array
-      : sourceValues; // If it's 1D array (X channel), use as is
-
-    // Handle target values based on their structure
-    const isTargetArray2D = Array.isArray(targetValues[0]);
-
-    if (normalizedSourceValues.length === 0) continue;
-
-    const dataLength = normalizedSourceValues.length;
-
-    for (let i = 0; i < dataLength; i++) {
-      const sourceValue = normalizedSourceValues[i];
-      let shouldInclude = false;
-
-      if (isSourceDiscrete) {
-        shouldInclude = domain.includes(sourceValue);
-      } else {
-        // Handle both numeric and Date domains
-        if (domain.length >= 2) {
-          const sourceTime = convertToNumeric(sourceValue);
-          const domainStartTime = convertToNumeric(domain[0]);
-          const domainEndTime = convertToNumeric(domain[domain.length - 1]);
-
-          if (
-            !isNaN(sourceTime) &&
-            !isNaN(domainStartTime) &&
-            !isNaN(domainEndTime)
-          ) {
-            shouldInclude =
-              sourceTime >= domainStartTime && sourceTime <= domainEndTime;
-          }
-        }
-      }
-
-      if (adaptiveMode === 'filter' && shouldInclude) {
-        // Collect target channel values for this data point
-        if (isTargetArray2D) {
-          // Target is 2D array (Y channel)
-          const numChannels = targetValues.length;
-          for (let channelIdx = 0; channelIdx < numChannels; channelIdx++) {
-            const channelData = targetValues[channelIdx];
-            if (Array.isArray(channelData) && i < channelData.length) {
-              const targetValue = channelData[i];
-              const numericValue = convertToNumeric(targetValue);
-              if (!isNaN(numericValue)) {
-                allFilteredTargetValues.push(numericValue);
-              }
-            }
-          }
-        } else {
-          // Target is 1D array (X channel)
-          if (i < targetValues.length) {
-            const targetValue = targetValues[i];
-            const numericValue = convertToNumeric(targetValue);
-            if (!isNaN(numericValue)) {
-              allFilteredTargetValues.push(numericValue);
-            }
-          }
-        }
-      }
-    }
-  }
-
-  if (allFilteredTargetValues.length > 0) {
-    return calculateFilteredDomain({
-      isTargetDiscrete,
-      filteredValues: allFilteredTargetValues,
-      shouldPreserveZeroBaseline,
-    });
-  }
-
-  return [];
+    throw new Error("STUB");
 }
 
 /**
@@ -363,18 +197,7 @@ export function processSingleAxisFiltering({
   adaptiveMode,
   shouldFilterXAxis = false,
 }: SingleAxisFilteringParams): unknown[] {
-  const { isSourceDiscrete, isTargetDiscrete, shouldPreserveZeroBaseline } =
-    scaleInfo;
-
-  return filterMarkDataByDomain(
-    markDataPairs,
-    domain,
-    isSourceDiscrete,
-    isTargetDiscrete,
-    shouldPreserveZeroBaseline,
-    adaptiveMode,
-    shouldFilterXAxis,
-  );
+    throw new Error("STUB");
 }
 
 /**
@@ -392,39 +215,7 @@ export function processMultiAxisViewFiltering({
   adaptiveMode,
   shouldFilterXAxis = false,
 }: MultiAxisFilteringParams): Map<string, unknown[]> {
-  const filteredDomain = new Map<string, unknown[]>();
-  const {
-    isSourceDiscrete,
-    isTargetDiscrete,
-    shouldPreserveZeroBaseline,
-    targetScaleKeys,
-  } = scaleInfo;
-
-  markDataPairs.forEach((markData) => {
-    const scaleKey = markToScaleMap.get(markData.markKey);
-    if (!scaleKey) return;
-
-    const scaleIndex = targetScaleKeys.indexOf(scaleKey);
-    if (scaleIndex === -1) return;
-
-    const currentIsTargetDiscrete = isTargetDiscrete[scaleIndex];
-    const currentShouldPreserveZeroBaseline =
-      shouldPreserveZeroBaseline[scaleIndex];
-
-    const markFilteredDomain = filterMarkDataByDomain(
-      [markData],
-      domain,
-      isSourceDiscrete,
-      currentIsTargetDiscrete,
-      currentShouldPreserveZeroBaseline,
-      adaptiveMode,
-      shouldFilterXAxis,
-    );
-
-    filteredDomain.set(scaleKey, markFilteredDomain);
-  });
-
-  return filteredDomain;
+    throw new Error("STUB");
 }
 
 /**
@@ -451,41 +242,7 @@ export function processMultiAxisMarkFiltering(
   shouldFilterXAxis = false,
   markToScaleMap?: Map<string, string>,
 ): Map<string, unknown[]> {
-  const filteredDomain = new Map<string, unknown[]>();
-
-  // Early return if no data to process
-  if (markDataPairs.length === 0 || domain.length === 0) {
-    return filteredDomain;
-  }
-
-  const { isSourceDiscrete, isTargetDiscrete, shouldPreserveZeroBaseline } =
-    scaleInfo;
-
-  // Find all marks that share the same target scale key
-  const relevantMarkData = markToScaleMap
-    ? markDataPairs.filter((markData) => {
-        const markScaleKey = markToScaleMap.get(markData.markKey);
-        return markScaleKey === targetScaleKey;
-      })
-    : markDataPairs.filter((markData) => markData.markKey === targetMarkKey);
-
-  // Early return if no relevant marks found
-  if (relevantMarkData.length === 0) {
-    return filteredDomain;
-  }
-
-  const markFilteredDomain = filterMarkDataByDomain(
-    relevantMarkData,
-    domain,
-    isSourceDiscrete,
-    isTargetDiscrete,
-    shouldPreserveZeroBaseline,
-    adaptiveMode,
-    shouldFilterXAxis,
-  );
-
-  filteredDomain.set(targetScaleKey, markFilteredDomain);
-  return filteredDomain;
+    throw new Error("STUB");
 }
 
 /**
@@ -503,15 +260,5 @@ export function updateChannelDomains(
   shouldFilterXAxis: boolean,
   isMultiAxis: boolean,
 ): void {
-  if (isMultiAxis && filteredDomain instanceof Map) {
-    filteredDomain.forEach((domain, scaleKey) => {
-      if (domain && Array.isArray(domain) && domain.length > 0) {
-        channelDomain[scaleKey] = domain;
-      }
-    });
-  } else if (!isMultiAxis && Array.isArray(filteredDomain)) {
-    if (filteredDomain.length > 0) {
-      channelDomain[shouldFilterXAxis ? 'x' : 'y'] = filteredDomain;
-    }
-  }
+    throw new Error("STUB");
 }

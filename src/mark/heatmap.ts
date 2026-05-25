@@ -19,17 +19,7 @@ export type HeatmapOptions = Omit<HeatmapMark, 'type'>;
  * Draw heatmap with gradient.
  */
 export const Heatmap: MC<HeatmapOptions> = (options) => {
-  return (index, scale, value, coordinate) => {
-    const { x: X, y: Y, size: S, color: C } = value;
-    const P = Array.from(index, (i) => {
-      // Default size = 40.
-      const r = S ? +S[i] : 40;
-      // Warning: x, y, value, radius.
-      return [...coordinate.map([+X[i], +Y[i]]), C[i], r] as unknown as Vector2;
-    });
-
-    return [[0], [P]];
-  };
+    throw new Error("STUB");
 };
 
 Heatmap.props = {

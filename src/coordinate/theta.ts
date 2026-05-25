@@ -19,12 +19,7 @@ export const getThetaOptions = (options: ThetaOptions = {}) => {
  * Theta = Transpose + Polar.
  */
 export const Theta: CC<ThetaOptions> = (options) => {
-  const { startAngle, endAngle, innerRadius, outerRadius } =
-    getThetaOptions(options);
-  return [
-    ...Transpose(),
-    ...Polar({ startAngle, endAngle, innerRadius, outerRadius }),
-  ];
+    throw new Error("STUB");
 };
 
 Theta.props = {};

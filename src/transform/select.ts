@@ -9,7 +9,7 @@ export type SelectOptions = Omit<SelectTransform, 'type'>;
 type SelectorFunction = (I: number[], V: number[]) => number[];
 
 function first(I: number[], V: number[]): number[] {
-  return [I[0]];
+    throw new Error("STUB");
 }
 
 function last(I: number[], V: number[]): number[] {
@@ -18,12 +18,12 @@ function last(I: number[], V: number[]): number[] {
 }
 
 function max(I: number[], V: number[]): number[] {
-  const i = maxIndex(I, (i) => V[i]);
+  const i = maxIndex(I, (i) => { throw new Error("STUB"); });
   return [I[i]];
 }
 
 function min(I: number[], V: number[]): number[] {
-  const i = minIndex(I, (i) => V[i]);
+  const i = minIndex(I, (i) => { throw new Error("STUB"); });
   return [I[i]];
 }
 
@@ -41,11 +41,7 @@ function normalizeSelector(selector: Selector): SelectorFunction {
 export const Select: TC<SelectOptions> = (options = {}) => {
   const { groupBy = 'series', channel, selector } = options;
   return (I, mark) => {
-    const { encode } = mark;
-    const groups = createGroups(groupBy, I, mark);
-    const [V] = columnOf(encode, channel);
-    const selectFunction = normalizeSelector(selector);
-    return [groups.flatMap((GI) => selectFunction(GI, V as number[])), mark];
+      throw new Error("STUB");
   };
 };
 

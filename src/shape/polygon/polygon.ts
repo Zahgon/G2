@@ -15,24 +15,10 @@ function getPolygonPath(points: Vector2[], coordinate: Coordinate) {
     const center = coordinate.getCenter();
     const closedPoints = [...points, points[0]];
     // Calculate dist array for cache.
-    const dists = closedPoints.map((p) => dist(p, center));
+    const dists = closedPoints.map((p) => { throw new Error("STUB"); });
 
     closedPoints.forEach((curr, idx) => {
-      if (idx === 0) {
-        path.moveTo(curr[0], curr[1]);
-        return;
-      }
-      const currDist = dists[idx];
-      const prev = points[idx - 1];
-      const prevDist = dists[idx - 1];
-
-      // When radius is equal, draw 2 point with arc.
-      // todo: choose a minimum value.
-      if (prevDist !== undefined && Math.abs(currDist - prevDist) < 1e-10) {
-        appendArc(path, prev, curr, center, currDist);
-      } else {
-        path.lineTo(curr[0], curr[1]);
-      }
+        throw new Error("STUB");
     });
     path.closePath();
 
@@ -44,20 +30,7 @@ function getPolygonPath(points: Vector2[], coordinate: Coordinate) {
 }
 
 export const Polygon: SC<PolygonOptions> = (options, context) => {
-  const { coordinate, document } = context;
-  return (points, value, defaults) => {
-    const { color: defaultColor, ...rest } = defaults;
-    const { color = defaultColor, transform } = value;
-    const path = getPolygonPath(points, coordinate);
-    return select(document.createElement('path', {}))
-      .call(applyStyle, rest)
-      .style('d', path.toString())
-      .style('stroke', color)
-      .style('fill', color)
-      .style('transform', transform)
-      .call(applyStyle, options)
-      .node();
-  };
+    throw new Error("STUB");
 };
 
 Polygon.props = {

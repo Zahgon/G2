@@ -85,27 +85,7 @@ function getPath(p: Vector2[], coordinate: Coordinate, size = 4) {
 }
 
 export const Violin: SC<ViolinOptions> = (options, context) => {
-  const { coordinate, document } = context;
-  return (points, value, defaults) => {
-    const { color, transform } = value;
-    // TODO: how to setting it by size channel.
-    const size = 4;
-    const {
-      color: defaultColor,
-      fill = defaultColor,
-      stroke = defaultColor,
-      ...rest
-    } = defaults;
-    const path = getPath(points, coordinate, size);
-    return select(document.createElement('path', {}))
-      .call(applyStyle, rest)
-      .style('d', path.toString())
-      .style('stroke', stroke)
-      .style('fill', color || fill)
-      .style('transform', transform)
-      .call(applyStyle, options)
-      .node();
-  };
+    throw new Error("STUB");
 };
 
 Violin.props = {

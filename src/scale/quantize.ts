@@ -5,7 +5,7 @@ import { QuantizeScale as QuantizeScaleSpec } from '../spec';
 export type QuantizeOptions = Omit<QuantizeScaleSpec, 'type'>;
 
 export const Quantize: SC<QuantizeOptions> = (options) => {
-  return new QuantizeScale(options);
+    throw new Error("STUB");
 };
 
 Quantize.props = {};

@@ -49,8 +49,8 @@ function getArrowMarker(
 function getPath(points: Vector2[], coordinate: Coordinate) {
   if (!isPolar(coordinate))
     return line()
-      .x((d) => d[0])
-      .y((d) => d[1])(points);
+      .x((d) => { throw new Error("STUB"); })
+      .y((d) => { throw new Error("STUB"); })(points);
 
   const center = coordinate.getCenter();
   return arc()({
@@ -69,33 +69,7 @@ function getTransform(coordinate: Coordinate, transform?: Primitive) {
 }
 
 export const Line: SC<LineOptions> = (options, context) => {
-  const { arrow, arrowSize = 4, ...style } = options;
-  const { coordinate, document } = context;
-  return (points, value, defaults) => {
-    const { color: defaultColor, lineWidth, ...shapeTheme } = defaults;
-    const { color = defaultColor, size = lineWidth } = value;
-
-    const arrowMarker = arrow
-      ? getArrowMarker(document, arrowSize, {
-          fill: style.stroke || color,
-          stroke: style.stroke || color,
-          ...subObject(style, 'arrow'),
-        })
-      : null;
-
-    const path = getPath(points, coordinate);
-    const transform = getTransform(coordinate, value.transform);
-
-    return select(document.createElement('path', {}))
-      .call(applyStyle, shapeTheme)
-      .style('d', path)
-      .style('stroke', color)
-      .style('lineWidth', size)
-      .style('transform', transform)
-      .style('markerEnd', arrowMarker)
-      .call(applyStyle, style)
-      .node();
-  };
+    throw new Error("STUB");
 };
 
 Line.props = {

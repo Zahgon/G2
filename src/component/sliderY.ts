@@ -7,7 +7,7 @@ export type SliderYOptions = SliderOptions;
  * SliderY component.
  */
 export const SliderY: GCC<SliderYOptions> = (options) => {
-  return Slider({ ...options, orientation: 'vertical' });
+    throw new Error("STUB");
 };
 
 SliderY.props = {

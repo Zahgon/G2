@@ -35,45 +35,11 @@ function inferTextPosition(shape: DisplayObject) {
 }
 
 const BadgeShape = createElement((g) => {
-  const { class: className, x: x0, y: y0, transform, ...rest } = g.attributes;
-
-  const markerStyle = subObject(rest, 'marker');
-  const { size = 24 } = markerStyle;
-
-  const symbol = () => getPath(size / 2);
-  const bgShape = select(g)
-    .maybeAppend('marker', () => new Marker({}))
-    .call((selection) =>
-      (selection.node() as Marker).update({ symbol, ...markerStyle }),
-    )
-    .node() as DisplayObject;
-
-  const [x, y] = inferTextPosition(bgShape);
-  select(g)
-    .maybeAppend('text', 'text')
-    .style('x', x)
-    .style('y', y)
-    .call(applyStyle, rest);
+    throw new Error("STUB");
 });
 
 export const Badge: SC<BadgeOptions> = (options, context) => {
-  const { ...style } = options;
-  return (points, value, defaults) => {
-    const { color: defaultColor, ...rest } = defaults;
-    const { color = defaultColor, text = '' } = value;
-    const textStyle = {
-      text: String(text),
-      stroke: color,
-      fill: color,
-    };
-    const [[x0, y0]] = points;
-    return select(new BadgeShape())
-      .call(applyStyle, rest)
-      .style('transform', `translate(${x0},${y0})`)
-      .call(applyStyle, textStyle)
-      .call(applyStyle, style)
-      .node();
-  };
+    throw new Error("STUB");
 };
 
 Badge.props = {

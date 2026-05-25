@@ -44,15 +44,5 @@ export function spider(
   options: Record<string, any>,
   labels: Vector2[][],
 ) {
-  if (!isCircular(coordinate)) return {};
-  if (styleByPoints.has(points)) return styleByPoints.get(points);
-  const computed = labels.map((points) => compute(points, value, coordinate));
-  const { width, height } = coordinate.getOptions();
-  const left = computed.filter((d) => d.x < width / 2);
-  const right = computed.filter((d) => d.x >= width / 2);
-  const extendedOptions = { ...options, height };
-  hideAndDodgeY(left, extendedOptions);
-  hideAndDodgeY(right, extendedOptions);
-  computed.forEach((style, i) => styleByPoints.set(labels[i], style));
-  return styleByPoints.get(points);
+    throw new Error("STUB");
 }

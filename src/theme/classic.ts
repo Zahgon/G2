@@ -8,15 +8,7 @@ export type ClassicOptions = Theme;
  * Default theme.
  */
 export const Classic: TC<ClassicOptions> = (options) => {
-  return deepMix(
-    {},
-    Light(),
-    {
-      category10: 'category10',
-      category20: 'category20',
-    },
-    options,
-  );
+    throw new Error("STUB");
 };
 
 Classic.props = {};

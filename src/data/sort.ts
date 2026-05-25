@@ -12,7 +12,7 @@ export function defined(d: any): boolean {
  */
 export const Sort: DC<SortOptions> = (options) => {
   const { callback } = options;
-  return (data) => (Array.isArray(data) ? [...data].sort(callback) : data);
+  return (data) => { throw new Error("STUB"); };
 };
 
 Sort.props = {};

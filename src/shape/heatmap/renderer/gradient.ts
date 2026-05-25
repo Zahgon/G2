@@ -8,8 +8,7 @@ export function parseGradient(
 ): Array<[number, string]> {
   if (typeof gradient === 'string') {
     return gradient.split(' ').map((stop) => {
-      const [r, c] = stop.split(':');
-      return [+r, c];
+        throw new Error("STUB");
     });
   }
   return gradient;

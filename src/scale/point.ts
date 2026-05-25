@@ -6,7 +6,7 @@ import { ScaleComponent as SC } from '../runtime';
 export type PointOptions = Omit<PointScaleSpec, 'type'>;
 
 export const Point: SC<PointOptions> = (options) => {
-  return new PointScale(options);
+    throw new Error("STUB");
 };
 
 Point.props = {};

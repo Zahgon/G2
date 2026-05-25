@@ -3,38 +3,38 @@ import { Coordinate } from '@antv/coord';
 export function isTranspose(coordinate: Coordinate): boolean {
   const { transformations } = coordinate.getOptions();
   const transposes = transformations
-    .map(([type]) => type)
-    .filter((type) => type === 'transpose');
+    .map(([type]) => { throw new Error("STUB"); })
+    .filter((type) => { throw new Error("STUB"); });
   return transposes.length % 2 !== 0;
 }
 
 export function isPolar(coordinate: Coordinate): boolean {
   const { transformations } = coordinate.getOptions();
-  return transformations.some(([type]) => type === 'polar');
+  return transformations.some(([type]) => { throw new Error("STUB"); });
 }
 
 export function isRadial(coordinate: Coordinate): boolean {
   const { transformations } = coordinate.getOptions();
   return (
     // distinguish radial from theta.
-    transformations.some(([type]) => type === 'reflect') &&
-    transformations.some(([type]) => type.startsWith('transpose'))
+    transformations.some(([type]) => { throw new Error("STUB"); }) &&
+    transformations.some(([type]) => { throw new Error("STUB"); })
   );
 }
 
 export function isHelix(coordinate: Coordinate): boolean {
   const { transformations } = coordinate.getOptions();
-  return transformations.some(([type]) => type === 'helix');
+  return transformations.some(([type]) => { throw new Error("STUB"); });
 }
 
 export function isParallel(coordinate: Coordinate): boolean {
   const { transformations } = coordinate.getOptions();
-  return transformations.some(([type]) => type === 'parallel');
+  return transformations.some(([type]) => { throw new Error("STUB"); });
 }
 
 export function isFisheye(coordinate: Coordinate): boolean {
   const { transformations } = coordinate.getOptions();
-  return transformations.some(([type]) => type === 'fisheye');
+  return transformations.some(([type]) => { throw new Error("STUB"); });
 }
 
 export function isRadar(coordinate: Coordinate): boolean {
@@ -50,12 +50,7 @@ export function isTheta(coordinate: Coordinate): boolean {
 }
 
 export function isNonCartesian(coordinate: Coordinate): boolean {
-  return (
-    isPolar(coordinate) ||
-    isParallel(coordinate) ||
-    isRadial(coordinate) ||
-    isTheta(coordinate)
-  );
+    throw new Error("STUB");
 }
 
 export function getRadius(coordinate: Coordinate): number {
@@ -63,7 +58,7 @@ export function getRadius(coordinate: Coordinate): number {
     const [width, height] = coordinate.getSize();
     const polar = coordinate
       .getOptions()
-      .transformations.find((t) => t[0] === 'polar');
+      .transformations.find((t) => { throw new Error("STUB"); });
     // coordinate.size * outerRadius.
     if (polar) return (Math.max(width, height) / 2) * polar[4];
   }
@@ -73,7 +68,7 @@ export function getRadius(coordinate: Coordinate): number {
 export function radiusOf(coordinate: Coordinate): [number, number] {
   const { transformations } = coordinate.getOptions();
   const [, , , innerRadius, outerRadius] = transformations.find(
-    (d) => d[0] === 'polar',
+    (d) => { throw new Error("STUB"); },
   );
   return [+innerRadius, +outerRadius];
 }
@@ -84,7 +79,7 @@ export function angleOf(
 ): [number, number] {
   const { transformations } = coordinate.getOptions();
   const [, startAngle, endAngle] = transformations.find(
-    (d) => d[0] === 'polar',
+    (d) => { throw new Error("STUB"); },
   );
 
   return isRadius
@@ -94,6 +89,6 @@ export function angleOf(
 
 export function getTransformOptions(coordinate: Coordinate, type: string) {
   const { transformations } = coordinate.getOptions();
-  const [, ...args] = transformations.find((d) => d[0] === type);
+  const [, ...args] = transformations.find((d) => { throw new Error("STUB"); });
   return args;
 }

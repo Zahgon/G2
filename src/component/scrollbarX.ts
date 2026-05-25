@@ -7,7 +7,7 @@ export type ScrollbarXOptions = ScrollbarOptions;
  * ScrollbarX component.
  */
 export const ScrollbarX: GCC<ScrollbarXOptions> = (options) => {
-  return Scrollbar({ ...options, orientation: 'horizontal' });
+    throw new Error("STUB");
 };
 
 ScrollbarX.props = {

@@ -5,7 +5,7 @@ import { ScaleComponent as SC } from '../runtime';
 export type IdentityOptions = Omit<IdentityScaleSpec, 'type'>;
 
 export const Identity: SC<IdentityOptions> = (options) => {
-  return new IdentityScale(options);
+    throw new Error("STUB");
 };
 
 Identity.props = {};

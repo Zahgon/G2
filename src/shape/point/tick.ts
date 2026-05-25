@@ -7,10 +7,7 @@ export type TickOptions = Record<string, any>;
  * 工
  */
 export const Tick: SC<TickOptions> = (options, context) => {
-  return Color(
-    { colorAttribute: 'stroke', symbol: 'tick', ...options },
-    context,
-  );
+    throw new Error("STUB");
 };
 
 Tick.props = {

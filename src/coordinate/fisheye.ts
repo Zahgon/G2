@@ -12,6 +12,6 @@ export const Fisheye: CC<FisheyeOptions> = ({
   distortionX = 2,
   distortionY = 2,
   visual = false,
-}) => [['fisheye', focusX, focusY, distortionX, distortionY, visual]];
+}) => { throw new Error("STUB"); };
 
 Fisheye.props = { transform: true };

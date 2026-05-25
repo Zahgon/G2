@@ -14,27 +14,5 @@ export function surround(
   value: Record<string, any>,
   coordinate: Coordinate,
 ) {
-  if (!isCircular(coordinate)) return {};
-  const { connectorLength, connectorLength2, connectorDistance } = value;
-
-  const { ...style }: any = inferOutsideCircularStyle(
-    'outside',
-    points,
-    value,
-    coordinate,
-  );
-  const { x0, y0 } = style;
-
-  const center = coordinate.getCenter();
-  const radius = getRadius(coordinate);
-  const radius1 = radius + connectorLength;
-  const angle = angleWithQuadrant([x0 - center[0], y0 - center[1]]);
-  const sign = Math.sin(angle) > 0 ? 1 : -1;
-
-  const [newX, newY] = pointOfArc(center, angle, radius1);
-
-  style.x = newX + (connectorLength2 + connectorDistance) * sign;
-  style.y = newY;
-
-  return style;
+    throw new Error("STUB");
 }

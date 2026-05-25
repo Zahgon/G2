@@ -43,60 +43,27 @@ const line: Mark = (index, scale, value, coordinate) => {
 
   // Group data into series.
   // There is only one series without specified series encode.
-  const series = S ? Array.from(group(index, (i) => S[i]).values()) : [index];
-  const I = series.map((group) => group[0]).filter((i) => i !== undefined);
+  const series = S ? Array.from(group(index, (i) => { throw new Error("STUB"); }).values()) : [index];
+  const I = series.map((group) => { throw new Error("STUB"); }).filter((i) => { throw new Error("STUB"); });
 
   // A group of data corresponds to one line.
   const xoffset = (x?.getBandWidth?.() || 0) / 2;
   const yoffset = (y?.getBandWidth?.() || 0) / 2;
   const P = Array.from(series, (I) => {
-    return I.map((i) =>
-      coordinate.map([+X[i] + xoffset, +Y[i] + yoffset]),
-    ) as Vector2[];
+      throw new Error("STUB");
   });
   return [I, P, series];
 };
 
 const parallel: Mark = (index, scale, value, coordinate) => {
-  // Extract all value for position[number] channels.
-  const PV = Object.entries(value)
-    .filter(([key]) => key.startsWith('position'))
-    .map(([, value]) => value);
-
-  // Because position channel is not strictly required in Line.props,
-  // it should throw error with empty position values.
-  if (PV.length === 0) {
-    throw new Error('Missing encode for position channel.');
-  }
-  // Close the loop for radar(= parallel + polar) coordinate.
-  if (isPolar(coordinate)) PV.push(PV[0]);
-
-  // One data corresponds to one line.
-  const P = Array.from(index, (i) => {
-    // Transform high dimension vector to a list of two-dimension vectors.
-    // [a, b, c] -> [d, e, f, g, h, i]
-    const vector = PV.map((pv) => +pv[i]);
-    const vectors = coordinate.map(vector) as Vector;
-
-    // Two-dimension vectors are stored in a flat array, so extract them.
-    // [d, e, f, g, h, i] -> [d, e], [f, g], [h, i]
-    const points = [];
-    for (let i = 0; i < vectors.length; i += 2) {
-      points.push([vectors[i], vectors[i + 1]]);
-    }
-    return points;
-  });
-  return [index, P];
+    throw new Error("STUB");
 };
 
 /**
  * Convert value for each channel to line shapes.
  */
 export const Line: MC<LineOptions> = () => {
-  return (index, scale, value, coordinate) => {
-    const mark = isParallel(coordinate) ? parallel : line;
-    return (mark as SingleMark)(index, scale, value, coordinate);
-  };
+    throw new Error("STUB");
 };
 
 Line.props = {

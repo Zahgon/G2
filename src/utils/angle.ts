@@ -1,9 +1,9 @@
 export function toRadian(degree: number): number {
-  return (degree * Math.PI) / 180;
+    throw new Error("STUB");
 }
 
 export function toDegree(radian: number): number {
-  return (radian * 180) / Math.PI;
+    throw new Error("STUB");
 }
 
 // convert the angle to the range of 0 to 4*Math.PI

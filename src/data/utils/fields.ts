@@ -8,10 +8,6 @@ export function normalizeFields(
   defaultValue: boolean | ((d: any) => boolean),
 ) {
   return fields.map((d) => {
-    if (Array.isArray(d)) {
-      const [field, value = defaultValue] = d;
-      return [field, value];
-    }
-    return [d, defaultValue];
+      throw new Error("STUB");
   });
 }

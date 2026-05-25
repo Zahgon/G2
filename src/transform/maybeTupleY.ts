@@ -9,11 +9,7 @@ export type MaybeTupleYOptions = Record<string, never>;
  * This is useful for point geometry.
  */
 export const MaybeTupleY: TC<MaybeTupleYOptions> = () => {
-  return (I, mark) => {
-    const { data } = mark;
-    if (!Array.isArray(data) || data.some(isObject)) return [I, mark];
-    return [I, deepMix({}, mark, { encode: { y: column(data) } })];
-  };
+    throw new Error("STUB");
 };
 
 MaybeTupleY.props = {};

@@ -8,8 +8,7 @@ export type SelectYOptions = Omit<SelectYTransform, 'type'>;
  * The selectY transform filter index by y channel.
  */
 export const SelectY: TC<SelectYOptions> = (options = {}) => {
-  const { selector, ...rest } = options;
-  return Select({ channel: 'y', selector, ...rest });
+    throw new Error("STUB");
 };
 
 SelectY.props = {};

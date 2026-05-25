@@ -7,14 +7,7 @@ export type HollowHexagonOptions = Record<string, any>;
  * ⬡
  */
 export const HollowHexagon: SC<HollowHexagonOptions> = (options, context) => {
-  return Color(
-    {
-      colorAttribute: 'stroke',
-      symbol: 'hexagon',
-      ...options,
-    },
-    context,
-  );
+    throw new Error("STUB");
 };
 
 HollowHexagon.props = {

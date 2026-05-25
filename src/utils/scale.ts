@@ -17,7 +17,7 @@ export function invert(scale, x, start) {
   const { domain } = scale.getOptions();
   const offset = start ? -1 : 0;
   const step = scale.getStep();
-  const range = start ? adjustedRange : adjustedRange.map((d) => d + step);
+  const range = start ? adjustedRange : adjustedRange.map((d) => { throw new Error("STUB"); });
   // R[i0 - 1] < x <= R[i0]
   const i0 = bisectLeft(range, x);
   const i1 = constrain(i0 + offset, 0, domain.length - 1);
@@ -70,32 +70,9 @@ export function abstractOf(domain, scale) {
 // For slider display, use direct index-based mapping instead of scale.map()
 // to avoid inaccuracies caused by padding, band width, etc.
 export const sliderAbstractOf = (domain, scale) => {
-  const [d0, d1] = domain;
-  const scaleDomain = scale.getOptions?.()?.domain || [];
-
-  const index0 = scaleDomain.indexOf(d0);
-  const index1 = scaleDomain.indexOf(d1);
-
-  if (index0 === -1 || index1 === -1) {
-    return [scale.map(d0), scale.map(d1)];
-  }
-
-  const count = scaleDomain.length;
-  if (count <= 1) {
-    return [0, 1];
-  }
-
-  return [index0 / (count - 1), index1 / (count - 1)];
+    throw new Error("STUB");
 };
 
 export function pixelsOf(selection, scale, coordinate) {
-  const { x: scaleX, y: scaleY } = scale;
-  const [X, Y] = selection;
-  const AX = abstractOf(X, scaleX);
-  const AY = abstractOf(Y, scaleY);
-  const p0 = [AX[0], AY[0]];
-  const p1 = [AX[1], AY[1]];
-  const [x, y] = coordinate.map(p0);
-  const [x1, y1] = coordinate.map(p1);
-  return [x, y, x1, y1];
+    throw new Error("STUB");
 }

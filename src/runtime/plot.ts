@@ -117,12 +117,12 @@ export async function plot<T extends G2ViewTree>(
   // Some helper functions.
   const marks = new Set(
     Object.keys(library)
-      .map((d) => /mark\.(.*)/.exec(d)?.[1])
+      .map((d) => { throw new Error("STUB"); })
       .filter(defined),
   );
   const staticMarks = new Set(
     Object.keys(library)
-      .map((d) => /component\.(.*)/.exec(d)?.[1])
+      .map((d) => { throw new Error("STUB"); })
       .filter(defined),
   );
 
@@ -180,14 +180,14 @@ export async function plot<T extends G2ViewTree>(
       // standardView if they are mark or view node.
       const transformedNodes = children
         .flatMap(transform)
-        .map((d) => coordinate2Transform(d, library));
+        .map((d) => { throw new Error("STUB"); });
       discovered.push(...transformedNodes);
 
       // Only StandardView can be treated as facet and it
       // should sync position scales among facets normally.
       if (transformedNodes.every(isStandardView)) {
         const states = await Promise.all(
-          transformedNodes.map((d) => initializeMarks(d, context)),
+          transformedNodes.map((d) => { throw new Error("STUB"); }),
         );
         // Note!!!
         // This will mutate scales for marks.
@@ -217,33 +217,14 @@ export async function plot<T extends G2ViewTree>(
   const transitions: GAnimation[] = [];
   selection
     .selectAll(className(VIEW_CLASS_NAME))
-    .data(views, (d) => d.key)
+    .data(views, (d) => { throw new Error("STUB"); })
     .join(
       (enter) =>
-        enter
-          .append('g')
-          .attr('className', VIEW_CLASS_NAME)
-          .attr('id', (view) => view.key)
-          .call(applyTranslate)
-          .each(function (view, i, element) {
-            plotView(view, select(element), transitions, context);
-            enterContainer.set(view, element);
-          }),
+        { throw new Error("STUB"); },
       (update) =>
-        update.call(applyTranslate).each(function (view, i, element) {
-          plotView(view, select(element), transitions, context);
-          updateContainer.set(view, element);
-        }),
+        { throw new Error("STUB"); },
       (exit) =>
-        exit
-          .each(function (d, i, element) {
-            // Remove existed interactions.
-            const interactions = element['nameInteraction'].values();
-            for (const interaction of interactions) {
-              interaction.destroy();
-            }
-          })
-          .remove(),
+        { throw new Error("STUB"); },
     );
 
   // Apply interactions.
@@ -257,33 +238,7 @@ export async function plot<T extends G2ViewTree>(
     oldStore?: Store,
   ) => {
     return Array.from(viewContainer.entries()).map(([view, container]) => {
-      // Index state by component or interaction name,
-      // such as legend, scrollbar, brushFilter.
-      // Each state transform options to another options.
-      const store =
-        oldStore || new Map<any, (options: G2ViewTree) => G2ViewTree>();
-      const setState = (key, reducer = (x) => x) => store.set(key, reducer);
-      const options = viewNode.get(view);
-      const update = createUpdateView(select(container), options, context);
-      const target = {
-        view,
-        container,
-        options,
-        setState,
-        update: async (from, updateTypes) => {
-          // Apply all state functions to get new options.
-          const reducer = compose(Array.from(store.values()));
-          const newOptions = reducer(options);
-          return await update(newOptions, from, () => {
-            if (isArray(updateTypes)) {
-              updateInteractions(viewContainer, updateTypes, store);
-            }
-          });
-        },
-      };
-      context.externals.update = target.update;
-      context.externals.setState = setState;
-      return target;
+        throw new Error("STUB");
     });
   };
 
@@ -305,7 +260,7 @@ export async function plot<T extends G2ViewTree>(
       let typeOptions = inferInteraction(options);
 
       if (updateType) {
-        typeOptions = typeOptions.filter((v) => updateType.includes(v[0]));
+        typeOptions = typeOptions.filter((v) => { throw new Error("STUB"); });
       }
 
       for (const typeOption of typeOptions) {
@@ -372,11 +327,7 @@ export async function plot<T extends G2ViewTree>(
     // created by different nodeGenerator will play in the same time.
     // eslint-disable-next-line no-async-promise-executor
     const keyframe = new Promise<void>(async (resolve) => {
-      for (const node of nodeGenerator) {
-        const sizedNode = { width, height, ...node };
-        await plot(sizedNode, selection, context);
-      }
-      resolve();
+        throw new Error("STUB");
     });
     keyframes.push(keyframe);
   }
@@ -384,7 +335,7 @@ export async function plot<T extends G2ViewTree>(
   context.views = views;
 
   // Clear and update animation.
-  context.animations?.forEach((animation) => animation?.cancel());
+  context.animations?.forEach((animation) => { throw new Error("STUB"); });
   context.animations = transitions;
 
   context.emitter.emit(ChartEvent.AFTER_PAINT);
@@ -396,15 +347,12 @@ export async function plot<T extends G2ViewTree>(
   const finished = transitions
     .filter(defined)
     .map(cancel)
-    .map((d) => d.finished);
+    .map((d) => { throw new Error("STUB"); });
   return Promise.all([...finished, ...keyframes]);
 }
 
 function applyTranslate(selection: Selection) {
-  selection.style(
-    'transform',
-    (d) => `translate(${d.layout.x}, ${d.layout.y})`,
-  );
+    throw new Error("STUB");
 }
 
 function definedInteraction(library: G2Library) {
@@ -414,12 +362,7 @@ function definedInteraction(library: G2Library) {
     Interaction
   >('interaction', library);
   return (d) => {
-    const [name, options] = d;
-    try {
-      return [name, createInteraction(name)] as const;
-    } catch {
-      return [name, options.type] as const;
-    }
+      throw new Error("STUB");
   };
 }
 
@@ -435,23 +378,10 @@ function createUpdateView(
   const updates = interactions
     .map(createDefinedInteraction)
     .filter(filter)
-    .map((d) => d[0]);
+    .map((d) => { throw new Error("STUB"); });
 
   return async (newOptions, source, callback) => {
-    const transitions = [];
-    const [newView, newChildren] = await initializeView(newOptions, context);
-    plotView(newView, selection, transitions, context);
-
-    // Update interaction need to reapply when update.
-    for (const name of updates.filter((d) => d !== source)) {
-      updateInteraction(name, selection, newOptions, newView, context);
-    }
-
-    for (const child of newChildren) {
-      plot(child, selection, context);
-    }
-    callback();
-    return { options: newOptions, view: newView };
+      throw new Error("STUB");
   };
 }
 
@@ -474,7 +404,7 @@ function updateInteraction(
   const container = selection.node();
   const nameInteraction = container['nameInteraction'];
   const interactionOptions = inferInteraction(options).find(
-    ([d]) => d === name,
+    ([d]) => { throw new Error("STUB"); },
   );
 
   // Destroy older interaction.
@@ -495,7 +425,7 @@ function updateInteraction(
     options,
     view,
     container: selection.node(),
-    update: (options) => Promise.resolve(options),
+    update: (options) => { throw new Error("STUB"); },
   };
   const destroy = applyInteraction(target, [], context.emitter);
   nameInteraction.set(name, { destroy });
@@ -532,19 +462,19 @@ function bubbleOptions(options: G2View): G2View {
     marks,
     ...rest
   } = options;
-  const markCoordinates = marks.map((d) => d.coordinate || {});
-  const markInteractions = marks.map((d) => d.interaction || {});
-  const markViewStyles = marks.map((d) => d.viewStyle || {});
+  const markCoordinates = marks.map((d) => { throw new Error("STUB"); });
+  const markInteractions = marks.map((d) => { throw new Error("STUB"); });
+  const markViewStyles = marks.map((d) => { throw new Error("STUB"); });
   const newCoordinate = [...markCoordinates, viewCoordinate].reduceRight(
-    (prev, cur) => deepMix(prev, cur),
+    (prev, cur) => { throw new Error("STUB"); },
     {},
   );
   const newInteraction = [viewInteraction, ...markInteractions].reduce(
-    (prev, cur) => deepMix(prev, cur),
+    (prev, cur) => { throw new Error("STUB"); },
     {},
   );
   const newStyle = [...markViewStyles, viewStyle].reduce(
-    (prev, cur) => deepMix(prev, cur),
+    (prev, cur) => { throw new Error("STUB"); },
     {},
   );
   return {
@@ -569,7 +499,7 @@ async function transformMarks(
 
   const staticMarks = new Set(
     Object.keys(library)
-      .map((d) => /component\.(.*)/.exec(d)?.[1])
+      .map((d) => { throw new Error("STUB"); })
       .filter(defined),
   );
   const { marks } = options;
@@ -604,7 +534,7 @@ async function transformMarks(
         // Convert composite mark to marks.
         const marks = await useMark(newMark, markOptions);
         const M = Array.isArray(marks) ? marks : [marks];
-        discovered.unshift(...M.map((d, i) => ({ ...d, key: `${key}-${i}` })));
+        discovered.unshift(...M.map((d, i) => { throw new Error("STUB"); }));
       }
     }
   }
@@ -648,22 +578,22 @@ async function initializeMarks(
 
   // Group channels by scale key, each group has scale.
   const scaleChannels = group(
-    Array.from(markState.values()).flatMap((d) => d.channels),
-    ({ scaleKey }) => scaleKey,
+    Array.from(markState.values()).flatMap((d) => { throw new Error("STUB"); }),
+    ({ scaleKey }) => { throw new Error("STUB"); },
   );
 
   // Infer scale for each channel groups.
   for (const channels of scaleChannels.values()) {
     // Merge scale options for these channels.
     const scaleOptions = channels.reduce(
-      (total, { scale }) => deepMix(total, scale),
+      (total, { scale }) => { throw new Error("STUB"); },
       {},
     );
     const { scaleKey } = channels[0];
 
     // Use the fields of the first channel as the title.
     const { values: FV } = channels[0];
-    const fields = Array.from(new Set(FV.map((d) => d.field).filter(defined)));
+    const fields = Array.from(new Set(FV.map((d) => { throw new Error("STUB"); }).filter(defined)));
     const options = deepMix(
       {
         guide: { title: fields.length === 0 ? undefined : fields },
@@ -674,13 +604,13 @@ async function initializeMarks(
 
     // Use the name of the first channel as the scale name.
     const { name } = channels[0];
-    const values = channels.flatMap(({ values }) => values.map((d) => d.value));
+    const values = channels.flatMap(({ values }) => { throw new Error("STUB"); });
     const scale = {
       ...inferScale(name, values, options, coordinates, theme, library),
       uid: Symbol('scale'),
       key: scaleKey,
     };
-    channels.forEach((channel) => (channel.scale = scale));
+    channels.forEach((channel) => { throw new Error("STUB"); });
   }
 
   return markState;
@@ -755,11 +685,7 @@ function initializeState(
   // Index scale instance by uid.
   const uidScale = new Map(
     Array.from(markState.values()).flatMap((state) => {
-      const { channels } = state;
-      return channels.map(({ scale }) => [
-        scale.uid,
-        useRelationScale(scale, library),
-      ]);
+        throw new Error("STUB");
     }),
   );
 
@@ -810,10 +736,10 @@ function initializeState(
     dataMap.set(markKey, data);
     const { index, channels, tooltip } = state;
     const scale = Object.fromEntries(
-      channels.map(({ name, scale }) => [name, scale]),
+      channels.map(({ name, scale }) => { throw new Error("STUB"); }),
     );
     // Transform abstract value to visual value by scales.
-    const markScaleInstance = mapObject(scale, ({ uid }) => uidScale.get(uid));
+    const markScaleInstance = mapObject(scale, ({ uid }) => { throw new Error("STUB"); });
     assignScale(scaleInstance, markScaleInstance);
     const value = applyScale(channels, markScaleInstance);
 
@@ -828,30 +754,9 @@ function initializeState(
     const count = dataDomain || I.length;
     const T = modifier ? modifier(P, count, layout) : [];
     const titleOf = (i) => tooltip.title?.[i]?.value;
-    const itemsOf = (i) => tooltip.items.map((V) => V[i]);
+    const itemsOf = (i) => tooltip.items.map((V) => { throw new Error("STUB"); });
     const visualData: Record<string, any>[] = I.map((d, i) => {
-      const datum = {
-        points: P[i],
-        transform: T[i],
-        index: d,
-        markKey,
-        viewKey: key,
-        data: data[d],
-        ...(tooltip && {
-          title: titleOf(d),
-          items: itemsOf(d),
-        }),
-      };
-      for (const [k, V] of Object.entries(value)) {
-        datum[k] = V[d];
-        if (S) datum[`series${upperFirst(k)}`] = S[i].map((i) => V[i]);
-      }
-      if (S) datum['seriesIndex'] = S[i];
-      if (S && tooltip) {
-        datum['seriesItems'] = S[i].map((si) => itemsOf(si));
-        datum['seriesTitle'] = S[i].map((si) => titleOf(si));
-      }
-      return datum;
+        throw new Error("STUB");
     });
     state.data = visualData;
     state.index = I;
@@ -906,55 +811,33 @@ async function plotView(
   // Render background for the different areas.
   const { x, y, width, height, ...rest } = layout;
   const areaKeys = ['view', 'plot', 'main', 'content'];
-  const I = areaKeys.map((_, i) => i);
+  const I = areaKeys.map((_, i) => { throw new Error("STUB"); });
   const sizeKeys = ['a', 'margin', 'padding', 'inset'];
   const areaStyles = areaKeys.map((d) =>
-    maybeSubObject(Object.assign({}, theme.view, style), d),
+    { throw new Error("STUB"); },
   );
-  const areaSizes = sizeKeys.map((d) => subObject(rest, d));
+  const areaSizes = sizeKeys.map((d) => { throw new Error("STUB"); });
   const styleArea = (selection) =>
-    selection
-      .style('x', (i) => areaLayouts[i].x)
-      .style('y', (i) => areaLayouts[i].y)
-      .style('width', (i) => areaLayouts[i].width)
-      .style('height', (i) => areaLayouts[i].height)
-      .each(function (i, d, element) {
-        applyStyle(select(element), areaStyles[i]);
-      });
+    { throw new Error("STUB"); };
   let px = 0;
   let py = 0;
   let pw = width;
   let ph = height;
   const areaLayouts = I.map((i) => {
-    const size = areaSizes[i];
-    const { left = 0, top = 0, bottom = 0, right = 0 } = size;
-    px += left;
-    py += top;
-    pw -= left + right;
-    ph -= top + bottom;
-    return {
-      x: px,
-      y: py,
-      width: pw,
-      height: ph,
-    };
+      throw new Error("STUB");
   });
   selection
     .selectAll(className(AREA_CLASS_NAME))
     .data(
       // Only render area with defined style.
-      I.filter((i) => defined(areaStyles[i])),
-      (i) => areaKeys[i],
+      I.filter((i) => { throw new Error("STUB"); }),
+      (i) => { throw new Error("STUB"); },
     )
     .join(
       (enter) =>
-        enter
-          .append('rect')
-          .attr('className', AREA_CLASS_NAME)
-          .style('zIndex', -2)
-          .call(styleArea),
-      (update) => update.call(styleArea),
-      (exit) => exit.remove(),
+        { throw new Error("STUB"); },
+      (update) => { throw new Error("STUB"); },
+      (exit) => { throw new Error("STUB"); },
     );
 
   const animationExtent = computeAnimationExtent(markState);
@@ -967,47 +850,18 @@ async function plotView(
   // @todo renderComponent return ctor and options.
   // Key for each type of component.
   // Index them grouped by position.
-  for (const [, C] of groups(components, (d) => `${d.type}-${d.position}`)) {
-    C.forEach((d, i) => (d.index = i));
+  for (const [, C] of groups(components, (d) => { throw new Error("STUB"); })) {
+    C.forEach((d, i) => { throw new Error("STUB"); });
   }
 
   const componentsTransitions = selection
     .selectAll(className(COMPONENT_CLASS_NAME))
-    .data(components, (d) => `${d.type}-${d.position}-${d.index}`)
+    .data(components, (d) => { throw new Error("STUB"); })
     .join(
       (enter) =>
-        enter
-          .append('g')
-          .style('zIndex', ({ zIndex }) => zIndex || -1)
-          .attr('className', COMPONENT_CLASS_NAME)
-          .append((options) =>
-            renderComponent(
-              deepMix({ animate: componentAnimateOptions, scale }, options),
-              coordinate,
-              theme,
-              library,
-              markState,
-            ),
-          ),
+        { throw new Error("STUB"); },
       (update) =>
-        update.transition(function (
-          options: G2GuideComponentOptions,
-          i,
-          element,
-        ) {
-          const { preserve = false } = options;
-          if (preserve) return;
-          const newComponent = renderComponent(
-            deepMix({ animate: componentAnimateOptions, scale }, options),
-            coordinate,
-            theme,
-            library,
-            markState,
-          );
-          const { attributes } = newComponent;
-          const [node] = element.childNodes;
-          return node.update(attributes, false);
-        }),
+        { throw new Error("STUB"); },
     )
     .transitions();
 
@@ -1018,28 +872,12 @@ async function plotView(
   // @todo Test DOM structure.
   const T = selection
     .selectAll(className(PLOT_CLASS_NAME))
-    .data([layout], () => key)
+    .data([layout], () => { throw new Error("STUB"); })
     .join(
       (enter) =>
-        enter
-          // Make this layer interactive, such as click and mousemove events.
-          .append('rect')
-          .style('zIndex', 0)
-          .style('fill', 'transparent')
-          .attr('className', PLOT_CLASS_NAME)
-          .call(updateBBox)
-          .call(updateLayers, Array.from(markState.keys()))
-          .call(applyClip, clip),
+        { throw new Error("STUB"); },
       (update) =>
-        update
-          .call(updateLayers, Array.from(markState.keys()))
-          .call(updateBBox)
-          // .call((selection) => {
-          //   return animationExtent
-          //     ? animateBBox(selection, animationExtent)
-          //     : updateBBox(selection);
-          // })
-          .call(applyClip, clip),
+        { throw new Error("STUB"); },
     )
     .transitions();
   transitions.push(...T.flat());
@@ -1064,102 +902,21 @@ async function plotView(
       .selectFacetAll(facetElements)
       .data(
         data,
-        (d) => d.key,
-        (d) => d.groupKey,
+        (d) => { throw new Error("STUB"); },
+        (d) => { throw new Error("STUB"); },
       )
       .join(
         (enter) =>
-          enter
-            .append(shapeFunction)
-            // Note!!! Only one className can be set.
-            // Using attribute as alternative for other classNames.
-            .attr('className', ELEMENT_CLASS_NAME)
-            .attr('markType', type)
-            .transition(function (data, i, element) {
-              return enterFunction(data, [element]);
-            }),
+          { throw new Error("STUB"); },
         (update) =>
-          update.call((selection) => {
-            const parent = selection.parent();
-            const origin = useMemo<DisplayObject, [number, number]>((node) => {
-              const [x, y] = node.getBounds().min;
-              return [x, y];
-            });
-            selection
-              .transition(function (data, index, element) {
-                maybeFacetElement(element, parent, origin);
-                const node = shapeFunction(data, index);
-                const animation = updateFunction(data, [element], [node]);
-                if (animation?.length) return animation;
-                if (
-                  element.nodeName === node.nodeName &&
-                  node.nodeName !== 'g'
-                ) {
-                  copyAttributes(element, node);
-                } else {
-                  element.parentNode.replaceChild(node, element);
-                  node.className = ELEMENT_CLASS_NAME;
-                  // @ts-ignore
-                  node.markType = type;
-                  // @ts-ignore
-                  node.__data__ = element.__data__;
-                }
-                return animation;
-              })
-              .each(function (d, i, element) {
-                if (element.__removed__) {
-                  element.__removed__ = false;
-                }
-              })
-              .attr('markType', type)
-              .attr('className', ELEMENT_CLASS_NAME);
-          }),
+          { throw new Error("STUB"); },
         (exit) => {
-          return exit
-            .each(function (d, i, element) {
-              element.__removed__ = true;
-            })
-            .transition(function (data, i, element) {
-              return exitFunction(data, [element]);
-            })
-            .remove();
+            throw new Error("STUB");
         },
         (merge) =>
-          merge
-            // Append elements to be merged.
-            .append(shapeFunction)
-            .attr('className', ELEMENT_CLASS_NAME)
-            .attr('markType', type)
-            .transition(function (data, i, element) {
-              // Remove merged elements after animation finishing.
-              const { __fromElements__: fromElements } = element;
-              const transition = updateFunction(data, fromElements, [element]);
-              const exit = new Selection(
-                fromElements,
-                null,
-                element.parentNode,
-              );
-              exit.transition(transition).remove();
-              return transition;
-            }),
+          { throw new Error("STUB"); },
         (split) =>
-          split
-            .transition(function (data, i, element) {
-              // Append splitted shapes.
-              const enter = new Selection(
-                [],
-                element.__toData__,
-                element.parentNode,
-              );
-              const toElements = enter
-                .append(shapeFunction)
-                .attr('className', ELEMENT_CLASS_NAME)
-                .attr('markType', type)
-                .nodes();
-              return updateFunction(data, [element], toElements);
-            })
-            // Remove elements to be splitted after animation finishing.
-            .remove(),
+          { throw new Error("STUB"); },
       )
       .transitions();
     transitions.push(...T.flat());
@@ -1196,67 +953,25 @@ function plotLabel(
 
   // Get all labels for this view.
   const labels = Array.from(markState.entries()).flatMap(([mark, state]) => {
-    const { labels: labelOptions = [], key } = mark;
-    const shapeFunction = createLabelShapeFunction(
-      mark,
-      state,
-      view,
-      library,
-      context,
-    );
-    const elements = selection
-      .select(`#${key}`)
-      .selectAll(className(ELEMENT_CLASS_NAME))
-      .nodes()
-      // Only select the valid element.
-      .filter((n) => {
-        if (n.__removed__) return false;
-        // Filter out elements that are hidden (e.g., by slider filtering)
-        // Check if element or its children have visibility: hidden
-        const isHidden =
-          n.style?.visibility === 'hidden' ||
-          (n.children &&
-            n.children.some((child) => child.style?.visibility === 'hidden'));
-        return !isHidden;
-      });
-    return labelOptions.flatMap((labelOption, i) => {
-      const { transform = [], ...options } = labelOption;
-      return elements.flatMap((e) => {
-        const L = getLabels(options, i, e);
-        L.forEach((l) => {
-          labelShapeFunction.set(l, (data) =>
-            shapeFunction({ ...data, element: e }),
-          );
-          labelDescriptor.set(l, labelOption);
-        });
-        return L;
-      });
-    });
+      throw new Error("STUB");
   });
 
   // Render all labels.
   const labelShapes = select(labelLayer)
     .selectAll(className(LABEL_CLASS_NAME))
-    .data(labels, (d) => d.key)
+    .data(labels, (d) => { throw new Error("STUB"); })
     .join(
       (enter) =>
-        enter
-          .append((d) => labelShapeFunction.get(d)(d))
-          .attr('className', LABEL_CLASS_NAME),
+        { throw new Error("STUB"); },
       (update) =>
-        update.each(function (d, i, element) {
-          // @todo Handle Label with different type.
-          const shapeFunction = labelShapeFunction.get(d);
-          const node = shapeFunction(d);
-          copyAttributes(element, node);
-        }),
-      (exit) => exit.remove(),
+        { throw new Error("STUB"); },
+      (exit) => { throw new Error("STUB"); },
     )
     .nodes();
 
   // Apply group-level transforms.
   const labelGroups = group(labelShapes, (d) =>
-    labelDescriptor.get(d.__data__),
+    { throw new Error("STUB"); },
   );
   const { coordinate, layout } = view;
 
@@ -1297,14 +1012,7 @@ function getLabels(
     ];
   }
   const selector = normalizeLabelSelector(label);
-  const F = SI.map((index: number, i: number) => ({
-    ...label,
-    key: `${seriesKey[i]}-${labelIndex}`,
-    bounds: [points[i]],
-    index,
-    points,
-    dependentElement: element,
-  }));
+  const F = SI.map((index: number, i: number) => { throw new Error("STUB"); });
   // @ts-ignore
   return selector ? selector(F) : F;
 }
@@ -1322,9 +1030,7 @@ function plotBreak(
   const breaks = get(scale, 'y.options.breaks', []);
   const { document } = context.canvas;
   [BREAK_CLASS_NAME, BREAK_GROUP_CLASS_NAME].forEach((d) => {
-    document.getElementsByClassName(d).forEach((e) => {
-      e.remove();
-    });
+      throw new Error("STUB");
   });
   if (!breaks.length) {
     return;
@@ -1336,37 +1042,19 @@ function plotBreak(
   );
   const breaksShapeFunction = new Map();
   breaks.forEach((breakConfig, index) => {
-    breaksShapeFunction.set(
-      breakConfig,
-      useShape(
-        {
-          type: 'break',
-        },
-        {
-          view,
-          selection,
-          context,
-        },
-      ),
-    );
+      throw new Error("STUB");
   });
 
   // Render all breaks.
   select(breakLayer)
     .selectAll(className(BREAK_CLASS_NAME))
-    .data(breaks, (d) => d.key)
+    .data(breaks, (d) => { throw new Error("STUB"); })
     .join(
       (enter) =>
-        enter
-          .append((d, index) => breaksShapeFunction.get(d)(d, index))
-          .attr('className', BREAK_CLASS_NAME),
+        { throw new Error("STUB"); },
       (update) =>
-        update.each(function (d, i, element) {
-          const shapeFunction = breaksShapeFunction.get(d);
-          const node = shapeFunction(d, i);
-          copyAttributes(element, node);
-        }),
-      (exit) => exit.remove(),
+        { throw new Error("STUB"); },
+      (exit) => { throw new Error("STUB"); },
     )
     .nodes();
 }
@@ -1382,7 +1070,7 @@ function filterValid([I, P, S]: [number[], Vector2[][], number[][]?]): [
   for (let i = 0; i < I.length; i++) {
     const d = I[i];
     const p = P[i];
-    if (p.every(([x, y]) => defined(x) && defined(y))) {
+    if (p.every(([x, y]) => { throw new Error("STUB"); })) {
       definedIndex.push(d);
       definedPoints.push(p);
     }
@@ -1396,8 +1084,8 @@ function normalizeLabelSelector(
   const { selector } = label;
   if (!selector) return null;
   if (typeof selector === 'function') return selector;
-  if (selector === 'first') return (I) => [I[0]];
-  if (selector === 'last') return (I) => [I[I.length - 1]];
+  if (selector === 'first') return (I) => { throw new Error("STUB"); };
+  if (selector === 'last') return (I) => { throw new Error("STUB"); };
   throw new Error(`Unknown selector: ${selector}`);
 }
 
@@ -1412,8 +1100,7 @@ function getLocalBounds(element: DisplayObject) {
   const animations = element.getAnimations();
   cloneElement.style.visibility = 'hidden';
   animations.forEach((animation) => {
-    const keyframes = animation.effect.getKeyframes();
-    cloneElement.attr(keyframes[keyframes.length - 1]);
+      throw new Error("STUB");
   });
   element.parentNode.appendChild(cloneElement);
   const bounds = cloneElement.getLocalBounds();
@@ -1435,8 +1122,8 @@ function createLabelShapeFunction(
   );
   const { data: abstractData, encode } = mark;
   const { data: visualData, defaultLabelShape } = state;
-  const point2d = visualData.map((d) => d.points);
-  const channel = mapObject(encode, (d) => d.value);
+  const point2d = visualData.map((d) => { throw new Error("STUB"); });
+  const channel = mapObject(encode, (d) => { throw new Error("STUB"); });
 
   // Assemble Context.
   const { theme, coordinate } = view;
@@ -1448,41 +1135,7 @@ function createLabelShapeFunction(
   };
 
   return (options) => {
-    // Computed values from data and styles.
-    const { index, points } = options;
-    const datum = abstractData[index];
-    const {
-      formatter = (d) => `${d}`,
-      transform,
-      style: abstractStyle,
-      render,
-      selector,
-      element,
-      ...abstractOptions
-    } = options;
-
-    const visualOptions = mapObject(
-      { ...abstractOptions, ...abstractStyle } as Record<string, any>,
-      (d) =>
-        valueOf(d, datum, index, abstractData, {
-          channel,
-          element,
-        }),
-    );
-    const { shape = defaultLabelShape, text, ...style } = visualOptions;
-    const f = typeof formatter === 'string' ? format(formatter) : formatter;
-    const value = {
-      ...style,
-      text: f(text, datum, index, abstractData),
-      datum,
-    };
-
-    // Params for create shape.
-    const shapeOptions = { type: `label.${shape}`, render, ...style };
-    const shapeFunction = useShape(shapeOptions, shapeContext);
-    const defaults = getDefaultsStyle(theme, 'label', shape, 'label');
-
-    return shapeFunction(points, value, defaults, point2d);
+      throw new Error("STUB");
   };
 }
 
@@ -1566,11 +1219,9 @@ function selectFacetElements(
   return group
     .findAll(
       (node) =>
-        node.style.facet !== undefined &&
-        node.style.facet === facetClassName &&
-        node !== current.node(), // Exclude current view.
+        { throw new Error("STUB"); }, // Exclude current view.
     )
-    .flatMap((node) => node.getElementsByClassName(elementClassName));
+    .flatMap((node) => { throw new Error("STUB"); });
 }
 
 /**
@@ -1612,8 +1263,8 @@ function createMarkShapeFunction(
   );
   const { data: abstractData, encode } = mark;
   const { defaultShape, data, shape: shapeLibrary } = state;
-  const channel = mapObject(encode, (d) => d.value);
-  const point2d = data.map((d) => d.points);
+  const channel = mapObject(encode, (d) => { throw new Error("STUB"); });
+  const point2d = data.map((d) => { throw new Error("STUB"); });
   const { theme, coordinate } = view;
   const { type: markType, style = {} } = mark;
   const shapeContext = {
@@ -1623,34 +1274,7 @@ function createMarkShapeFunction(
     theme,
   };
   return (data) => {
-    const { shape: styleShape = defaultShape } = style;
-    const { shape = styleShape, points, seriesIndex, index: i, ...v } = data;
-    const value = { ...v, index: i };
-
-    // Get data-driven style.
-    // If it is a series shape, such as area and line,
-    // provides the series of abstract data and indices
-    // for this shape, otherwise the single datum and
-    // index.
-    const abstractDatum = seriesIndex
-      ? seriesIndex.map((i) => abstractData[i])
-      : abstractData[i];
-
-    const I = seriesIndex ? seriesIndex : i;
-    const visualStyle = mapObject(style, (d) =>
-      valueOf(d, abstractDatum, I, abstractData, { channel }),
-    );
-
-    // Try get shape from mark first, then from library.
-    const shapeFunction = shapeLibrary[shape]
-      ? shapeLibrary[shape](visualStyle, shapeContext)
-      : useShape(
-          { ...visualStyle, type: shapeName(mark, shape) },
-          shapeContext,
-        );
-
-    const defaults = getDefaultsStyle(theme, markType, shape, defaultShape);
-    return shapeFunction(points, value, defaults, point2d);
+      throw new Error("STUB");
   };
 }
 
@@ -1706,29 +1330,7 @@ function createAnimationFunction(
   const context = { coordinate };
 
   return (data, from, to) => {
-    const {
-      [`${type}Type`]: animation,
-      [`${type}Delay`]: delay,
-      [`${type}Duration`]: duration,
-      [`${type}Easing`]: easing,
-    } = data;
-
-    const options = {
-      type: animation || defaultAnimation,
-      ...animate,
-    };
-    if (!options.type) return null;
-
-    const animateFunction = useAnimation(options, context);
-    const value = { delay, duration, easing };
-    const A = animateFunction(from, to, deepMix(defaultEffectTiming, value));
-    let an: GAnimation[] = [];
-    if (!Array.isArray(A)) {
-      an = [A];
-    } else {
-      an = A;
-    }
-    return an.filter(Boolean);
+      throw new Error("STUB");
   };
 }
 
@@ -1751,7 +1353,7 @@ function createEnterFunction(
  */
 function cancel(animation: GAnimation): GAnimation {
   animation.finished.then(() => {
-    animation.cancel();
+      throw new Error("STUB");
   });
   return animation;
 }
@@ -1817,46 +1419,11 @@ async function applyTransform<T extends G2ViewTree>(
 }
 
 function updateBBox(selection: Selection) {
-  selection
-    .style(
-      'transform',
-      (d) =>
-        `translate(${d.paddingLeft + d.marginLeft}, ${
-          d.paddingTop + d.marginTop
-        })`,
-    )
-    .style('width', (d) => d.innerWidth)
-    .style('height', (d) => d.innerHeight);
+    throw new Error("STUB");
 }
 
 function animateBBox(selection: Selection, extent: [number, number]) {
-  const [delay, duration] = extent;
-  selection.transition(function (data, i, element) {
-    const { transform, width, height } = element.style;
-    const {
-      paddingLeft,
-      paddingTop,
-      innerWidth,
-      innerHeight,
-      marginLeft,
-      marginTop,
-    } = data;
-    const keyframes = [
-      {
-        transform,
-        width,
-        height,
-      },
-      {
-        transform: `translate(${paddingLeft + marginLeft}, ${
-          paddingTop + marginTop
-        })`,
-        width: innerWidth,
-        height: innerHeight,
-      },
-    ];
-    return element.animate(keyframes, { delay, duration, fill: 'both' });
-  });
+    throw new Error("STUB");
 }
 
 function shapeName(mark, name) {
@@ -1870,58 +1437,15 @@ function shapeName(mark, name) {
  * All the layers created here are treated as main layers.
  */
 function updateLayers(selection: Selection, marks: G2Mark[]) {
-  const facet = (d) => (d.class !== undefined ? `${d.class}` : '');
-
-  // Skip for empty selection, it can't append nodes.
-  const nodes = selection.nodes();
-  if (nodes.length === 0) return;
-
-  selection
-    .selectAll(className(MAIN_LAYER_CLASS_NAME))
-    .data(marks, (d) => d.key)
-    .join(
-      (enter) =>
-        enter
-          .append('g')
-          .attr('className', MAIN_LAYER_CLASS_NAME)
-          .attr('id', (d) => d.key)
-          .style('facet', facet)
-          .style('fill', 'transparent')
-          .style('zIndex', (d) => d.zIndex ?? 0),
-      (update) =>
-        update
-          .style('facet', facet)
-          .style('fill', 'transparent')
-          .style('zIndex', (d) => d.zIndex ?? 0),
-      (exit) => exit.remove(),
-    );
-
-  const labelLayer = selection.select(className(LABEL_LAYER_CLASS_NAME)).node();
-  if (labelLayer) return;
-  selection
-    .append('g')
-    .attr('className', LABEL_LAYER_CLASS_NAME)
-    .style('zIndex', 0);
+    throw new Error("STUB");
 }
 
 function className(...names: string[]): string {
-  return names.map((d) => `.${d}`).join('');
+  return names.map((d) => { throw new Error("STUB"); }).join('');
 }
 
 function applyClip(selection, clip?: boolean) {
-  if (!selection.node()) return;
-  selection.style('clipPath', (data) => {
-    if (!clip) return null;
-    const {
-      paddingTop: y,
-      paddingLeft: x,
-      marginLeft: x1,
-      marginTop: y1,
-      innerWidth: width,
-      innerHeight: height,
-    } = data;
-    return new Rect({ style: { x: x + x1, y: y + y1, width, height } });
-  });
+    throw new Error("STUB");
 }
 
 function inferComponentScales(
@@ -1935,12 +1459,12 @@ function inferComponentScales(
   // @todo support shape scale for cell.
   for (const [key] of markState.entries()) {
     if (key.type === 'cell') {
-      return scales.filter((scale) => scale.name !== 'shape');
+      return scales.filter((scale) => { throw new Error("STUB"); });
     }
   }
 
   // can't infer shape scale if there are multiple states.
-  if (states.length !== 1 || scales.some((scale) => scale.name === 'shape')) {
+  if (states.length !== 1 || scales.some((scale) => { throw new Error("STUB"); })) {
     return scales;
   }
 
@@ -1955,7 +1479,7 @@ function inferComponentScales(
   };
 
   // create shape scale
-  const field = scales.find((scale) => scale.name === 'color')?.field || null;
+  const field = scales.find((scale) => { throw new Error("STUB"); })?.field || null;
   const shapeScale = {
     field,
     name: 'shape',

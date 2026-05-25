@@ -6,8 +6,6 @@ type FlowFunction<P> = (param: P) => P;
  */
 export function flow<P>(...flows: FlowFunction<P>[]): FlowFunction<P> {
   return (param: P) => {
-    return flows.reduce((result: P, f: FlowFunction<P>) => {
-      return f(result);
-    }, param);
+      throw new Error("STUB");
   };
 }

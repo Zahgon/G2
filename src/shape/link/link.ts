@@ -11,7 +11,7 @@ export type LinkOptions = ArrowOptions;
 export const Link: SC<LinkOptions> = (options, context) => {
   const { arrow = false } = options;
   return (...params) => {
-    return Vector({ ...options, arrow }, context)(...params);
+      throw new Error("STUB");
   };
 };
 

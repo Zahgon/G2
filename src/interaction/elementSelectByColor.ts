@@ -2,7 +2,7 @@ import { createColorKey } from './utils';
 import { ElementSelect } from './elementSelect';
 
 export function ElementSelectByColor(options) {
-  return ElementSelect({ ...options, createGroup: createColorKey });
+    throw new Error("STUB");
 }
 
 ElementSelectByColor.props = {

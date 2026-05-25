@@ -23,8 +23,7 @@ export function applyDefaults(
   mark: G2Mark,
   context: G2Context,
 ): [number[], G2Mark] {
-  const { encode = {}, scale = {}, transform = [], ...rest } = mark;
-  return [I, { ...rest, encode, scale, transform }];
+    throw new Error("STUB");
 }
 
 export async function applyDataTransform(
@@ -41,7 +40,7 @@ export async function applyDataTransform(
   const descriptor = normalizedDataSource(data);
   const { transform: T = [], ...connector } = descriptor;
   const transform = [connector, ...T];
-  const transformFunctions = transform.map((t) => useData(t, context));
+  const transformFunctions = transform.map((t) => { throw new Error("STUB"); });
   const transformedData = await composeAsync(transformFunctions)(data);
 
   // Maintain the consistency of shape between input and output data.
@@ -65,20 +64,7 @@ export function flatEncode(
   mark: G2Mark,
   context: G2Context,
 ): [number[], G2Mark] {
-  const { encode } = mark;
-  if (!encode) return [I, mark];
-  const flattenEncode = {};
-  for (const [key, value] of Object.entries(encode)) {
-    if (Array.isArray(value)) {
-      for (let i = 0; i < value.length; i++) {
-        const name = `${key}${i === 0 ? '' : i}`;
-        flattenEncode[name] = value[i];
-      }
-    } else {
-      flattenEncode[key] = value;
-    }
-  }
-  return [I, { ...mark, encode: flattenEncode }];
+    throw new Error("STUB");
 }
 
 export function inferChannelsType(
@@ -86,14 +72,7 @@ export function inferChannelsType(
   mark: G2Mark,
   context: G2Context,
 ): [number[], G2Mark] {
-  const { encode, data } = mark;
-  if (!encode) return [I, mark];
-  const typedEncode = mapObject(encode, (channel) => {
-    if (isTypedChannel(channel)) return channel;
-    const type = inferChannelType(data, channel);
-    return { type, value: channel };
-  });
-  return [I, { ...mark, encode: typedEncode }];
+    throw new Error("STUB");
 }
 
 export function maybeVisualChannel(
@@ -101,14 +80,7 @@ export function maybeVisualChannel(
   mark: G2Mark,
   context: G2Context,
 ): [number[], G2Mark] {
-  const { encode } = mark;
-  if (!encode) return [I, mark];
-  const newEncode = mapObject(encode, (channel, name) => {
-    const { type } = channel;
-    if (type !== 'constant' || isPosition(name)) return channel;
-    return { ...channel, constant: true };
-  });
-  return [I, { ...mark, encode: newEncode }];
+    throw new Error("STUB");
 }
 
 export function extractColumns(
@@ -116,12 +88,7 @@ export function extractColumns(
   mark: G2Mark,
   context: G2Context,
 ): [number[], G2Mark] {
-  const { encode, data } = mark;
-  if (!encode) return [I, mark];
-  const { library } = context;
-  const columnOf = createColumnOf(library);
-  const valuedEncode = mapObject(encode, (channel) => columnOf(data, channel));
-  return [I, { ...mark, encode: valuedEncode }];
+    throw new Error("STUB");
 }
 
 /**
@@ -132,15 +99,7 @@ export function normalizeTooltip(
   mark: G2Mark,
   context: G2Context,
 ): [number[], G2Mark] {
-  const { tooltip = {} } = mark;
-  if (isUnset(tooltip)) return [I, mark];
-  if (Array.isArray(tooltip)) {
-    return [I, { ...mark, tooltip: { items: tooltip } }];
-  }
-  if (isStrictObject(tooltip) && isFullTooltip(tooltip)) {
-    return [I, { ...mark, tooltip }];
-  }
-  return [I, { ...mark, tooltip: { items: [tooltip] } }];
+    throw new Error("STUB");
 }
 
 export function extractTooltip(
@@ -148,67 +107,7 @@ export function extractTooltip(
   mark: G2Mark,
   context: G2Context,
 ): [number[], G2Mark] {
-  const { data, encode, tooltip = {} } = mark;
-  if (isUnset(tooltip)) return [I, mark];
-  const valueOf = (item) => {
-    if (!item) return item;
-    if (typeof item === 'string') {
-      return I.map((i) => ({ name: item, value: data[i][item] }));
-    }
-    if (isStrictObject(item)) {
-      const {
-        field,
-        channel,
-        color,
-        name = field,
-        valueFormatter = (d) => d,
-      } = item;
-
-      // Support d3-format.
-      const normalizedValueFormatter =
-        typeof valueFormatter === 'string'
-          ? format(valueFormatter)
-          : valueFormatter;
-
-      // Field name.
-      const definedChannel = channel && encode[channel];
-      const channelField = definedChannel && encode[channel].field;
-      const name1 = name || channelField || channel;
-
-      const values = [];
-      for (const i of I) {
-        const value1 = field
-          ? data[i][field]
-          : definedChannel
-          ? encode[channel].value[i]
-          : null;
-        values[i] = {
-          name: name1,
-          color,
-          value: normalizedValueFormatter(value1),
-        };
-      }
-      return values;
-    }
-    if (typeof item === 'function') {
-      const values = [];
-      for (const i of I) {
-        const v = item(data[i], i, data, encode);
-        if (isStrictObject(v))
-          values[i] = { ...v, [CALLBACK_ITEM_SYMBOL]: true };
-        else values[i] = { value: v };
-      }
-      return values;
-    }
-    return item;
-  };
-  const { title, items = [], ...rest } = tooltip;
-  const newTooltip = {
-    title: valueOf(title),
-    items: Array.isArray(items) ? items.map(valueOf) : [],
-    ...rest,
-  };
-  return [I, { ...mark, tooltip: newTooltip }];
+    throw new Error("STUB");
 }
 
 export function maybeArrayField(
@@ -216,37 +115,7 @@ export function maybeArrayField(
   mark: G2Mark,
   context: G2Context,
 ): [number[], G2Mark] {
-  const { encode, ...rest } = mark;
-  if (!encode) return [I, mark];
-  const columns = Object.entries(encode);
-  const arrayColumns = columns
-    .filter(([, channel]) => {
-      const { value: V } = channel;
-      return Array.isArray(V[0]);
-    })
-    .flatMap(([key, V]) => {
-      const columns = [[key, new Array(I.length).fill(undefined)] as const];
-      const { value: rows, ...rest } = V;
-      for (let i = 0; i < rows.length; i++) {
-        const row = rows[i];
-        if (Array.isArray(row)) {
-          for (let j = 0; j < row.length; j++) {
-            const column = columns[j] || [
-              `${key}${j}`,
-              new Array(I).fill(undefined),
-            ];
-            column[1][i] = row[j];
-            columns[j] = column;
-          }
-        }
-      }
-      return columns.map(([key, value]) => [
-        key,
-        { type: 'column', value, ...rest },
-      ]);
-    });
-  const newEncode = Object.fromEntries([...columns, ...arrayColumns]);
-  return [I, { ...rest, encode: newEncode }];
+    throw new Error("STUB");
 }
 
 export function addGuideToScale(
@@ -254,47 +123,7 @@ export function addGuideToScale(
   mark: G2Mark,
   context: G2Context,
 ): [number[], G2Mark] {
-  const { axis = {}, legend = {}, slider = {}, scrollbar = {} } = mark;
-  const normalize = (guide: boolean | Record<string, any>, channel: string) => {
-    if (typeof guide === 'boolean') return guide ? {} : null;
-    const eachGuide = guide[channel];
-    return eachGuide === undefined || eachGuide ? eachGuide : null;
-  };
-  const axisChannels =
-    typeof axis === 'object'
-      ? Array.from(new Set(['x', 'y', 'z', ...Object.keys(axis)]))
-      : ['x', 'y', 'z'];
-
-  deepMix(mark, {
-    scale: {
-      ...Object.fromEntries(
-        axisChannels.map((channel) => {
-          const scrollbarOptions = normalize(scrollbar, channel);
-          return [
-            channel,
-            {
-              guide: normalize(axis, channel),
-              slider: normalize(slider, channel),
-              scrollbar: scrollbarOptions,
-              ...(scrollbarOptions && {
-                ratio:
-                  scrollbarOptions.ratio === undefined
-                    ? 0.5
-                    : scrollbarOptions.ratio,
-              }),
-            },
-          ];
-        }),
-      ),
-      color: { guide: normalize(legend, 'color') },
-      size: { guide: normalize(legend, 'size') },
-      shape: { guide: normalize(legend, 'shape') },
-      // fixme: opacity is conflict with DisplayObject.opacity
-      // to be confirm.
-      opacity: { guide: normalize(legend, 'opacity') },
-    },
-  });
-  return [I, mark];
+    throw new Error("STUB");
 }
 
 export function maybeNonAnimate(
@@ -302,16 +131,7 @@ export function maybeNonAnimate(
   mark: G2Mark,
   context: G2Context,
 ): [number[], G2Mark] {
-  const { animate } = mark;
-  if (animate || animate === undefined) return [I, mark];
-  deepMix(mark, {
-    animate: {
-      enter: { type: null },
-      exit: { type: null },
-      update: { type: null },
-    },
-  });
-  return [I, mark];
+    throw new Error("STUB");
 }
 
 export function appendMarkScaleKey(
@@ -319,39 +139,19 @@ export function appendMarkScaleKey(
   mark: G2Mark,
   context: G2Context,
 ): [number[], G2Mark] {
-  deepMix(mark, {
-    scale: {
-      series: {
-        key: `DEFAULT_${mark.type}_SERIES_KEY`,
-        ...(mark?.scale?.series ?? {}),
-      },
-    },
-  });
-
-  return [I, mark];
+    throw new Error("STUB");
 }
 
 function isTypedChannel(channel): boolean {
-  if (
-    typeof channel !== 'object' ||
-    channel instanceof Date ||
-    channel === null
-  ) {
-    return false;
-  }
-  const { type } = channel;
-  return defined(type);
+    throw new Error("STUB");
 }
 
 function inferChannelType(data: Record<string, Primitive>[], channel): string {
-  if (typeof channel === 'function') return 'transform';
-  if (typeof channel === 'string' && isField(data, channel)) return 'field';
-  return 'constant';
+    throw new Error("STUB");
 }
 
 function isField(data: Record<string, Primitive>[], value: string): boolean {
-  if (!Array.isArray(data)) return false;
-  return data.some((d) => d[value] !== undefined);
+    throw new Error("STUB");
 }
 
 function normalizedDataSource(data) {
@@ -365,24 +165,5 @@ function normalizedDataSource(data) {
 }
 
 function isColumnMajorData(data: any): boolean {
-  // Check if the data is an object (not array, not null) with all values being arrays
-  if (!isStrictObject(data) || Array.isArray(data)) {
-    return false;
-  }
-
-  // Check if there's at least one key
-  const keys = Object.keys(data);
-  if (keys.length === 0) {
-    return true;
-  }
-
-  // Check if all values are arrays and have the same length
-  const first = data[keys[0]];
-  if (!Array.isArray(first)) {
-    return false;
-  }
-  const length = first.length;
-  return keys.every(
-    (key) => Array.isArray(data[key]) && data[key].length === length,
-  );
+    throw new Error("STUB");
 }

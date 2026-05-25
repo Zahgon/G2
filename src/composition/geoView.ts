@@ -25,7 +25,7 @@ function normalizeProjection(type: string) {
 function mergeGeoJSON(gjs) {
   return {
     type: 'FeatureCollection',
-    features: gjs.flatMap((gj) => normalizeGeoJSON(gj).features),
+    features: gjs.flatMap((gj) => { throw new Error("STUB"); }),
   };
 }
 
@@ -80,12 +80,12 @@ function setProjectionSize(projection, nodes, layout, options) {
   const defaultOutline = () => {
     const geoNodes = nodes.filter(isGeoPath);
     // For geoPath with sphere mark, use it as outline.
-    const sphere = geoNodes.find((d) => d.sphere);
+    const sphere = geoNodes.find((d) => { throw new Error("STUB"); });
     if (sphere) return { type: 'Sphere' };
 
     // Merge all GeoJSON as the outline.
     return mergeGeoJSON(
-      geoNodes.filter((d) => !d.sphere).flatMap((d) => d.data.value),
+      geoNodes.filter((d) => { throw new Error("STUB"); }).flatMap((d) => { throw new Error("STUB"); }),
     );
   };
   const { outline = defaultOutline() } = options;
@@ -125,17 +125,7 @@ function setFitWidth(projection, object, layout) {
  * @todo Remove this.
  */
 function normalizeDataSource(node) {
-  const { data } = node;
-  if (Array.isArray(data)) return { ...node, data: { value: data } };
-  const { type } = data;
-  if (type === 'graticule10') {
-    return { ...node, data: { value: [geoGraticule10()] } };
-  } else if (type === 'sphere') {
-    // Sphere is not a standard type of GeoJSON.
-    // Mark this geoPath as sphere geoPath.
-    return { ...node, sphere: true, data: { value: [{ type: 'Sphere' }] } };
-  }
-  return node;
+    throw new Error("STUB");
 }
 
 function isGeoPath(d) {
@@ -148,98 +138,7 @@ export type GeoViewOptions = Omit<GeoViewComposition, 'type'>;
  * A view with geo coordinate.
  */
 export const GeoView: CC<GeoViewOptions> = () => {
-  return (options) => {
-    const { children, coordinate: projection = {} } = options;
-    if (!Array.isArray(children)) return [];
-
-    // Get projection factory.
-    const { type = 'equalEarth', ...projectionOptions } = projection;
-    const createProjection = normalizeProjection(type);
-    const nodes = children
-      .map((c) => {
-        return { ...c, data: mergeData(c.data, options.data) };
-      })
-      .map(normalizeDataSource);
-
-    // Set path generator lazily.
-    let path;
-
-    // A custom geo coordinate.
-    function Geo() {
-      return [
-        [
-          'custom',
-          (x, y, width, height) => {
-            // Create and set projection.
-            const visual = createProjection();
-            const layout = { x, y, width, height };
-            setProjectionSize(visual, nodes, layout, projectionOptions);
-            setProjectionOptions(visual, projectionOptions);
-
-            // Create path generator.
-            path = geoPath(visual);
-
-            // Normalize projection and projection.invert,
-            // which normalize projected points.
-            const scaleX = new Linear({
-              domain: [x, x + width],
-            });
-            const scaleY = new Linear({
-              domain: [y, y + height],
-            });
-            const normalize = (point) => {
-              const visualPoint = visual(point);
-              if (!visualPoint) return [null, null];
-              const [vx, vy] = visualPoint;
-              return [scaleX.map(vx), scaleY.map(vy)];
-            };
-            const normalizeInvert = (point) => {
-              if (!point) return null;
-              const [px, py] = point;
-              const visualPoint = [scaleX.invert(px), scaleY.invert(py)];
-              return visual.invert(visualPoint);
-            };
-            return {
-              transform: (point) => normalize(point),
-              untransform: (point) => normalizeInvert(point),
-            };
-          },
-        ],
-      ];
-    }
-
-    function GeoPath(options) {
-      const { style, tooltip = {} } = options;
-      return {
-        ...options,
-        type: 'path',
-        tooltip: maybeTooltip(tooltip, {
-          title: 'id',
-          items: [{ channel: 'color' }],
-        }),
-        style: {
-          ...style,
-          d: (d) => path(d) || [],
-        },
-      };
-    }
-
-    const t = (d) => (isGeoPath(d) ? GeoPath(d) : d);
-
-    return [
-      {
-        ...options,
-        type: 'view',
-        scale: {
-          x: { type: 'identity' },
-          y: { type: 'identity' },
-        },
-        axis: false,
-        coordinate: { type: Geo },
-        children: nodes.flatMap(t),
-      },
-    ];
-  };
+    throw new Error("STUB");
 };
 
 GeoView.props = {};

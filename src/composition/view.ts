@@ -12,40 +12,7 @@ export type ViewOptions = Omit<ViewComposition, 'type'>;
  */
 export const View: CC<ViewOptions> = () => {
   return (options) => {
-    const { children, ...restOptions } = options;
-    if (!Array.isArray(children)) return [];
-    const {
-      data: viewData,
-      scale: viewScale = {},
-      axis: viewAxis = {},
-      legend: viewLegend = {},
-      encode: viewEncode = {},
-      transform: viewTransform = [],
-      slider: viewSlider = {},
-      ...rest
-    } = restOptions;
-    const marks = children.map(
-      ({
-        data,
-        scale = {},
-        axis = {},
-        legend = {},
-        encode = {},
-        transform = [],
-        slider = {},
-        ...rest
-      }) => ({
-        data: mergeData(data, viewData),
-        scale: deepMix({}, viewScale, scale),
-        encode: deepMix({}, viewEncode, encode),
-        transform: [...viewTransform, ...transform],
-        axis: axis && viewAxis ? deepMix({}, viewAxis, axis) : false,
-        legend: legend && viewLegend ? deepMix({}, viewLegend, legend) : false,
-        slider: deepMix({}, viewSlider, slider),
-        ...rest,
-      }),
-    );
-    return [{ ...rest, marks, type: 'standardView', slider: viewSlider }];
+      throw new Error("STUB");
   };
 };
 

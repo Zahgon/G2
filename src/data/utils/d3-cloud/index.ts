@@ -14,31 +14,31 @@ const cloudRadians = Math.PI / 180,
   ch = 1 << 11;
 
 function cloudText(d: Item) {
-  return d.text;
+    throw new Error("STUB");
 }
 
 function cloudFont() {
-  return 'serif';
+    throw new Error("STUB");
 }
 
 function cloudFontNormal() {
-  return 'normal';
+    throw new Error("STUB");
 }
 
 function cloudFontSize(d: Item) {
-  return d.value;
+    throw new Error("STUB");
 }
 
 function cloudRotate() {
-  return ~~(Math.random() * 2) * 90;
+    throw new Error("STUB");
 }
 
 function cloudPadding() {
-  return 1;
+    throw new Error("STUB");
 }
 
 function cloudDispatch() {
-  return;
+    throw new Error("STUB");
 }
 // Fetches a monochrome sprite bitmap for the specified text.
 // Load in batches for speed.
@@ -186,36 +186,11 @@ function collideRects(a, b) {
 }
 
 function archimedeanSpiral(size) {
-  const e = size[0] / size[1];
-  return function (t) {
-    return [e * (t *= 0.1) * Math.cos(t), t * Math.sin(t)];
-  };
+    throw new Error("STUB");
 }
 
 function rectangularSpiral(size) {
-  const dy = 4,
-    dx = (dy * size[0]) / size[1];
-  let x = 0,
-    y = 0;
-  return function (t) {
-    const sign = t < 0 ? -1 : 1;
-    // See triangular numbers: T_n = n * (n + 1) / 2.
-    switch ((Math.sqrt(1 + 4 * sign * t) - sign) & 3) {
-      case 0:
-        x += dx;
-        break;
-      case 1:
-        y += dy;
-        break;
-      case 2:
-        x -= dx;
-        break;
-      default:
-        y -= dy;
-        break;
-    }
-    return [x, y];
-  };
+    throw new Error("STUB");
 }
 
 // TODO reuse arrays?
@@ -227,15 +202,15 @@ function zeroArray(n) {
 }
 
 function cloudCanvas() {
-  return document.createElement('canvas');
+    throw new Error("STUB");
 }
 
 function functor(d) {
   return typeof d === 'function'
     ? d
     : function () {
-        return d;
-      };
+        throw new Error("STUB");
+    };
 }
 
 const spirals = {
@@ -263,87 +238,11 @@ export function tagCloud() {
   const cloud: any = {};
 
   cloud.start = function () {
-    const [width, height] = size;
-    const contextAndRatio = getContext(canvas()),
-      board = cloud.board ? cloud.board : zeroArray((size[0] >> 5) * size[1]),
-      n = words.length,
-      tags = [],
-      data = words
-        .map(function (d, i, data) {
-          d.text = text.call(this, d, i, data);
-          d.font = font.call(this, d, i, data);
-          d.style = fontStyle.call(this, d, i, data);
-          d.weight = fontWeight.call(this, d, i, data);
-          d.rotate = rotate.call(this, d, i, data);
-          d.size = ~~fontSize.call(this, d, i, data);
-          d.padding = padding.call(this, d, i, data);
-          return d;
-        })
-        .sort(function (a, b) {
-          return b.size - a.size;
-        });
-    let i = -1,
-      bounds = !cloud.board
-        ? undefined
-        : [
-            {
-              x: 0,
-              y: 0,
-            },
-            {
-              x: width,
-              y: height,
-            },
-          ];
-
-    if (timer) clearInterval(timer);
-    timer = setInterval(step, 0);
-    step();
-
-    function step() {
-      const start = Date.now();
-      while (Date.now() - start < timeInterval && ++i < n) {
-        const d = data[i];
-        d.x = (width * (random() + 0.5)) >> 1;
-        d.y = (height * (random() + 0.5)) >> 1;
-        cloudSprite(contextAndRatio, d, data, i);
-        if (d.hasText && place(board, d, bounds)) {
-          event.call(null, 'word', { cloud, word: d });
-          tags.push(d);
-          if (bounds) {
-            if (!cloud.hasImage) {
-              // update bounds if image mask not set
-              cloudBounds(bounds, d);
-            }
-          } else {
-            bounds = [
-              { x: d.x + d.x0, y: d.y + d.y0 },
-              { x: d.x + d.x1, y: d.y + d.y1 },
-            ];
-          }
-          // Temporary hack
-          d.x -= size[0] >> 1;
-          d.y -= size[1] >> 1;
-        }
-      }
-      cloud._tags = tags;
-      cloud._bounds = bounds;
-
-      if (i >= n) {
-        cloud.stop();
-        event.call(null, 'end', { cloud, words: tags, bounds });
-      }
-    }
-
-    return cloud;
+      throw new Error("STUB");
   };
 
   cloud.stop = function () {
-    if (timer) {
-      clearInterval(timer);
-      timer = null;
-    }
-    return cloud;
+      throw new Error("STUB");
   };
 
   function getContext(canvas: HTMLCanvasElement) {
@@ -418,86 +317,59 @@ export function tagCloud() {
   }
 
   cloud.createMask = (img: HTMLImageElement) => {
-    const can: HTMLCanvasElement = document.createElement('canvas');
-    const [width, height] = size;
-
-    // 当 width 或 height 为 0 时，调用 cxt.getImageData 会报错
-    if (!width || !height) {
-      return;
-    }
-    const w32 = width >> 5;
-    const board = zeroArray((width >> 5) * height);
-    can.width = width;
-    can.height = height;
-    const cxt = can.getContext('2d') as CanvasRenderingContext2D;
-    cxt.drawImage(img, 0, 0, img.width, img.height, 0, 0, width, height);
-    const imageData = cxt.getImageData(0, 0, width, height).data;
-    for (let j = 0; j < height; j++) {
-      for (let i = 0; i < width; i++) {
-        const k = w32 * j + (i >> 5);
-        const tmp = (j * width + i) << 2;
-        const flag =
-          imageData[tmp] >= 250 &&
-          imageData[tmp + 1] >= 250 &&
-          imageData[tmp + 2] >= 250;
-        const m = flag ? 1 << (31 - (i % 32)) : 0;
-        board[k] |= m;
-      }
-    }
-    cloud.board = board;
-    cloud.hasImage = true;
+      throw new Error("STUB");
   };
 
   cloud.timeInterval = function (_) {
-    timeInterval = _ == null ? Infinity : _;
+      throw new Error("STUB");
   };
 
   cloud.words = function (_) {
-    words = _;
+      throw new Error("STUB");
   };
 
   cloud.size = function (_ = []) {
-    size = [+_[0], +_[1]];
+      throw new Error("STUB");
   };
 
   cloud.text = function (_) {
-    text = functor(_);
+      throw new Error("STUB");
   };
 
   cloud.font = function (_) {
-    font = functor(_);
+      throw new Error("STUB");
   };
 
   cloud.fontWeight = function (_) {
-    fontWeight = functor(_);
+      throw new Error("STUB");
   };
 
   cloud.rotate = function (_) {
-    rotate = functor(_);
+      throw new Error("STUB");
   };
 
   cloud.canvas = function (_) {
-    canvas = functor(_);
+      throw new Error("STUB");
   };
 
   cloud.spiral = function (_) {
-    spiral = spirals[_] || _;
+      throw new Error("STUB");
   };
 
   cloud.fontSize = function (_) {
-    fontSize = functor(_);
+      throw new Error("STUB");
   };
 
   cloud.padding = function (_) {
-    padding = functor(_);
+      throw new Error("STUB");
   };
 
   cloud.random = function (_) {
-    random = functor(_);
+      throw new Error("STUB");
   };
 
   cloud.on = function (_) {
-    event = functor(_);
+      throw new Error("STUB");
   };
 
   return cloud;

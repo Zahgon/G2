@@ -17,7 +17,7 @@ export function area(
   const Y1 = points.slice(0, l);
   const Y0 = points.slice(l);
   // Get the maximal space for label.
-  let idx = maxIndex(Y1, (p, i) => Math.abs(p[1] - Y0[i][1]));
+  let idx = maxIndex(Y1, (p, i) => { throw new Error("STUB"); });
   // Do not show label at first and last.
   idx = Math.max(Math.min(idx, l - 2), 1);
 

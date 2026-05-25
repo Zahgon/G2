@@ -9,7 +9,7 @@ export type TransformOptions = Omit<TransformEncode, 'type'>;
  * Specifying identity scale for related channel explicitly will treat them as visual data.
  */
 export const Transform: EC<TransformOptions> = ({ value }) => {
-  return (data) => data.map(value);
+    throw new Error("STUB");
 };
 
 Transform.props = {};

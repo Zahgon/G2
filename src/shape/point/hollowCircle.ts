@@ -7,7 +7,7 @@ export type HollowCircleOptions = Record<string, any>;
  * ○
  */
 export const HollowCircle: SC<HollowCircleOptions> = (options, context) => {
-  return BaseCircle({ colorAttribute: 'stroke', ...options }, context);
+    throw new Error("STUB");
 };
 
 HollowCircle.props = {

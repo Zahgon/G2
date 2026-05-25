@@ -29,33 +29,9 @@ const getPointTemplate = lru(
     blurFactor: number,
     createCanvas?: () => HTMLCanvasElement,
   ) => {
-    const tplCanvas = newCanvas(createCanvas, radius * 2, radius * 2);
-    const tplCtx = tplCanvas.getContext('2d');
-    const x = radius;
-    const y = radius;
-
-    if (blurFactor === 1) {
-      tplCtx.beginPath();
-      tplCtx.arc(x, y, radius, 0, 2 * Math.PI, false);
-      tplCtx.fillStyle = 'rgba(0,0,0,1)';
-      tplCtx.fill();
-    } else {
-      const gradient = tplCtx.createRadialGradient(
-        x,
-        y,
-        radius * blurFactor,
-        x,
-        y,
-        radius,
-      );
-      gradient.addColorStop(0, 'rgba(0,0,0,1)');
-      gradient.addColorStop(1, 'rgba(0,0,0,0)');
-      tplCtx.fillStyle = gradient;
-      tplCtx.fillRect(0, 0, 2 * radius, 2 * radius);
-    }
-    return tplCanvas;
-  },
-  (radius) => `${radius}`,
+        throw new Error("STUB");
+    },
+  (radius) => { throw new Error("STUB"); },
 );
 
 /**
@@ -69,7 +45,7 @@ function getColorPalette(gradientConfig: HeatmapGradient, createCanvas) {
 
   const gradient = paletteCtx.createLinearGradient(0, 0, 256, 1);
   parseGradient(gradientConfig).forEach(([r, c]) => {
-    gradient.addColorStop(r, c);
+      throw new Error("STUB");
   });
 
   paletteCtx.fillStyle = gradient;

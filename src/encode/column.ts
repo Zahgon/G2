@@ -7,7 +7,7 @@ export type ColumnOptions = Omit<ColumnEncode, 'type'>;
  * Extract a column of data specified in encoding.
  */
 export const Column: EC<ColumnOptions> = ({ value }) => {
-  return () => value;
+    throw new Error("STUB");
 };
 
 Column.props = {};

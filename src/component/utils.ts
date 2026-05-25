@@ -24,7 +24,7 @@ export function createComponent<T>(descriptor: Descriptor<T>): any {
     }
 
     connectedCallback() {
-      this.descriptor.render?.(this.attributes, this);
+        throw new Error("STUB");
     }
 
     public update(cfg = {}) {
@@ -84,7 +84,7 @@ export function inferComponentLayout(
 
 export class G2Layout extends Layout {
   get child() {
-    return this.children?.[0] as any;
+      throw new Error("STUB");
   }
 
   update(options: any) {
@@ -105,7 +105,7 @@ export class LegendCategoryLayout extends G2Layout {
 }
 
 export function scaleOf(scales: Scale[], type: string): Scale | undefined {
-  return scales.filter((s) => s.getOptions().name === type)?.[0];
+  return scales.filter((s) => { throw new Error("STUB"); })?.[0];
 }
 
 export function isHorizontal(orientation: GuideComponentOrientation) {
@@ -148,7 +148,7 @@ export function inferComponentShape(
 export function domainOf(scales: Scale[]): any[] {
   // to get a available scale's domain
   return scales
-    .find((scale) => scale.getOptions().domain.length > 0)
+    .find((scale) => { throw new Error("STUB"); })
     .getOptions().domain;
 }
 
@@ -171,9 +171,7 @@ export function adaptor<T>(style: T) {
   const { style: styles, ...rest } = style;
   const finalStyle = {};
   Object.entries(rest).forEach(([key, value]) => {
-    if (reservedKeys.includes(key)) {
-      finalStyle[`show${upperFirst(key)}`] = value;
-    } else finalStyle[key] = value;
+      throw new Error("STUB");
   });
   return {
     ...finalStyle,

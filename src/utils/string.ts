@@ -5,7 +5,7 @@
  */
 export function camelCase(s: string) {
   return s.replace(/-(\w)/g, function (_, letter) {
-    return letter.toUpperCase();
+      throw new Error("STUB");
   });
 }
 
@@ -15,5 +15,5 @@ export function camelCase(s: string) {
  * @param s
  */
 export function kebabCase(s: string) {
-  return s.replace(/([A-Z])/g, '-$1').toLowerCase();
+    throw new Error("STUB");
 }

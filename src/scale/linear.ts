@@ -5,7 +5,7 @@ import { LinearScale as LinearScaleSpec } from '../spec';
 export type LinearOptions = Omit<LinearScaleSpec, 'type'>;
 
 export const Linear: SC<LinearOptions> = (options) => {
-  return new LinearScale(options);
+    throw new Error("STUB");
 };
 
 Linear.props = {};

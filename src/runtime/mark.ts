@@ -51,90 +51,28 @@ export async function initializeMark(
   // For independent channels, dot not group them, such as position1, position2.
   const { channels: channelDescriptors } = partialProps;
   const nameChannels = rollups(
-    Object.entries(encode).filter(([, value]) => defined(value)),
+    Object.entries(encode).filter(([, value]) => { throw new Error("STUB"); }),
     (values) =>
-      values.map(([key, options]) => ({
-        name: key,
-        ...options,
-      })),
+      { throw new Error("STUB"); },
     ([key]) => {
-      const prefix = /([^\d]+)\d*$/.exec(key)?.[1];
-      const descriptor = channelDescriptors.find((d) => d.name === prefix);
-      if (descriptor?.independent) return key;
-      return prefix;
+        throw new Error("STUB");
     },
   );
 
   // Check required channels and initialize scale options for each channel.
   const channels = channelDescriptors
     .filter((descriptor) => {
-      const { name, required } = descriptor;
-      if (nameChannels.find(([d]) => d === name)) return true;
-      if (required) throw new Error(`Missing encoding for channel: ${name}.`);
-      return false;
+        throw new Error("STUB");
     })
     .flatMap((descriptor) => {
-      const {
-        name,
-        scale: scaleType,
-        scaleKey,
-        range,
-        quantitative,
-        ordinal,
-      } = descriptor;
-      const valuesArray = nameChannels.filter(([channel]) =>
-        channel.startsWith(name),
-      );
-      return valuesArray.map(([channel, values], i) => {
-        const visual = values.some((d) => d.visual);
-        const constant = values.some((d) => d.constant);
-        const {
-          independent = false,
-          // Use channel name as default scale key.
-          key = scaleKey || channel,
-          // Visual channel use identity scale.
-          type = constant ? 'constant' : visual ? 'identity' : scaleType,
-          ...scaleOptions
-        } = scale[channel] || {};
-        // For constant scale, infer range from data.
-        const isConstant = type === 'constant';
-        const finalRange = isConstant ? undefined : range;
-        return {
-          name: channel,
-          values,
-          // Generate a unique key for independent channel,
-          // which will not group with any other channels.
-          scaleKey: independent || isConstant ? Symbol('independent') : key,
-          scale: {
-            type,
-            markKey,
-            range: finalRange,
-            ...scaleOptions,
-            quantitative,
-            ordinal,
-          },
-        };
-      });
+        throw new Error("STUB");
     });
 
   return [transformedMark, { ...partialProps, index: I, channels, tooltip }];
 }
 
 export function createColumnOf(library: G2Library): ColumnOf {
-  const [useEncode] = useLibrary<G2EncodeOptions, EncodeComponent, Encode>(
-    'encode',
-    library,
-  );
-  return (data, encode) => {
-    if (encode === undefined) return null;
-    if (data === undefined) return null;
-    return {
-      ...encode,
-      type: 'column',
-      value: useEncode(encode)(data),
-      field: fieldOf(encode),
-    };
-  };
+    throw new Error("STUB");
 }
 
 async function applyMarkTransform(
@@ -176,7 +114,5 @@ async function applyMarkTransform(
 }
 
 function fieldOf(encode: NormalizedEncodeSpec): string {
-  const { type, value } = encode;
-  if (type === 'field' && typeof value === 'string') return value;
-  return null;
+    throw new Error("STUB");
 }

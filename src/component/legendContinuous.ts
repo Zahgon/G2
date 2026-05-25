@@ -72,12 +72,7 @@ function inferContinuousShape(
 }
 
 function getFormatter(max: number) {
-  return (value: number) => ({
-    value: value / max,
-    label: String(value),
-    // Reference of input original domain value.
-    domainValue: value,
-  });
+  return (value: number) => { throw new Error("STUB"); };
 }
 
 function getQuantizeOrQuantileConfig(
@@ -102,18 +97,13 @@ function getThresholdConfig(
   range: string[],
 ): Config {
   const thresholds = (colorScale as any).thresholds as number[];
-  const data = [-Infinity, ...thresholds, Infinity].map((value, index) => ({
-    value: index,
-    // Reference of input original domain value.
-    domainValue: value,
-    label: value,
-  }));
+  const data = [-Infinity, ...thresholds, Infinity].map((value, index) => { throw new Error("STUB"); });
   return {
     ...shape,
     data,
     color: range,
     labelFilter: (datum, index) => {
-      return index > 0 && index < data.length - 1;
+        throw new Error("STUB");
     },
   };
 }
@@ -157,21 +147,15 @@ function getLinearConfig(
   const [min, max] = rangeOf(scale);
   const [domainMin, domainMax] = rangeOf(
     [colorScale, sizeScale, opacityScale]
-      .filter((d) => d !== undefined)
-      .find((d) => !(d instanceof Constant)),
+      .filter((d) => { throw new Error("STUB"); })
+      .find((d) => { throw new Error("STUB"); }),
   );
   return {
     ...shape,
     domain: [domainMin, domainMax],
-    data: scale.getTicks().map((value) => ({ value })),
+    data: scale.getTicks().map((value) => { throw new Error("STUB"); }),
     color: new Array(Math.floor(length)).fill(0).map((d, i) => {
-      const value = ((max - min) / (length - 1)) * i + min;
-      const color = scale.map(value) || defaultColor;
-      const opacity = opacityScale ? opacityScale.map(value) : 1;
-      return color.replace(
-        /rgb[a]*\(([\d]{1,3}) *, *([\d]{1,3}) *, *([\d]{1,3})[\S\s]*\)/,
-        (match, p1, p2, p3) => `rgba(${p1}, ${p2}, ${p3}, ${opacity})`,
-      );
+        throw new Error("STUB");
     }),
   };
 }
@@ -231,58 +215,7 @@ export const LegendContinuous: GCC<LegendContinuousOptions> = (options) => {
   } = options;
 
   return ({ scales, value, theme, scale }) => {
-    const { bbox } = value;
-    const { x, y, width, height } = bbox;
-    const finalLayout = inferComponentLayout(position, layout);
-
-    const { legendContinuous: legendTheme = {} } = theme;
-
-    const finalStyle = adaptor(
-      Object.assign(
-        {},
-        legendTheme,
-        {
-          titleText: titleContent(title),
-          labelAlign: 'value',
-          labelFormatter:
-            typeof labelFormatter === 'string'
-              ? (d) => format(labelFormatter)(d.label)
-              : labelFormatter,
-          ...inferContinuousConfig(
-            scales,
-            scale,
-            value,
-            options,
-            LegendContinuous,
-            theme,
-          ),
-          ...style,
-          classNamePrefix: G2_CLASS_PREFIX,
-        },
-        rest,
-      ),
-    );
-
-    const layoutWrapper = new G2Layout({
-      style: {
-        x,
-        y,
-        width,
-        height,
-        ...finalLayout,
-        // @ts-ignore
-        subOptions: finalStyle,
-      },
-    });
-
-    layoutWrapper.appendChild(
-      new Continuous({
-        className: 'legend-continuous',
-        style: finalStyle,
-      }),
-    );
-
-    return layoutWrapper as unknown as DisplayObject;
+      throw new Error("STUB");
   };
 };
 

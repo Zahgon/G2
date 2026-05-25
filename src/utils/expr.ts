@@ -12,25 +12,9 @@ export const EXPR_WHITE_LIST = ['style', 'encode', 'labels', 'children'];
  */
 const compileExpression = lru(
   (expr: string): (() => any) | string => {
-    const evaluator = compile(expr);
-
-    return (...args) => {
-      const paramNames = Array.from({ length: args.length }, (_, i) =>
-        String.fromCharCode(97 + i),
-      );
-
-      const namedParams = Object.fromEntries(
-        args.map((value, index) => [paramNames[index], value]),
-      );
-
-      // global is used to overview what can i get in props.
-      return evaluator({
-        ...namedParams,
-        global: { ...namedParams },
-      });
-    };
-  },
-  (expr) => expr,
+        throw new Error("STUB");
+    },
+  (expr) => { throw new Error("STUB"); },
   128,
 );
 
@@ -42,19 +26,12 @@ const compileExpression = lru(
  */
 export function parseOptionsExpr(options: any, isSpecRoot = true): any {
   if (Array.isArray(options)) {
-    return options.map((_, i) => parseOptionsExpr(options[i], isSpecRoot));
+    return options.map((_, i) => { throw new Error("STUB"); });
   }
 
   if (typeof options === 'object' && options) {
     return mapValues(options, (value, key) => {
-      // if options is root and the key is in the white list, parse the expression.
-      if (isSpecRoot && EXPR_WHITE_LIST.includes(key)) {
-        return parseOptionsExpr(value, key === 'children');
-      }
-      if (!isSpecRoot) {
-        return parseOptionsExpr(value, false);
-      }
-      return value;
+        throw new Error("STUB");
     });
   }
 

@@ -13,7 +13,7 @@ import { field } from './utils';
 const GET_DEFAULT_LAYOUT_OPTIONS = (width, height) => ({
   size: [width, height],
   padding: 0,
-  sort: (a, b) => b.value - a.value,
+  sort: (a, b) => { throw new Error("STUB"); },
 });
 
 const GET_DEFAULT_OPTIONS = (width, height, encode) => ({
@@ -32,8 +32,8 @@ const GET_DEFAULT_OPTIONS = (width, height, encode) => ({
     shape: 'point',
   },
   style: {
-    fill: !encode.color ? (d) => (d.height === 0 ? '#ddd' : '#fff') : undefined,
-    stroke: !encode.color ? (d) => (d.height === 0 ? '' : '#000') : undefined,
+    fill: !encode.color ? (d) => { throw new Error("STUB"); } : undefined,
+    stroke: !encode.color ? (d) => { throw new Error("STUB"); } : undefined,
   },
 });
 
@@ -43,10 +43,10 @@ const DEFAULT_LABEL_OPTIONS = {
   textOverflow: 'clip',
   wordWrap: true,
   maxLines: 1,
-  wordWrapWidth: (d) => d.r * 2,
+  wordWrapWidth: (d) => { throw new Error("STUB"); },
 };
 const DEFAULT_TOOLTIP_OPTIONS = {
-  title: (d) => d.data.name,
+  title: (d) => { throw new Error("STUB"); },
   items: [{ field: 'value' }],
 };
 
@@ -63,7 +63,7 @@ const dataTransform = (data, layout: PackLayout, encode) => {
   const root = isArray(data)
     ? stratify().path(layout.path)(data)
     : hierarchy(data);
-  value ? root.sum((d) => field(value)(d)).sort(layout.sort) : root.count();
+  value ? root.sum((d) => { throw new Error("STUB"); }).sort(layout.sort) : root.count();
   // @ts-ignore
   packLayout().size(layout.size).padding(layout.padding)(root);
   return root.descendants();
@@ -72,45 +72,7 @@ const dataTransform = (data, layout: PackLayout, encode) => {
 export type PackOptions = Omit<PackMark, 'type'>;
 
 export const Pack: CC<PackOptions> = (markOptions, context) => {
-  const { width, height } = context;
-
-  const {
-    data,
-    encode = {},
-    scale = {},
-    style = {},
-    layout = {},
-    labels = [],
-    tooltip = {},
-    ...resOptions
-  } = markOptions;
-
-  const DEFAULT_OPTIONS = GET_DEFAULT_OPTIONS(width, height, encode);
-
-  const transformedData = dataTransform(
-    data,
-    deepMix({}, GET_DEFAULT_LAYOUT_OPTIONS(width, height), layout),
-    deepMix({}, DEFAULT_OPTIONS['encode'], encode),
-  );
-
-  const labelStyle = subObject(style, 'label');
-
-  return deepMix({}, DEFAULT_OPTIONS, {
-    data: transformedData,
-    encode,
-    scale,
-    style,
-    labels: [
-      {
-        ...DEFAULT_LABEL_OPTIONS,
-        ...labelStyle,
-      },
-      ...labels,
-    ],
-    ...resOptions,
-    tooltip: maybeTooltip(tooltip, DEFAULT_TOOLTIP_OPTIONS),
-    axis: false,
-  });
+    throw new Error("STUB");
 };
 
 Pack.props = {};

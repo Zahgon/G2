@@ -21,7 +21,7 @@ const GET_DEFAULT_LAYOUT_OPTIONS = (width, height) => ({
   paddingRight: 0,
   paddingBottom: 0,
   paddingLeft: 0,
-  sort: (a, b) => b.value - a.value,
+  sort: (a, b) => { throw new Error("STUB"); },
   layer: 0,
 });
 
@@ -32,7 +32,7 @@ const GET_DEFAULT_OPTIONS = (width, height) => ({
     x: 'x',
     y: 'y',
     key: 'id',
-    color: (d) => d.path[1],
+    color: (d) => { throw new Error("STUB"); },
   },
   scale: {
     x: { domain: [0, width], range: [0, 1] },
@@ -49,108 +49,28 @@ const GET_DEFAULT_OPTIONS = (width, height) => ({
 
 const DEFAULT_LABEL_OPTIONS = {
   fontSize: 10,
-  text: (d) => last(d.path),
+  text: (d) => { throw new Error("STUB"); },
   position: 'inside',
   fill: '#000',
   textOverflow: 'clip',
   wordWrap: true,
   maxLines: 1,
-  wordWrapWidth: (d) => d.x1 - d.x0,
+  wordWrapWidth: (d) => { throw new Error("STUB"); },
   isTreemapLabel: true,
 };
 
 const DEFAULT_TOOLTIP_OPTIONS = {
-  title: (d) => d.path?.join?.('.'),
+  title: (d) => { throw new Error("STUB"); },
   items: [{ field: 'value' }],
 };
 
 const DEFAULT_TOOLTIP_OPTIONS_DRILL = {
-  title: (d) => last(d.path),
+  title: (d) => { throw new Error("STUB"); },
   items: [{ field: 'value' }],
 };
 
 export const Treemap: CC<TreemapOptions> = (options, context) => {
-  const { width, height, options: markOptions } = context;
-
-  const {
-    data,
-    encode = {},
-    scale,
-    style = {},
-    layout = {},
-    labels = [],
-    tooltip = {},
-    ...resOptions
-  } = options;
-
-  const treemapDrillDown =
-    get(markOptions, ['interaction', 'treemapDrillDown']) ||
-    get(markOptions, ['marks', 0, 'interaction', 'treemapDrillDown']);
-
-  // Layout
-  const layoutOptions = deepMix(
-    {},
-    GET_DEFAULT_LAYOUT_OPTIONS(width, height),
-    layout,
-    {
-      layer: treemapDrillDown
-        ? (d) => {
-            return d.depth === 1;
-          }
-        : layout.layer,
-    },
-  );
-
-  // Data
-  const [transformedData, transformedDataAll] = treeDataTransform(
-    data,
-    layoutOptions,
-    encode,
-  );
-
-  // Label
-  const labelStyle = subObject(style, 'label');
-
-  return deepMix(
-    {},
-    GET_DEFAULT_OPTIONS(width, height),
-    {
-      data: transformedData,
-      scale,
-      style,
-      labels: [
-        {
-          ...DEFAULT_LABEL_OPTIONS,
-          ...labelStyle,
-          ...(treemapDrillDown && { cursor: 'pointer' }),
-        },
-        ...labels,
-      ],
-      ...resOptions,
-      encode,
-      tooltip: maybeTooltip(tooltip, DEFAULT_TOOLTIP_OPTIONS),
-      axis: false,
-    },
-    treemapDrillDown
-      ? {
-          interaction: {
-            ...resOptions.interaction,
-            treemapDrillDown: treemapDrillDown
-              ? {
-                  ...treemapDrillDown,
-                  originData: transformedDataAll,
-                  layout: layoutOptions,
-                }
-              : undefined,
-          },
-          encode: {
-            color: (d) => last(d.path),
-            ...encode,
-          },
-          tooltip: maybeTooltip(tooltip, DEFAULT_TOOLTIP_OPTIONS_DRILL),
-        }
-      : {},
-  );
+    throw new Error("STUB");
 };
 
 Treemap.props = {};

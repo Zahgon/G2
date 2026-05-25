@@ -24,56 +24,5 @@ const getAngle = (start, end, center) => {
 
 // Gauge round.
 export const Round: SC<RoundOptions> = (options, context) => {
-  if (!context) return;
-  const { coordinate } = context;
-  if (!coordinate?.getCenter) return;
-  // Get coordinate center point.
-  const center = coordinate.getCenter() as Vector2;
-
-  return (points, cfg, defaultCfg) => {
-    const { document } = context.canvas;
-    const { color, index } = cfg;
-
-    const g = document.createElement('g', {});
-
-    const minR = getR(points[0], points[1]);
-    const maxR = getR(points[0], center) * 2;
-
-    // 计算每个弧段的角度
-    // 判断是否需要使用大弧度（角度大于180度）
-    const isHalf = getAngle(points[3], points[0], center) > Math.PI;
-
-    /**
-     * MinR small circle radius,  maxR big circle radius.
-     * Draw four arcs.
-     * Style lineWidth and stroke for the time being inset.
-     */
-    const roundPath = document.createElement('path', {
-      style: {
-        d: [
-          ['M', ...points[0]],
-          ['A', minR, minR, 0, 1, 0, ...points[1]],
-          [
-            'A',
-            maxR + minR * 2,
-            maxR + minR * 2,
-            0,
-            isHalf ? 1 : 0,
-            0,
-            ...points[2],
-          ],
-          ['A', minR, minR, 0, 1, index === 0 ? 0 : 1, ...points[3]],
-          ['A', maxR, maxR, 0, isHalf ? 1 : 0, 1, ...points[0]],
-          ['Z'],
-        ],
-        ...defaultCfg,
-        ...omit(options, ['shape', 'last', 'first']),
-        fill: color || defaultCfg.color,
-      },
-    });
-
-    g.appendChild(roundPath);
-
-    return g;
-  };
+    throw new Error("STUB");
 };

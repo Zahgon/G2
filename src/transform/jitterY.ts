@@ -11,20 +11,7 @@ export type JitterYOptions = Omit<JitterYTransform, 'type'>;
  * with ordinal x and y dimension, say to make them jitter in their own space.
  */
 export const JitterY: TC<JitterYOptions> = (options = {}) => {
-  const { padding = 0, random = Math.random } = options;
-  return (I, mark) => {
-    const { encode, scale } = mark;
-    const { y: scaleY } = scale;
-    const [Y] = columnOf(encode, 'y');
-    const rangeY = rangeOf(Y, scaleY, padding);
-    const DY = I.map(() => interpolate(random(), ...rangeY));
-    return [
-      I,
-      deepMix({ scale: { y: { padding: 0.5 } } }, mark, {
-        encode: { dy: column(DY) },
-      }),
-    ];
-  };
+    throw new Error("STUB");
 };
 
 JitterY.props = {};

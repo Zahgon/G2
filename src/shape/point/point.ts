@@ -7,10 +7,7 @@ export type PointOptions = Record<string, any>;
  * ●
  */
 export const Point: SC<PointOptions> = (options, context) => {
-  return Color(
-    { colorAttribute: 'fill', symbol: 'point', ...options },
-    context,
-  );
+    throw new Error("STUB");
 };
 
 Point.props = {

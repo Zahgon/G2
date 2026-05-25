@@ -57,8 +57,7 @@ function inferShape(scales: Scale[], markState: Map<G2Mark, G2MarkState>) {
         ? shapeScale.getOptions().domain
         : state.data;
     const shape: string[] = domain.map((d, i) => {
-      if (shapeScale1) return shapeScale1.map(d || 'point');
-      return mark?.style?.shape || state.defaultShape || 'point';
+        throw new Error("STUB");
     });
     if (typeof namespace === 'string') shapes.push([namespace, shape]);
   }
@@ -70,14 +69,9 @@ function inferShape(scales: Scale[], markState: Map<G2Mark, G2MarkState>) {
   const { range } = shapeScale.getOptions();
   return shapes
     .map(([namespace, shape]) => {
-      let sum = 0;
-      for (let i = 0; i < shapes.length; i++) {
-        const targetShape = range[i % range.length];
-        if (shape[i] === targetShape) sum++;
-      }
-      return [sum / shape.length, [namespace, shape]] as const;
+        throw new Error("STUB");
     })
-    .sort((a, b) => b[0] - a[0])[0][1];
+    .sort((a, b) => { throw new Error("STUB"); })[0][1];
 }
 
 function inferItemMarker(
@@ -93,30 +87,26 @@ function inferItemMarker(
       (library[`mark.${mark}`]?.props?.shape[name]?.props
         .defaultMarker as string) || last(name.split('.'));
     const radius = typeof size === 'function' ? size(d) : size;
-    return () => useMarker(marker, { color: d.color })(0, 0, radius);
+    return () => { throw new Error("STUB"); };
   };
 
   const shapeOf = (i) => `${shapes[i]}`;
 
   const shapeScale = scaleOf(scales, 'shape');
-  if (shapeScale && !itemMarker) return (d, i) => create(shapeOf(i), d);
+  if (shapeScale && !itemMarker) return (d, i) => { throw new Error("STUB"); };
   if (typeof itemMarker === 'function') {
     return (d, i) => {
-      // @todo Fix this in GUI.
-      // It should pass primitive value rather object.
-      const node = itemMarker(d.id, i);
-      if (typeof node === 'string') return create(node, d);
-      return node;
+        throw new Error("STUB");
     };
   }
-  return (d, i) => create(itemMarker || shapeOf(i), d);
+  return (d, i) => { throw new Error("STUB"); };
 }
 
 function inferItemMarkerOpacity(scales: Scale[]) {
   const scale = scaleOf(scales, 'opacity');
   if (scale) {
     const { range } = scale.getOptions();
-    return (d, i) => range[i];
+    return (d, i) => { throw new Error("STUB"); };
   }
   return undefined;
 }
@@ -157,17 +147,13 @@ function inferItemMarkerLineWidth(options, context: GuideComponentContext) {
   // If itemMarker is a function, we need to return a function that checks each shape
   if (typeof itemMarker === 'function') {
     return (d, i) => {
-      const markerShape = itemMarker(d.id, i);
-      if (typeof markerShape === 'string' && lineShapes.includes(markerShape)) {
-        return 4;
-      }
-      return undefined;
+        throw new Error("STUB");
     };
   }
 
   // Check if any of the inferred shapes are line-based
   const shapesArray = Array.isArray(shapes) ? shapes : [shapes];
-  const hasLineShape = shapesArray.some((shape) => lineShapes.includes(shape));
+  const hasLineShape = shapesArray.some((shape) => { throw new Error("STUB"); });
   if (hasLineShape) {
     return 4;
   }
@@ -176,7 +162,7 @@ function inferItemMarkerLineWidth(options, context: GuideComponentContext) {
 }
 
 function inferCategoryStyle(options, context: GuideComponentContext) {
-  const { labelFormatter = (d) => `${d}` } = options;
+  const { labelFormatter = (d) => { throw new Error("STUB"); } } = options;
   const { scales, theme } = context;
   const defaultSize = theme.legendCategory.itemMarkerSize;
   const itemMarkerSize = inferItemMarkerSize(scales, defaultSize);
@@ -195,16 +181,12 @@ function inferCategoryStyle(options, context: GuideComponentContext) {
   const colorScale = scaleOf(scales, 'color');
   const domain = domainOf(scales);
   const colorOf = colorScale
-    ? (d) => colorScale.map(d)
-    : () => context.theme.color;
+    ? (d) => { throw new Error("STUB"); }
+    : () => { throw new Error("STUB"); };
 
   return {
     ...baseStyle,
-    data: domain.map((d) => ({
-      id: d,
-      label: finalLabelFormatter(d),
-      color: colorOf(d),
-    })),
+    data: domain.map((d) => { throw new Error("STUB"); }),
   };
 }
 
@@ -229,7 +211,7 @@ function filterEmptyIds(legendStyle) {
     ...legendStyle,
     data:
       legendStyle?.data.filter(
-        (item) => item.id !== '' && item.id !== undefined,
+        (item) => { throw new Error("STUB"); },
       ) || [],
   };
 }
@@ -238,80 +220,7 @@ function filterEmptyIds(legendStyle) {
  * Guide Component for ordinal color scale.
  */
 export const LegendCategory: GCC<LegendCategoryOptions> = (options) => {
-  const {
-    labelFormatter,
-    layout,
-    order,
-    orientation,
-    position,
-    size,
-    title,
-    cols,
-    itemMarker,
-    render,
-    ...style
-  } = options;
-
-  const { gridRow } = style;
-
-  return (context) => {
-    const { value, theme } = context;
-    const { bbox } = value;
-    const { width, height } = inferLegendShape(value, options, LegendCategory);
-
-    const finalLayout = inferComponentLayout(position, layout);
-
-    const legendStyle = {
-      orientation: ['right', 'left', 'center'].includes(position)
-        ? 'vertical'
-        : 'horizontal',
-      width,
-      height,
-      layout: cols !== undefined ? 'grid' : 'flex',
-      ...(cols !== undefined && { gridCol: cols }),
-      ...(gridRow !== undefined && { gridRow }),
-      titleText: titleContent(title),
-      ...inferCategoryStyle(options, context),
-    };
-
-    const { legendCategory: legendTheme = {} } = theme;
-
-    // Filter out the data items with empty string IDs in the wordCloud's data before generating the legend.
-    const categoryStyle = adaptor(
-      Object.assign({}, legendTheme, filterEmptyIds(legendStyle), style, {
-        classNamePrefix: G2_CLASS_PREFIX,
-      }),
-    );
-
-    // If render is provided, use HTML to render.
-    if (render) {
-      return new Category({
-        className: CATEGORY_LEGEND_HTML_CLASS_NAME,
-        style: { ...categoryStyle, x: bbox.x, y: bbox.y, render },
-      });
-    }
-
-    const layoutWrapper = new LegendCategoryLayout({
-      style: {
-        x: bbox.x,
-        y: bbox.y,
-        width: bbox.width,
-        height: bbox.height,
-        ...finalLayout,
-        // @ts-ignore
-        subOptions: categoryStyle,
-      },
-    });
-
-    layoutWrapper.appendChild(
-      new Category({
-        className: 'legend-category',
-        style: categoryStyle,
-      }),
-    );
-
-    return layoutWrapper as unknown as DisplayObject;
-  };
+    throw new Error("STUB");
 };
 
 LegendCategory.props = {

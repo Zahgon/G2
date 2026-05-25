@@ -10,14 +10,7 @@ export const HollowTriangleDown: SC<HollowTriangleDownOptions> = (
   options,
   context,
 ) => {
-  return Color(
-    {
-      colorAttribute: 'stroke',
-      symbol: 'triangle-down',
-      ...options,
-    },
-    context,
-  );
+    throw new Error("STUB");
 };
 
 HollowTriangleDown.props = {

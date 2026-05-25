@@ -7,14 +7,7 @@ export type AxisXOptions = AxisOptions;
  * LinearAxis component bind to x scale.
  */
 export const AxisX: GCC<AxisXOptions> = (options) => {
-  return (...args) => {
-    // empirical value for crossPadding
-    const axisX = LinearAxis(Object.assign({}, { crossPadding: 50 }, options))(
-      ...args,
-    );
-    rotateAxis(axisX, options);
-    return axisX;
-  };
+    throw new Error("STUB");
 };
 
 AxisX.props = {
@@ -22,4 +15,6 @@ AxisX.props = {
   defaultPosition: 'bottom',
 };
 
-export function axisXConfig() {}
+export function axisXConfig() {
+    throw new Error("STUB");
+}

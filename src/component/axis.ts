@@ -90,25 +90,7 @@ function sizeOf(coordinate: Coordinate): [number, number, number] {
 function createFisheye(position, coordinate) {
   const { width, height } = coordinate.getOptions();
   return (tick) => {
-    if (!isFisheye(coordinate)) return tick;
-    const tickPoint = position === 'bottom' ? [tick, 1] : [0, tick];
-    const vector = coordinate.map(tickPoint);
-    if (position === 'bottom') {
-      const v = vector[0];
-      const x = new LinearScale({
-        domain: [0, width],
-        range: [0, 1],
-      });
-      return x.map(v);
-    } else if (position === 'left') {
-      const v = vector[1];
-      const x = new LinearScale({
-        domain: [0, height],
-        range: [0, 1],
-      });
-      return x.map(v);
-    }
-    return tick;
+      throw new Error("STUB");
   };
 }
 
@@ -119,14 +101,14 @@ function ticksOf(
 ) {
   if (scale.getTicks) return scale.getTicks();
   if (!tickMethod) return domain;
-  const [min, max] = extent(domain, (d) => +d);
+  const [min, max] = extent(domain, (d) => { throw new Error("STUB"); });
   const { tickCount } = scale.getOptions();
   return tickMethod(min, max, tickCount);
 }
 
 // Set inset for axis.
 function createInset(position, coordinate) {
-  if (isPolar(coordinate)) return (d) => d;
+  if (isPolar(coordinate)) return (d) => { throw new Error("STUB"); };
   const options = coordinate.getOptions();
   const {
     innerWidth,
@@ -144,7 +126,7 @@ function createInset(position, coordinate) {
     domain: [0, 1],
     range: [start / size, 1 - end / size],
   });
-  return (i) => x.map(i);
+  return (i) => { throw new Error("STUB"); };
 }
 
 /**
@@ -187,35 +169,12 @@ function getData(
   // and label of arc axis.
   if (isPolar(coordinate) || isTranspose(coordinate)) {
     return filteredTicks.map((d, i, array) => {
-      const offset = scale.getBandWidth?.(d) / 2 || 0;
-      const tick = applyInset(scale.map(d) + offset);
-      // For radial coordinate, the Y axis direction is reversed due to reflect transformation.
-      // We need to reverse the tick values for all axis types (center, inner, outer)
-      // to ensure smaller values appear at the start angle and larger values at the end angle.
-      const shouldReverse =
-        isRadial(coordinate) ||
-        (isTranspose(coordinate) &&
-          scale.getTicks?.() &&
-          isHorizontal(position)) ||
-        (isTranspose(coordinate) && isVertical(position));
-
-      return {
-        value: shouldReverse ? 1 - tick : tick,
-        label: toString(labelFormatter(prettyNumber(d), i, array)),
-        id: String(i),
-      };
+        throw new Error("STUB");
     });
   }
 
   return filteredTicks.map((d, i, array) => {
-    const offset = scale.getBandWidth?.(d) / 2 || 0;
-    const tick = applyFisheye(applyInset(scale.map(d) + offset));
-    const shouldReverse = isVertical(position);
-    return {
-      value: shouldReverse ? 1 - tick : tick,
-      label: toString(labelFormatter(prettyNumber(d), i, array)),
-      id: String(i),
-    };
+      throw new Error("STUB");
   });
 }
 
@@ -413,7 +372,7 @@ function inferAxisLinearOverrideStyle(
         gridControlAngles: new Array(controllAngleCount)
           .fill(0)
           .map(
-            (d, i, arr) => ((endAngle - startAngle) / controllAngleCount) * i,
+            (d, i, arr) => { throw new Error("STUB"); },
           ),
       };
     }
@@ -425,80 +384,7 @@ function inferAxisLinearOverrideStyle(
 }
 
 const ArcAxisComponent: GCC<AxisOptions> = (options) => {
-  const {
-    order,
-    size,
-    position,
-    orientation,
-    labelFormatter,
-    tickFilter,
-    tickCount,
-    tickMethod,
-    tickLength,
-    important = {},
-    style = {},
-    indexBBox,
-    title,
-    grid = false,
-    ...rest
-  } = options;
-
-  return ({ scales: [scale], value, coordinate, theme }) => {
-    const { bbox } = value;
-    const { domain } = scale.getOptions();
-    const data = getData(
-      scale,
-      domain,
-      tickCount,
-      labelFormatter,
-      tickFilter,
-      tickMethod,
-      position,
-      coordinate,
-    );
-
-    // Bind computed bbox if exists.
-    const labels = indexBBox
-      ? data.map((d, i) => {
-          const bbox = indexBBox.get(i);
-          if (!bbox) return d;
-          // bbox: [label, bbox]
-          // Make than indexBBox can match current label.
-          if (bbox[0] !== d.label) return d;
-          return { ...d, bbox: bbox[1] };
-        })
-      : data;
-
-    const [innerRadius, outerRadius] = radiusOf(coordinate);
-
-    const defaultStyle = inferArcStyle(
-      position,
-      bbox,
-      innerRadius,
-      outerRadius,
-      coordinate,
-    );
-
-    const { axis: axisTheme, axisArc = {} } = theme;
-    const finalStyle = adaptor(
-      deepMix({}, axisTheme, axisArc, defaultStyle, {
-        type: 'arc',
-        data: labels,
-        titleText: titleContent(title),
-        grid,
-        classNamePrefix: G2_CLASS_PREFIX,
-        ...(tickLength !== undefined ? { tickLength } : null),
-        ...rest,
-        ...important,
-      }),
-    );
-
-    return new AxisComponent({
-      // @fixme transform is not valid for arcAxis.
-      // @ts-ignore
-      style: omit(finalStyle, ['transform']),
-    }) as unknown as DisplayObject;
-  };
+    throw new Error("STUB");
 };
 
 function inferThemeStyle(
@@ -552,140 +438,14 @@ function inferDefaultStyle(
 }
 
 const LinearAxisComponent: GCC<AxisOptions> = (options) => {
-  const {
-    direction = 'left',
-    important = {},
-    labelFormatter,
-    order,
-    orientation,
-    actualPosition,
-    position,
-    size,
-    style = {},
-    title,
-    tickCount,
-    tickFilter,
-    tickMethod,
-    tickLength,
-    transform,
-    indexBBox,
-    ...userDefinitions
-  } = options;
-  return ({ scales, value, coordinate, theme }) => {
-    const { bbox } = value;
-    const [scale] = scales;
-    const { domain, xScale } = scale.getOptions();
-    const defaultStyle = inferDefaultStyle(
-      scale,
-      coordinate,
-      theme,
-      direction,
-      position,
-      orientation,
-    );
-    const internalAxisStyle = {
-      ...defaultStyle,
-      ...style,
-      ...userDefinitions,
-    };
-
-    const gridLength = inferGridLength(
-      actualPosition || position,
-      coordinate,
-      options.plane,
-    );
-
-    const overrideStyle = inferAxisLinearOverrideStyle(
-      position,
-      orientation,
-      bbox,
-      coordinate,
-      xScale,
-    );
-
-    const threeDOverrideStyle = infer3DAxisLinearOverrideStyle(coordinate);
-
-    const data = getData(
-      scale,
-      domain,
-      tickCount,
-      labelFormatter,
-      tickFilter,
-      tickMethod,
-      position,
-      coordinate,
-    );
-
-    // Bind computed bbox if exists.
-    const labels = indexBBox
-      ? data.map((d, i) => {
-          const bbox = indexBBox.get(i);
-          if (!bbox) return d;
-          // bbox: [label, bbox]
-          // Make than indexBBox can match current label.
-          if (bbox[0] !== d.label) return d;
-          return { ...d, bbox: bbox[1] };
-        })
-      : data;
-    const finalAxisStyle = {
-      ...internalAxisStyle,
-      type: 'linear' as const,
-      data: labels,
-      crossSize: size,
-      titleText: titleContent(title),
-      labelOverlap: inferLabelOverlap(transform, internalAxisStyle),
-      grid: inferGrid(internalAxisStyle.grid, coordinate, scale),
-      gridLength,
-      // Always showLine, make title could align the end of axis.
-      line: true,
-      indexBBox,
-      classNamePrefix: G2_CLASS_PREFIX,
-      ...(tickLength !== undefined ? { tickLength } : null),
-      ...(!internalAxisStyle.line ? { lineOpacity: 0 } : null),
-      ...overrideStyle,
-      ...threeDOverrideStyle,
-      ...important,
-    };
-
-    // For hide overlap, do not set crossSize.
-    const hasHide = finalAxisStyle.labelOverlap.find((d) => d.type === 'hide');
-    if (hasHide) finalAxisStyle.crossSize = false;
-
-    return new AxisComponent({
-      className: 'axis',
-      style: adaptor(finalAxisStyle),
-    }) as unknown as DisplayObject;
-  };
+    throw new Error("STUB");
 };
 
 const axisFactor: (
   axis: typeof ArcAxisComponent | typeof LinearAxisComponent,
 ) => GCC<AxisOptions> = (axis) => {
   return (options) => {
-    const {
-      labelFormatter: useDefinedLabelFormatter,
-      labelFilter: userDefinedLabelFilter = () => true,
-    } = options;
-
-    return (context) => {
-      const {
-        scales: [scale],
-      } = context;
-      const ticks = scale.getTicks?.() || scale.getOptions().domain;
-      const labelFormatter =
-        typeof useDefinedLabelFormatter === 'string'
-          ? format(useDefinedLabelFormatter)
-          : useDefinedLabelFormatter;
-      const labelFilter = (datum: any, index: number, array: any[]) =>
-        userDefinedLabelFilter(ticks[index], index, ticks);
-      const normalizedOptions = {
-        ...options,
-        labelFormatter,
-        labelFilter,
-        scale,
-      };
-      return axis(normalizedOptions)(context);
-    };
+      throw new Error("STUB");
   };
 };
 

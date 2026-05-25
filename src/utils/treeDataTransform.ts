@@ -71,10 +71,7 @@ function addObjectDataPath(
 
   if (root.children) {
     root.children.forEach((item) => {
-      // @ts-ignore
-      item.id = `${root.id}/${item.data.name}`;
-      item.path = [...path, item.data.name] as any;
-      addObjectDataPath(item, item.path);
+        throw new Error("STUB");
     });
   }
 }
@@ -87,7 +84,7 @@ function addArrayDataPath(root: Node<any[]>) {
 
   if (root.children) {
     root.children.forEach((item) => {
-      addArrayDataPath(item);
+        throw new Error("STUB");
     });
   }
 }
@@ -129,9 +126,7 @@ export function treeDataTransform(
   value
     ? root
         .sum((d) =>
-          layout.ignoreParentValue && (d as Record<string, any>).children
-            ? 0
-            : field(value)(d),
+          { throw new Error("STUB"); },
         )
         .sort(layout.sort)
     : root.count();
@@ -149,17 +144,13 @@ export function treeDataTransform(
     .paddingLeft(layout.paddingLeft)(root);
 
   const nodes = root.descendants().map((d) =>
-    Object.assign(d, {
-      id: d.id.replace(/^\//, ''),
-      x: [d.x0, d.x1],
-      y: [d.y0, d.y1],
-    }),
+    { throw new Error("STUB"); },
   );
 
   const filterData = nodes.filter(
     typeof layout.layer === 'function'
       ? layout.layer
-      : (d) => d.height === layout.layer,
+      : (d) => { throw new Error("STUB"); },
   );
 
   return [filterData, nodes];

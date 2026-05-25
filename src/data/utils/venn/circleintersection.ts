@@ -10,7 +10,7 @@ export function intersectionArea(circles, stats?: any) {
 
   // Filter out points that aren't included in all the circles
   const innerPoints = intersectionPoints.filter(function (p) {
-    return containedInCircles(p, circles);
+      throw new Error("STUB");
   });
 
   let arcArea = 0,
@@ -28,7 +28,7 @@ export function intersectionArea(circles, stats?: any) {
       p.angle = Math.atan2(p.x - center.x, p.y - center.y);
     }
     innerPoints.sort(function (a, b) {
-      return b.angle - a.angle;
+        throw new Error("STUB");
     });
 
     // Iterate over all points, get arc between the points
@@ -180,19 +180,7 @@ export function distance(p1, p2) {
 have their centers separated by distance d. Simpler faster
 circle intersection for only two circles */
 export function circleOverlap(r1, r2, d) {
-  // no overlap
-  if (d >= r1 + r2) {
-    return 0;
-  }
-
-  // Completely overlapped
-  if (d <= Math.abs(r1 - r2)) {
-    return Math.PI * Math.min(r1, r2) * Math.min(r1, r2);
-  }
-
-  const w1 = r1 - (d * d - r2 * r2 + r1 * r1) / (2 * d),
-    w2 = r2 - (d * d - r1 * r1 + r2 * r2) / (2 * d);
-  return circleArea(r1, w1) + circleArea(r2, w2);
+    throw new Error("STUB");
 }
 
 /** Given two circles (containing a x/y/radius attributes),

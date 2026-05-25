@@ -31,8 +31,8 @@ const DEFAULT_LINK_OPTIONS = {
   axis: false,
   legend: false,
   encode: {
-    x: [(d) => d.source.x, (d) => d.target.x],
-    y: [(d) => d.source.y, (d) => d.target.y],
+    x: [(d) => { throw new Error("STUB"); }, (d) => { throw new Error("STUB"); }],
+    y: [(d) => { throw new Error("STUB"); }, (d) => { throw new Error("STUB"); }],
   },
   style: {
     stroke: '#999',
@@ -62,7 +62,7 @@ const DEFAULT_LABEL_OPTIONS = {
 function dataTransform(data, layout, encode) {
   const { nodes, links } = data;
   const { joint, nodeStrength, linkStrength } = layout;
-  const { nodeKey = (d) => d.id, linkKey = (d) => d.id } = encode;
+  const { nodeKey = (d) => { throw new Error("STUB"); }, linkKey = (d) => { throw new Error("STUB"); } } = encode;
   const nodeForce = forceManyBody();
   const linkForce = forceLink(links).id(field(linkKey));
   typeof nodeStrength === 'function' && nodeForce.strength(nodeStrength);
@@ -87,63 +87,7 @@ function dataTransform(data, layout, encode) {
 export type ForceGraphOptions = Omit<ForceGraphMark, 'type'>;
 
 export const ForceGraph: CC<ForceGraphOptions> = (options) => {
-  const {
-    data,
-    encode: e = {},
-    scale,
-    style = {},
-    layout = {},
-    nodeLabels = [],
-    linkLabels = [],
-    animate = {},
-    tooltip = {},
-  } = options;
-  const { nodeKey = (d) => d.id, linkKey = (d) => d.id, ...restEncode } = e;
-  const encode = { nodeKey, linkKey, ...restEncode };
-  const nodeEncode = subObject(encode, 'node');
-  const linkEncode = subObject(encode, 'link');
-  const { links, nodes } = initializeData(data, encode);
-  const { nodesData, linksData } = dataTransform(
-    { links, nodes },
-    deepMix({}, DEFAULT_LAYOUT_OPTIONS, layout),
-    encode,
-  );
-  const linkTooltip = subTooltip(tooltip, 'link', {
-    items: [
-      (d) => ({ name: 'source', value: field(linkKey)(d.source) }),
-      (d) => ({ name: 'target', value: field(linkKey)(d.target) }),
-    ],
-  });
-  const nodeTooltip = subTooltip(
-    tooltip,
-    'node',
-    {
-      items: [(d) => ({ name: 'key', value: field(nodeKey)(d) })],
-    },
-    true,
-  );
-  return [
-    deepMix({}, DEFAULT_LINK_OPTIONS, {
-      data: linksData,
-      encode: linkEncode,
-      labels: linkLabels,
-      style: subObject(style, 'link'),
-      tooltip: linkTooltip,
-      animate: maybeAnimation(animate, 'link'),
-    }),
-    deepMix({}, DEFAULT_NODE_OPTIONS, {
-      data: nodesData,
-      encode: { ...nodeEncode },
-      scale,
-      style: subObject(style, 'node'),
-      tooltip: nodeTooltip,
-      labels: [
-        { ...DEFAULT_LABEL_OPTIONS, ...subObject(style, 'label') },
-        ...nodeLabels,
-      ],
-      animate: maybeAnimation(animate, 'link'),
-    }),
-  ];
+    throw new Error("STUB");
 };
 
 ForceGraph.props = {};

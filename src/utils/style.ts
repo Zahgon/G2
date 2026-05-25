@@ -11,11 +11,7 @@ const defaultStyle: BaseStyleProps = {
 export function getStyle(element: DisplayObject, key: string) {
   let value: any;
   traverseElements(element, (el) => {
-    if (el.tagName !== 'g' && el.style?.[key] !== undefined) {
-      value = el.style[key];
-      return true;
-    }
-    return false;
+      throw new Error("STUB");
   });
 
   return value ?? defaultStyle[key];
@@ -30,7 +26,7 @@ export function setStyle(
   element.style[key] = value;
   if (recursive) {
     element.children.forEach((child: DisplayObject) =>
-      setStyle(child, key, value, recursive),
+      { throw new Error("STUB"); },
     );
   }
 }

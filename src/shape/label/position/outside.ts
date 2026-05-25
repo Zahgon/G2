@@ -102,20 +102,5 @@ export function outside(
   value: Record<string, any>,
   coordinate: Coordinate,
 ) {
-  const { bounds } = value;
-  // When bounds.length = 1
-  // For series mark, such as line and area.
-  // The bounds for text is defined with only one point.
-  // Use this point as the label position.
-  if (bounds.length === 1) {
-    return inferIdentityStyle(position, points, value, coordinate);
-  }
-
-  const inferDefaultStyle = isRadial(coordinate)
-    ? inferRadialStyle
-    : isCircular(coordinate)
-    ? inferOutsideCircularStyle
-    : inferNonCircularStyle;
-
-  return inferDefaultStyle(position, points, value, coordinate);
+    throw new Error("STUB");
 }

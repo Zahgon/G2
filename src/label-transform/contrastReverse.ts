@@ -14,14 +14,5 @@ export type ContrastReverseOptions = Omit<
  * More about contract, see https://webaim.org/resources/contrastchecker/
  */
 export const ContrastReverse: LLC<ContrastReverseOptions> = (options) => {
-  const { threshold = 4.5, palette = ['#000', '#fff'] } = options;
-  return (labels: DisplayObject[]) => {
-    labels.forEach((l) => {
-      const background = l.attr('dependentElement').parsedStyle.fill;
-      const foreground = l.parsedStyle.fill;
-      const c = contrast(foreground, background);
-      if (c < threshold) l.attr('fill', mostContrast(background, palette));
-    });
-    return labels;
-  };
+    throw new Error("STUB");
 };

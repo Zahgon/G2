@@ -58,7 +58,7 @@ export function partitionLayout(
 
     if (node.children && node.children.length > 0) {
       partitionNode.children = node.children.map((child: PartitionNode) =>
-        buildPartition(child, partitionNode, depth + 1),
+        { throw new Error("STUB"); },
       );
     }
 
@@ -70,112 +70,7 @@ export function partitionLayout(
   let currentRootStartX = 0; // Track the starting position for the next root node
 
   data.forEach((rootData: PartitionNode) => {
-    const root = buildPartition(rootData);
-
-    // Calculate position for each node - key point: child nodes start layout from parent's starting position
-    const calculateLayout = (
-      node: PartitionDataNode,
-      parentStartX = 0,
-      isRootNode = false,
-      parentWidth = 0, // Parent node actual width.
-    ): void => {
-      if (isRootNode || node.depth === 0) {
-        // Root node: start from current root position
-        node.x0 = isRootNode ? parentStartX : 0;
-        node.x1 = node.x0 + node.value;
-      } else {
-        // Child node: start layout from parent's starting position
-        node.x0 = parentStartX;
-        if (fillParent && parentWidth > 0) {
-          // If fillParent is true, calculate width based on parent width and value ratio.
-          const siblingsTotalValue = node.parent
-            ? node.parent.children.reduce((acc, child) => acc + child.value, 0)
-            : node.value;
-          const siblingsCount = node.parent ? node.parent.children.length : 1;
-          const ratio =
-            siblingsTotalValue > 0
-              ? node.value / siblingsTotalValue
-              : 1 / siblingsCount;
-          node.x1 = parentStartX + parentWidth * ratio;
-        } else {
-          // If fillParent is false, use node own value as width.
-          node.x1 = parentStartX + node.value;
-        }
-      }
-
-      // Calculate position for child nodes - start from current node's starting position
-      let childStartX = node.x0;
-      const nodeWidth = node.x1 - node.x0;
-
-      const sortedChildren = sort
-        ? [...node.children].sort(
-            (a: PartitionDataNode, b: PartitionDataNode) =>
-              sort(a.data, b.data),
-          )
-        : node.children;
-
-      if (fillParent && sortedChildren.length > 0) {
-        // fillParent mode: child nodes fill parent width proportionally.
-        const childrenTotalValue = node.children.reduce(
-          (sum, c) => sum + c.value,
-          0,
-        );
-        sortedChildren.forEach((child: PartitionDataNode) => {
-          calculateLayout(child, childStartX, false, nodeWidth);
-          const ratio =
-            childrenTotalValue > 0
-              ? child.value / childrenTotalValue
-              : 1 / sortedChildren.length;
-          childStartX += nodeWidth * ratio;
-        });
-      } else {
-        // Non-fillParent mode: child nodes layout independently based on own value.
-        sortedChildren.forEach((child: PartitionDataNode) => {
-          calculateLayout(child, childStartX, false, 0);
-          // Next child node starts from current child node's end position.
-          childStartX += child.x1 - child.x0;
-        });
-      }
-    };
-
-    // Start layout calculation from root node, using current root start position.
-    calculateLayout(root, currentRootStartX, true);
-
-    // Update the starting position for the next root node.
-    currentRootStartX += root.value;
-
-    // Convert to final format.
-    const processNode = (node: PartitionDataNode): Record<string, any> => {
-      const getName = (d: PartitionNode) => d[nameField] ?? d.name;
-      const path = [getName(node.data)];
-      let ancestorNode = node;
-      while (ancestorNode.parent) {
-        path.unshift(getName(ancestorNode.parent.data));
-        ancestorNode = ancestorNode.parent;
-      }
-
-      return {
-        ...pick(node.data, [valueField]),
-        [PARTITION_PATH_FIELD]: path,
-        [PARTITION_ANCESTOR_FIELD]:
-          ancestorNode.parent?.data?.[nameField] ?? node.data[nameField],
-        name: node.data[nameField],
-        depth: node.depth,
-        value: node.value,
-        x: [node.x0, node.x1],
-        y: [node.depth, node.depth + 1],
-        // Add child node count attribute for drill-down interaction judgment.
-        [CHILD_NODE_COUNT]: node.children.length,
-      };
-    };
-
-    // Collect all nodes.
-    const collectResultNodes = (node: PartitionDataNode): void => {
-      result.push(processNode(node));
-      node.children.forEach(collectResultNodes);
-    };
-
-    collectResultNodes(root);
+      throw new Error("STUB");
   });
 
   return result;
@@ -210,12 +105,7 @@ export function transformData(
   });
 
   return nodes.map((node: Record<string, any>) => {
-    // Handle color mapping.
-    const nodeInfo = { ...node };
-    if (color && color !== PARTITION_ANCESTOR_FIELD) {
-      nodeInfo[color] = node[color];
-    }
-    return nodeInfo;
+      throw new Error("STUB");
   });
 }
 
@@ -268,45 +158,7 @@ const DEFAULT_OPTIONS = {
 export const Partition: CompositeMarkComponent<PartitionOptions> = (
   options,
 ) => {
-  const {
-    encode: encodeOption,
-    data = [],
-    layout = {},
-    ...resOptions
-  } = options;
-
-  const { fillParent = true, sort } = layout as {
-    fillParent?: boolean;
-    sort?: (a: PartitionNode, b: PartitionNode) => number;
-  };
-
-  const encode = { ...DEFAULT_OPTIONS.encode, ...encodeOption };
-  const { value } = encode;
-  const rectData = transformData({ encode, data, fillParent, sort });
-
-  return [
-    deepMix({}, DEFAULT_OPTIONS, {
-      type: 'rect',
-      data: rectData,
-      encode,
-      tooltip: {
-        title: 'path',
-        items: [
-          (d: Record<string, any>) => {
-            return {
-              name: value as string,
-              value: d[value],
-            };
-          },
-        ],
-      },
-      // Add basic interaction.
-      interaction: {
-        elementHighlight: true,
-      },
-      ...resOptions,
-    }),
-  ];
+    throw new Error("STUB");
 };
 
 Partition.props = {};

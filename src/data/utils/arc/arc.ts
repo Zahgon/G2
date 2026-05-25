@@ -8,11 +8,11 @@ const DEFAULT_OPTIONS = {
   thickness: 0.05,
   weight: false,
   marginRatio: 0.1,
-  id: (node) => node.id,
-  source: (edge) => edge.source,
-  target: (edge) => edge.target,
-  sourceWeight: (edge) => edge.value || 1,
-  targetWeight: (edge) => edge.value || 1,
+  id: (node) => { throw new Error("STUB"); },
+  source: (edge) => { throw new Error("STUB"); },
+  target: (edge) => { throw new Error("STUB"); },
+  sourceWeight: (edge) => { throw new Error("STUB"); },
+  targetWeight: (edge) => { throw new Error("STUB"); },
   sortBy: null,
 };
 
@@ -38,8 +38,8 @@ export function Arc(options?: ArcOptions) {
 
   function arc(data: ArcData) {
     // Clone first.
-    const nodes = data.nodes.map((n) => ({ ...n }));
-    const edges = data.edges.map((n) => ({ ...n }));
+    const nodes = data.nodes.map((n) => { throw new Error("STUB"); });
+    const edges = data.edges.map((n) => { throw new Error("STUB"); });
 
     // Keep reference in below functions.
     preprocess(nodes, edges);
@@ -55,29 +55,15 @@ export function Arc(options?: ArcOptions) {
    */
   function preprocess(nodes: ArcNode[], edges: ArcEdge[]) {
     edges.forEach((edge) => {
-      edge.source = source(edge);
-      edge.target = target(edge);
-      edge.sourceWeight = sourceWeight(edge);
-      edge.targetWeight = targetWeight(edge);
+        throw new Error("STUB");
     });
 
     // Group edges by source, target.
-    const edgesBySource = group(edges, (e: any) => e.source);
-    const edgesByTarget = group(edges, (e: any) => e.target);
+    const edgesBySource = group(edges, (e: any) => { throw new Error("STUB"); });
+    const edgesByTarget = group(edges, (e: any) => { throw new Error("STUB"); });
 
     nodes.forEach((node) => {
-      node.id = id(node);
-      const sources = edgesBySource.has(node.id)
-        ? edgesBySource.get(node.id)
-        : [];
-      const targets = edgesByTarget.has(node.id)
-        ? edgesByTarget.get(node.id)
-        : [];
-      node.frequency = sources.length + targets.length;
-
-      node.value =
-        sum(sources, (d) => d.sourceWeight) +
-        sum(targets, (d) => d.targetWeight);
+        throw new Error("STUB");
     });
 
     return { nodes, edges };
@@ -102,8 +88,7 @@ export function Arc(options?: ArcOptions) {
       const deltaX = 1 / size;
 
       nodes.forEach((node, i: number) => {
-        node.x = (i + 0.5) * deltaX;
-        node.y = y;
+          throw new Error("STUB");
       });
 
       return { nodes, edges };
@@ -113,28 +98,10 @@ export function Arc(options?: ArcOptions) {
     // todo: thickness shoule be in (0, 1)
     const margin = marginRatio / (2 * size);
 
-    const total = nodes.reduce((prev: number, node) => (prev += node.value), 0);
+    const total = nodes.reduce((prev: number, node) => { throw new Error("STUB"); }, 0);
 
     nodes.reduce((deltaX: number, node) => {
-      node.weight = node.value / total;
-      node.width = node.weight * (1 - marginRatio);
-      node.height = thickness;
-
-      /* points
-       * 3---2
-       * |   |
-       * 0---1
-       */
-      const minX = margin + deltaX;
-      const maxX = minX + node.width;
-      const minY = y - thickness / 2;
-      const maxY = minY + thickness;
-
-      node.x = [minX, maxX, maxX, minX];
-      node.y = [minY, minY, maxY, maxY];
-
-      // Return next deltaX.
-      return deltaX + node.width + 2 * margin;
+        throw new Error("STUB");
     }, 0);
     return {
       nodes,
@@ -146,63 +113,27 @@ export function Arc(options?: ArcOptions) {
    * Get edge layout information from nodes, and save into edge object.
    */
   function layoutEdges(nodes: ArcNode[], edges: ArcEdge[]) {
-    const nodesMap = new Map(nodes.map((d) => [d.id, d]));
+    const nodesMap = new Map(nodes.map((d) => { throw new Error("STUB"); }));
 
     if (!weight) {
       edges.forEach((edge) => {
-        const sourceId = source(edge);
-        const targetId = target(edge);
-
-        const sourceNode: any = nodesMap.get(sourceId);
-        const targetNode: any = nodesMap.get(targetId);
-
-        // Edge's layout information is Equal with node.
-        if (sourceNode && targetNode) {
-          edge.x = [sourceNode.x, targetNode.x];
-          edge.y = [sourceNode.y, targetNode.y];
-        }
+          throw new Error("STUB");
       });
       return { nodes, edges };
     }
 
     // Initial edge.x, edge.y.
     edges.forEach((edge) => {
-      edge.x = [0, 0, 0, 0];
-      edge.y = [y, y, y, y];
+        throw new Error("STUB");
     });
 
     // Group edges by source, target.
-    const edgesBySource = group(edges, (e: any) => e.source);
-    const edgesByTarget = group(edges, (e: any) => e.target);
+    const edgesBySource = group(edges, (e: any) => { throw new Error("STUB"); });
+    const edgesByTarget = group(edges, (e: any) => { throw new Error("STUB"); });
 
     // When weight = true, we need to calculation the bbox of edge start/end.
     nodes.forEach((node) => {
-      const { edges, width, x, y, value, id } = node;
-
-      const sourceEdges = edgesBySource.get(id) || [];
-      const targetEdges = edgesByTarget.get(id) || [];
-
-      let offset = 0;
-      /* points
-       * 0----------2
-       * |          |
-       * 1----------3
-       */
-      sourceEdges.map((edge) => {
-        const w = (edge.sourceWeight / value) * width;
-        edge.x[0] = x[0] + offset;
-        edge.x[1] = x[0] + offset + w;
-
-        offset += w;
-      });
-
-      targetEdges.forEach((edge) => {
-        const w = (edge.targetWeight / value) * width;
-        edge.x[3] = x[0] + offset;
-        edge.x[2] = x[0] + offset + w;
-
-        offset += w;
-      });
+        throw new Error("STUB");
     });
   }
 

@@ -17,20 +17,7 @@ const shape = {
 export type LineXOptions = Omit<LineXMark, 'type'>;
 
 export const LineX: MC<LineXOptions> = (options) => {
-  return (index, scale, value, coordinate) => {
-    const { x: X } = value;
-    const offset = createBandOffset(
-      scale,
-      value,
-      deepMix({ style: { bandOffset: 0 } }, options),
-    );
-    const P = Array.from(index, (i) => {
-      const p1 = [X[i], 1] as Vector2;
-      const p2 = [X[i], 0] as Vector2;
-      return [p1, p2].map((d) => coordinate.map(offset(d, i))) as Vector2[];
-    });
-    return [index, P];
-  };
+    throw new Error("STUB");
 };
 
 LineX.props = {

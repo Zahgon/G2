@@ -12,8 +12,7 @@ export function defined(d: any): boolean {
  * It saves datum with every fields defined by default.
  */
 export const Filter: DC<FilterDataOptions> = (options) => {
-  const { callback = defined } = options;
-  return (data) => data.filter(callback);
+    throw new Error("STUB");
 };
 
 Filter.props = {};

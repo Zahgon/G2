@@ -28,37 +28,7 @@ export function interpolate(t: number, a: number, b: number): number {
  * with ordinal x and y dimension, say to make them jitter in their own space.
  */
 export const Jitter: TC<JitterOptions> = (options = {}) => {
-  const {
-    padding = 0,
-    paddingX = padding,
-    paddingY = padding,
-    random = Math.random,
-  } = options;
-  return (I, mark) => {
-    const { encode, scale } = mark;
-    const { x: scaleX, y: scaleY } = scale;
-    const [X] = columnOf(encode, 'x');
-    const [Y] = columnOf(encode, 'y');
-    const rangeX = rangeOf(X, scaleX, paddingX);
-    const rangeY = rangeOf(Y, scaleY, paddingY);
-    const DY = I.map(() => interpolate(random(), ...rangeY));
-    const DX = I.map(() => interpolate(random(), ...rangeX));
-    return [
-      I,
-      deepMix(
-        {
-          scale: {
-            x: { padding: 0.5 },
-            y: { padding: 0.5 },
-          },
-        },
-        mark,
-        {
-          encode: { dy: column(DY), dx: column(DX) },
-        },
-      ),
-    ];
-  };
+    throw new Error("STUB");
 };
 
 Jitter.props = {};

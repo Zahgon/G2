@@ -7,14 +7,7 @@ export type HollowTriangleOptions = Record<string, any>;
  * △
  */
 export const HollowTriangle: SC<HollowTriangleOptions> = (options, context) => {
-  return Color(
-    {
-      colorAttribute: 'stroke',
-      symbol: 'triangle',
-      ...options,
-    },
-    context,
-  );
+    throw new Error("STUB");
 };
 
 HollowTriangle.props = {

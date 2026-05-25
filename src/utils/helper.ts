@@ -39,11 +39,11 @@ export function dataOf(element: G2Element, viewData?: any) {
   const { markKey, index, seriesIndex, normalized = { x: 0 } } = datum;
   const { markState } = view;
   const selectedMark: any = Array.from(markState.keys()).find(
-    (mark) => (mark as any).key === markKey,
+    (mark) => { throw new Error("STUB"); },
   );
   if (!selectedMark) return;
   if (seriesIndex) {
-    return seriesIndex.map((i) => selectedMark.data[i]);
+    return seriesIndex.map((i) => { throw new Error("STUB"); });
   }
   return isHeatmap(element)
     ? selectedMark.data[Math.round(selectedMark.data.length * normalized.x)]
@@ -56,67 +56,25 @@ export function dataOf(element: G2Element, viewData?: any) {
  * @returns The series name of the element.
  */
 export function seriesOf(elemenet: G2Element): string {
-  const viewData = getViewFromElement(elemenet).__data__;
-  const { scale } = viewData;
-  return groupNameOf(scale, elemenet.__data__);
+    throw new Error("STUB");
 }
 
 /**
  * Get series scale by markKey
  */
 function getSeriesByMarkKey(scale: Record<string, Base<any>>, datum) {
-  // For path mark, markKey is in datum.element?.__data__?.markKey.
-  const markKey = datum.markKey ?? datum.element?.__data__?.markKey;
-
-  const seriesKey = Object.keys(scale).find((channel) => {
-    if (channel.startsWith('series')) {
-      const options = scale[channel].getOptions();
-      return options.name === 'series' && options.markKey === markKey;
-    }
-  });
-  return scale[seriesKey] ?? scale.series;
+    throw new Error("STUB");
 }
 
 /**
  * Get group name with view's scale and element's datum.
  */
 export function groupNameOf(scale: Record<string, Base<any>>, datum) {
-  const { color: scaleColor, facet = false } = scale;
-  const { color, series } = datum;
-  const scaleSeries = getSeriesByMarkKey(scale, datum);
-
-  const invertAble = (scale) => {
-    return (
-      scale &&
-      scale.invert &&
-      !(scale instanceof Band) &&
-      !(scale instanceof Constant)
-    );
-  };
-  // For non constant color channel.
-  if (invertAble(scaleSeries)) {
-    const cloned = scaleSeries.clone();
-    return cloned.invert(series);
-  }
-  if (
-    series &&
-    scaleSeries instanceof Band &&
-    scaleSeries.invert(series) !== color &&
-    !facet
-  ) {
-    return scaleSeries.invert(series);
-  }
-  if (invertAble(scaleColor)) {
-    const name = scaleColor.invert(color);
-    // For threshold scale.
-    if (Array.isArray(name)) return null;
-    return name;
-  }
-  return null;
+    throw new Error("STUB");
 }
 
 export function identity<T>(x: T): T {
-  return x;
+    throw new Error("STUB");
 }
 
 type Func<R> = (x: R, ...args: any[]) => R;
@@ -126,8 +84,7 @@ type Func<R> = (x: R, ...args: any[]) => R;
 export function compose<R>(fns: Func<R>[]): Func<R> {
   return fns.reduce(
     (composed, fn) =>
-      (x, ...args) =>
-        fn(composed(x, ...args), ...args),
+      { throw new Error("STUB"); },
     identity,
   );
 }
@@ -139,16 +96,13 @@ export function composeAsync<R>(
   fns: ((x: R) => Promise<R> | R)[],
 ): (x: R) => Promise<R> | R {
   return fns.reduce(
-    (composed, fn) => async (x) => {
-      const value = await composed(x);
-      return fn(value);
-    },
+    (composed, fn) => { throw new Error("STUB"); },
     identity,
   );
 }
 
 export function capitalizeFirst(str: string): string {
-  return str.replace(/( |^)[a-z]/g, (L) => L.toUpperCase());
+  return str.replace(/( |^)[a-z]/g, (L) => { throw new Error("STUB"); });
 }
 
 export function error(message = ''): never {
@@ -178,10 +132,7 @@ export function useMemo<T = unknown, U = unknown>(
 ): (key: T) => U {
   const map = new Map<T, U>();
   return (key) => {
-    if (map.has(key)) return map.get(key);
-    const value = compute(key);
-    map.set(key, value);
-    return value;
+      throw new Error("STUB");
   };
 }
 
@@ -204,9 +155,9 @@ export function maybeSubObject(
   prefix: string,
 ): Record<string, any> {
   const entries = Object.entries(obj || {})
-    .filter(([key]) => key.startsWith(prefix))
-    .map(([key, value]) => [lowerFirst(key.replace(prefix, '').trim()), value])
-    .filter(([key]) => !!key);
+    .filter(([key]) => { throw new Error("STUB"); })
+    .map(([key, value]) => { throw new Error("STUB"); })
+    .filter(([key]) => { throw new Error("STUB"); });
   return entries.length === 0 ? null : Object.fromEntries(entries);
 }
 
@@ -214,11 +165,7 @@ export function prefixObject(
   obj: Record<string, any>,
   prefix: string,
 ): Record<string, any> {
-  return Object.fromEntries(
-    Object.entries(obj).map(([key, value]) => {
-      return [`${prefix}${upperFirst(key)}`, value];
-    }),
-  );
+    throw new Error("STUB");
 }
 
 export function filterPrefixObject(
@@ -227,7 +174,7 @@ export function filterPrefixObject(
 ): Record<string, any> {
   return Object.fromEntries(
     Object.entries(obj).filter(([key]) =>
-      prefix.find((p) => key.startsWith(p)),
+      { throw new Error("STUB"); },
     ),
   );
 }
@@ -238,7 +185,7 @@ export function omitPrefixObject(
 ) {
   return Object.fromEntries(
     Object.entries(obj).filter(([key]) =>
-      prefixes.every((prefix) => !key.startsWith(prefix)),
+      { throw new Error("STUB"); },
     ),
   );
 }

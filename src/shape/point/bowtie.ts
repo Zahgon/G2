@@ -7,10 +7,7 @@ export type BowtieOptions = Record<string, any>;
  * ▶◀
  */
 export const Bowtie: SC<BowtieOptions> = (options, context) => {
-  return Color(
-    { colorAttribute: 'fill', symbol: 'bowtie', ...options },
-    context,
-  );
+    throw new Error("STUB");
 };
 
 Bowtie.props = {

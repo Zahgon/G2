@@ -8,8 +8,7 @@ export type CustomOptions = Omit<CustomDataTransform, 'type'>;
  * Connector transfom by function.
  */
 export const Custom: DC<CustomOptions> = (options) => {
-  const { callback = identity } = options;
-  return (data) => callback(data);
+    throw new Error("STUB");
 };
 
 Custom.props = {};

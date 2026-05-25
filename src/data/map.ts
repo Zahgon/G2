@@ -8,8 +8,7 @@ export type MapOptions = Omit<MapTransform, 'type'>;
  * Map transform by function.
  */
 export const Map: DC<MapOptions> = (options) => {
-  const { callback = identity } = options;
-  return (data) => (Array.isArray(data) ? data.map(callback) : data);
+    throw new Error("STUB");
 };
 
 Map.props = {};

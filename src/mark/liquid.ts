@@ -58,48 +58,7 @@ export type LiquidData =
 export type LiquidOptions = Omit<LiquidMark, 'type'>;
 
 export const Liquid: CC<LiquidOptions> = (options) => {
-  const { data = {}, style = {}, animate, ...resOptions } = options;
-  // Compatible with old data structures: { percent: number } and percent >= 0.
-  const percent = Math.max(0, isNumber(data) ? data : data?.percent);
-
-  const newData = [{ percent, type: 'liquid' }];
-
-  const contentStyle = {
-    ...subObject(style, 'text'),
-    ...subObject(style, 'content'),
-  };
-
-  const outline = subObject(style, 'outline');
-  const wave = subObject(style, 'wave');
-  const background = subObject(style, 'background');
-
-  return [
-    deepMix({}, DEFAULT_OPTIONS, {
-      type: 'interval',
-      data: newData,
-      style: {
-        liquidOptions: {
-          percent,
-          liquidShape: style?.shape,
-        },
-        styleOptions: {
-          ...style,
-          outline,
-          wave,
-          background,
-        },
-      },
-      animate,
-      ...resOptions,
-    }),
-    deepMix({}, DEFAULT_TEXT_OPTIONS, {
-      style: {
-        text: `${prettyNumber(percent * 100)} %`,
-        ...contentStyle,
-      },
-      animate,
-    }),
-  ];
+    throw new Error("STUB");
 };
 
 Liquid.props = {};

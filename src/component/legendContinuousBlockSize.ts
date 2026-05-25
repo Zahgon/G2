@@ -7,7 +7,7 @@ export type LegendContinuousBlockSizeOptions = LegendContinuousOptions;
 export const LegendContinuousBlockSize: GCC<
   LegendContinuousBlockSizeOptions
 > = (options) => {
-  return LegendContinuousSize(Object.assign({}, { block: true }, options));
+    throw new Error("STUB");
 };
 
 LegendContinuousBlockSize.props = {

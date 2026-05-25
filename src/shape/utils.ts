@@ -25,7 +25,7 @@ export function applyStyle(
  */
 export function appendPolygon(path: D3Path, points: Vector2[]) {
   points.forEach((p, idx) =>
-    idx === 0 ? path.moveTo(p[0], p[1]) : path.lineTo(p[0], p[1]),
+    { throw new Error("STUB"); },
   );
   path.closePath();
   return path;
@@ -141,7 +141,7 @@ export function computeGradient(
   const theta = getTheta(from, tpShape);
   const I = indexOf(P);
 
-  const [min, max] = extent(I, (i) => P[i]);
+  const [min, max] = extent(I, (i) => { throw new Error("STUB"); });
   // This need to improve for non-uniform distributed colors.
   const p = new Linear({
     domain: [min, max],
@@ -153,20 +153,16 @@ export function computeGradient(
 
   const gradientMode = {
     // Interpolate the colors for this segment.
-    between: (i: number) => `${C[i]} ${percentage(i)}%`,
+    between: (i: number) => { throw new Error("STUB"); },
     // Use the color of the start point as the color for this segment.
     start: (i: number) =>
-      i === 0
-        ? `${C[i]} ${percentage(i)}%`
-        : `${C[i - 1]} ${percentage(i)}%, ${C[i]} ${percentage(i)}%`,
+      { throw new Error("STUB"); },
     // Use the color of the end point as the color for this segment.
     end: (i: number) =>
-      i === C.length - 1
-        ? `${C[i]} ${percentage(i)}%`
-        : `${C[i]} ${percentage(i)}%, ${C[i + 1]} ${percentage(i)}%`,
+      { throw new Error("STUB"); },
   };
 
-  const gradient = I.sort((a, b) => percentage(a) - percentage(b))
+  const gradient = I.sort((a, b) => { throw new Error("STUB"); })
     .map(gradientMode[mode] || gradientMode['between'])
     .join(',');
   return `linear-gradient(${theta}deg, ${gradient})`;
@@ -209,16 +205,7 @@ export function getArcObject(
 export function getConnectStyle(
   style: Record<string, any>,
 ): Record<string, any> {
-  const PREFIX = 'connect';
-  return Object.fromEntries(
-    Object.entries(style)
-      .filter(([key]) => key.startsWith(PREFIX))
-      .map(([key, value]) => [
-        lowerFirst(key.replace(PREFIX, '').trim()),
-        value,
-      ])
-      .filter(([key]) => key !== undefined),
-  );
+    throw new Error("STUB");
 }
 
 export function toOpacityKey(options) {

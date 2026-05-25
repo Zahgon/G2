@@ -7,7 +7,7 @@ export type AxisYOptions = AxisOptions;
  * ArcAxis component bind to x scale.
  */
 export const AxisArc: GCC<AxisYOptions> = (options) => {
-  return ArcAxis(options);
+    throw new Error("STUB");
 };
 
 AxisArc.props = {

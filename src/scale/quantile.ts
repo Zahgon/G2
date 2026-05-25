@@ -5,7 +5,7 @@ import { QuantileScale as QuantileScaleSpec } from '../spec';
 export type QuantileOptions = Omit<QuantileScaleSpec, 'type'>;
 
 export const Quantile: SC<QuantileOptions> = (options) => {
-  return new QuantileScale(options);
+    throw new Error("STUB");
 };
 
 Quantile.props = {};

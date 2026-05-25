@@ -1,26 +1,18 @@
 // need some basic operations on vectors, rather than adding a dependency,
 // just define here
 export function zeros(x) {
-  const r = new Array(x);
-  for (let i = 0; i < x; ++i) {
-    r[i] = 0;
-  }
-  return r;
+    throw new Error("STUB");
 }
 export function zerosM(x, y) {
-  return zeros(x).map(() => zeros(y));
+    throw new Error("STUB");
 }
 
 export function dot(a, b) {
-  let ret = 0;
-  for (let i = 0; i < a.length; ++i) {
-    ret += a[i] * b[i];
-  }
-  return ret;
+    throw new Error("STUB");
 }
 
 export function norm2(a) {
-  return Math.sqrt(dot(a, a));
+    throw new Error("STUB");
 }
 
 export function scale(ret, value, c?: any) {
@@ -36,7 +28,5 @@ export function weightedSum(ret, w1, v1, w2, v2) {
 }
 
 export function gemv(output, A, x) {
-  for (let i = 0; i < output.length; ++i) {
-    output[i] = dot(A[i], x);
-  }
+    throw new Error("STUB");
 }

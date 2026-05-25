@@ -21,16 +21,7 @@ export function flow(
       return this;
     },
     async setAsync(key: string, normalize?, callback?) {
-      if (source[key] === undefined) return this;
-
-      const value = normalize
-        ? await normalize.call(null, source[key])
-        : source[key];
-      if (callback) callback.call(null, value);
-      else if (typeof target[key] === 'function') target[key](value);
-      else target[key] = value;
-
-      return this;
+        throw new Error("STUB");
     },
   };
 }

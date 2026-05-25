@@ -70,21 +70,7 @@ function getRibbonPath(points: Vector2[], coordinate: Coordinate) {
  * - In polar, draw arc used in Chord.
  */
 export const Ribbon: SC<RibbonOptions> = (options, context) => {
-  const { ...style } = options;
-  const { coordinate, document } = context;
-  return (points, value, defaults) => {
-    const { color: defaultColor, ...rest } = defaults;
-    const { color = defaultColor, transform } = value;
-    const path = getRibbonPath(points, coordinate);
-    return select(document.createElement('path', {}))
-      .call(applyStyle, rest)
-      .style('d', path.toString())
-      .style('fill', color || defaultColor)
-      .style('stroke', color || defaultColor)
-      .style('transform', transform)
-      .call(applyStyle, style)
-      .node();
-  };
+    throw new Error("STUB");
 };
 
 Ribbon.props = {

@@ -47,67 +47,7 @@ const defaults = create(tokens);
 export type AcademyOptions = Theme;
 
 export const Academy: TC<AcademyOptions> = (options) => {
-  return deepMix(
-    {},
-    defaults,
-    {
-      text: { text: { fontSize: 10 } },
-      axis: {
-        gridLineDash: [0, 0],
-        gridLineWidth: 1,
-        gridStroke: '#ddd',
-        gridStrokeOpacity: 1,
-        labelOpacity: 1,
-        labelStrokeOpacity: 1,
-        labelFontSize: 10,
-        line: true,
-        lineLineWidth: 1,
-        lineStroke: '#888',
-        lineStrokeOpacity: 1,
-        tickLength: 5,
-        tickStrokeOpacity: 1,
-        titleOpacity: 1,
-        titleStrokeOpacity: 1,
-        titleFillOpacity: 1,
-        titleFontSize: 11,
-        titleFontWeight: 'bold',
-      },
-      axisLeft: {
-        gridFilter: (_, i) => i !== 0,
-      },
-      axisRight: {
-        gridFilter: (_, i) => i !== 0,
-      },
-      legendCategory: {
-        itemLabelFillOpacity: 1,
-        itemLabelFontSize: 10,
-        itemValueFillOpacity: 1,
-        itemValueFontSize: 10,
-        titleFillOpacity: 1,
-        titleFontSize: 11,
-        titleFontWeight: 'bold',
-      },
-      legendContinuous: {
-        handleLabelFontSize: 10,
-        labelFillOpacity: 0.45,
-        labelFontSize: 10,
-      },
-      label: {
-        fontSize: 10,
-      },
-      innerLabel: {
-        fontSize: 10,
-      },
-      htmlLabel: {
-        fontSize: 10,
-      },
-      slider: {
-        handleLabelFontSize: 10,
-        trackFillOpacity: 0.05,
-      },
-    },
-    options,
-  );
+    throw new Error("STUB");
 };
 
 Academy.props = {};

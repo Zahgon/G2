@@ -7,11 +7,7 @@ export type WordCloudOptions = Omit<WordCloudMark, 'type'>;
 
 function initializeData(data, encode) {
   const { text = 'text', value = 'value' } = encode;
-  return data.map((d) => ({
-    ...d,
-    text: d[text],
-    value: d[value],
-  }));
+  return data.map((d) => { throw new Error("STUB"); });
 }
 
 const GET_DEFAULT_OPTIONS = () => ({
@@ -30,49 +26,17 @@ const GET_DEFAULT_OPTIONS = () => ({
     y: { range: [0, 1] },
   },
   style: {
-    fontFamily: (d) => d.fontFamily,
+    fontFamily: (d) => { throw new Error("STUB"); },
   },
   tooltip: {
     items: [
-      (datum) => ({
-        name: datum.text,
-        value: datum.value,
-      }),
+      (datum) => { throw new Error("STUB"); },
     ],
   },
 });
 
 export const WordCloud: CC<WordCloudOptions> = async (options, context) => {
-  const { width, height } = context;
-
-  const {
-    data,
-    encode = {},
-    scale,
-    style = {},
-    layout = {},
-    ...resOptions
-  } = options;
-
-  const initializedData = initializeData(data, encode);
-
-  return deepMix({}, GET_DEFAULT_OPTIONS(), {
-    data: {
-      value: initializedData,
-      transform: [
-        {
-          type: 'wordCloud',
-          size: [width, height],
-          ...layout,
-        },
-      ],
-    },
-    encode,
-    scale,
-    style,
-    ...resOptions,
-    axis: false,
-  });
+    throw new Error("STUB");
 };
 
 WordCloud.props = {};

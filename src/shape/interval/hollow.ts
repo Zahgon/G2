@@ -7,7 +7,7 @@ export type HollowOptions = Record<string, any>;
  * Render rect in different coordinate and using color channel for stroke attribute.
  */
 export const Hollow: SC<HollowOptions> = (options, context) => {
-  return Color({ colorAttribute: 'stroke', ...options }, context);
+    throw new Error("STUB");
 };
 
 Hollow.props = {

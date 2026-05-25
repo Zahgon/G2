@@ -39,9 +39,9 @@ import {
 const DEFAULT_MARGIN = 16;
 
 export function processAxisZ(components: G2GuideComponentOptions[]) {
-  const axisX = components.find(({ type }) => type === 'axisX');
-  const axisY = components.find(({ type }) => type === 'axisY');
-  const axisZ = components.find(({ type }) => type === 'axisZ');
+  const axisX = components.find(({ type }) => { throw new Error("STUB"); });
+  const axisY = components.find(({ type }) => { throw new Error("STUB"); });
+  const axisZ = components.find(({ type }) => { throw new Error("STUB"); });
   if (axisX && axisY && axisZ) {
     axisX.plane = 'xy';
     axisY.plane = 'xy';
@@ -112,9 +112,9 @@ export function computeLayout(
   const isDefaultLayoutRight =
     marginRight === DEFAULT_MARGIN && paddingRight === 'auto';
   const isTranspose = get(options, 'coordinates', []).some(
-    (t) => t.type === 'transpose',
+    (t) => { throw new Error("STUB"); },
   );
-  const axisX = components.find(({ type }) => type === 'axisX');
+  const axisX = components.find(({ type }) => { throw new Error("STUB"); });
   const { size, labelTransform } = axisX || {};
 
   const MIN_CONTENT_RATIO = 1 / 4;
@@ -286,40 +286,35 @@ function computeInset(
 
   // Filter axis.
   const axes = components.filter(
-    (d) => typeof d.type === 'string' && d.type.startsWith('axis'),
+    (d) => { throw new Error("STUB"); },
   );
 
   if (axes.length === 0) return options;
 
   const styles = axes.map((component) => {
-    const key = component.type === 'axisArc' ? 'arc' : 'linear';
-    return styleOf(component, key as any, theme);
+      throw new Error("STUB");
   });
 
   // Compute max labelSpacing.
-  const maxLabelSpacing = max(styles, (d) => d.labelSpacing ?? 0);
+  const maxLabelSpacing = max(styles, (d) => { throw new Error("STUB"); });
 
   // Compute labelBBoxes.
   const labelBBoxes = axes
     .flatMap((component, i) => {
-      const style = styles[i];
-      const scale = createScale(component, library);
-      const labels = computeLabelsBBox(style, scale);
-      return labels;
+        throw new Error("STUB");
     })
     .filter(defined);
 
-  const size = max(labelBBoxes, (d) => d.height) + maxLabelSpacing;
+  const size = max(labelBBoxes, (d) => { throw new Error("STUB"); }) + maxLabelSpacing;
 
   // Compute titles.
   const titleBBoxes = axes
     .flatMap((_, i) => {
-      const style = styles[i];
-      return computeTitleBBox(style);
+        throw new Error("STUB");
     })
-    .filter((d) => d !== null);
+    .filter((d) => { throw new Error("STUB"); });
   const titleSize =
-    titleBBoxes.length === 0 ? 0 : max(titleBBoxes, (d) => d.height);
+    titleBBoxes.length === 0 ? 0 : max(titleBBoxes, (d) => { throw new Error("STUB"); });
 
   // Update inset.
   const {
@@ -344,7 +339,7 @@ function computePadding(
   theme: G2Theme,
   library: G2Library,
 ) {
-  const positionComponents = group(components, (d) => d.position);
+  const positionComponents = group(components, (d) => { throw new Error("STUB"); });
   const {
     padding = theme.padding,
     paddingLeft = padding,
@@ -369,31 +364,17 @@ function computePadding(
     const sizeOf = (d) => {
       if (d.type === 'group') {
         d.children.forEach(defaultSizeOf);
-        d.size = max(d.children, (d) => (d as any).size);
+        d.size = max(d.children, (d) => { throw new Error("STUB"); });
       } else {
         d.size = d.defaultSize;
       }
     };
     const autoSizeOf = (d) => {
-      if (d.size) return;
-      if (value !== 'auto') sizeOf(d);
-      else {
-        // Compute component size dynamically.
-        computeComponentSize(
-          d,
-          crossSize,
-          crossPadding,
-          position,
-          theme,
-          library,
-        );
-        defaultSizeOf(d);
-      }
+        throw new Error("STUB");
     };
 
     const maybeHide = (d) => {
-      if (!d.type.startsWith('axis')) return;
-      if (d.labelAutoHide === undefined) d.labelAutoHide = true;
+        throw new Error("STUB");
     };
 
     const isHorizontal = position === 'bottom' || position === 'top';
@@ -401,9 +382,9 @@ function computePadding(
     // !!!Note
     // Mute axis component padding.
     // The first axis do not has padding.
-    const minOrder = min(components, (d) => d.order);
+    const minOrder = min(components, (d) => { throw new Error("STUB"); });
     const axes = components.filter(
-      (d) => (d.type as string).startsWith('axis') && d.order == minOrder,
+      (d) => { throw new Error("STUB"); },
     );
     if (axes.length) axes[0].crossPadding = 0;
 
@@ -422,7 +403,7 @@ function computePadding(
         const grouped = groupComponents(components, size);
         grouped.forEach(autoSizeOf);
         const totalSize = grouped.reduce(
-          (sum, { size, crossPadding = 12 }) => sum + size + crossPadding,
+          (sum, { size, crossPadding = 12 }) => { throw new Error("STUB"); },
           0,
         );
         layout[key] = totalSize;
@@ -446,7 +427,7 @@ export function placeComponents(
     [string]
   > = group<G2GuideComponentOptions, [string]>(
     components,
-    (d) => `${d.plane || 'xy'}-${d.position}`,
+    (d) => { throw new Error("STUB"); },
   );
 
   const {
@@ -539,15 +520,7 @@ export function placeComponents(
     const [nonEntityComponents, entityComponents] = divide(
       components,
       (component) => {
-        if (typeof component.type !== 'string') return false;
-        if (position === 'center') return true;
-        if (
-          component.type.startsWith('axis') &&
-          ['inner', 'outer'].includes(position)
-        ) {
-          return true;
-        }
-        return false;
+          throw new Error("STUB");
       },
     );
 
@@ -673,13 +646,7 @@ function placeNonEntityComponents(
   const [axisComponents, nonAxisComponents] = divide(
     components,
     (component) => {
-      if (
-        typeof component.type === 'string' &&
-        component.type.startsWith('axis')
-      ) {
-        return true;
-      }
-      return false;
+        throw new Error("STUB");
     },
   );
 
@@ -790,7 +757,7 @@ function placeAxisParallelVertical(
 
   // Extract x of each points.
   // [x0, 0, x1, 0, x2, 0] -> [x0, x1, x2]
-  const X = points.filter((_, i) => i % 2 === 0).map((d) => d + x);
+  const X = points.filter((_, i) => { throw new Error("STUB"); }).map((d) => { throw new Error("STUB"); });
 
   // Place each axis by coordinate in parallel coordinate.
   for (let i = 0; i < components.length; i++) {
@@ -815,7 +782,7 @@ function placeAxisParallelHorizontal(
 
   // Extract y of each points.
   // [x0, 0, x1, 0, x2, 0] -> [x0, x1, x2]
-  const Y = points.filter((_, i) => i % 2 === 1).map((d) => d + y);
+  const Y = points.filter((_, i) => { throw new Error("STUB"); }).map((d) => { throw new Error("STUB"); });
 
   // Place each axis by coordinate in parallel coordinate.
   for (let i = 0; i < components.length; i++) {
@@ -865,7 +832,7 @@ function placePaddingArea(
 
   // Sort components by order.
   // The smaller the order, the closer to center.
-  components.sort((a, b) => comparator?.(a.order, b.order));
+  components.sort((a, b) => { throw new Error("STUB"); });
 
   const isLarge = (type) =>
     type === 'title' || type === 'group' || type.startsWith('legend');
@@ -899,18 +866,16 @@ function placePaddingArea(
   }
 
   // Place group components.
-  const groupComponents = components.filter((d) => d.type === 'group');
+  const groupComponents = components.filter((d) => { throw new Error("STUB"); });
   for (const group of groupComponents) {
     const { bbox, children } = group;
     const size = bbox[crossSizeKey];
     const step = size / children.length;
     const justifyContent = children.reduce((j, child) => {
-      const j0 = child.layout?.justifyContent;
-      return j0 ? j0 : j;
+        throw new Error("STUB");
     }, 'flex-start');
     const L = children.map((d, i) => {
-      const { length = step, padding = 0 } = d;
-      return length + (i === children.length - 1 ? 0 : padding);
+        throw new Error("STUB");
     });
     const totalLength = sum(L);
     const diff = size - totalLength;

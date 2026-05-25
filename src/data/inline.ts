@@ -4,8 +4,7 @@ import { InlineConnector } from '../spec';
 export type InlineOptions = Omit<InlineConnector, 'type'>;
 
 export const Inline: DC<InlineOptions> = (options) => {
-  const { value } = options;
-  return () => value;
+    throw new Error("STUB");
 };
 
 Inline.props = {};

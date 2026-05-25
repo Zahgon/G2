@@ -36,46 +36,5 @@ export function getContainerSize(container: HTMLElement): Size {
  * @description Calculate the real canvas size by view options.
  */
 export function getBBoxSize(options: G2View): Size {
-  const {
-    height,
-    width,
-    padding = 0,
-    paddingLeft = padding,
-    paddingRight = padding,
-    paddingTop = padding,
-    paddingBottom = padding,
-    margin = 0,
-    marginLeft = margin,
-    marginRight = margin,
-    marginTop = margin,
-    marginBottom = margin,
-    inset = 0,
-    insetLeft = inset,
-    insetRight = inset,
-    insetTop = inset,
-    insetBottom = inset,
-  } = options;
-
-  // @todo Add this padding to theme.
-  // 30 is default size for padding, which defined in runtime.
-  const maybeAuto = (padding) => (padding === 'auto' ? 20 : padding);
-
-  const finalWidth =
-    width -
-    maybeAuto(paddingLeft) -
-    maybeAuto(paddingRight) -
-    marginLeft -
-    marginRight -
-    insetLeft -
-    insetRight;
-  const finalHeight =
-    height -
-    maybeAuto(paddingTop) -
-    maybeAuto(paddingBottom) -
-    marginTop -
-    marginBottom -
-    insetTop -
-    insetBottom;
-
-  return { width: finalWidth, height: finalHeight };
+    throw new Error("STUB");
 }

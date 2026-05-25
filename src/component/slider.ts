@@ -41,44 +41,7 @@ export const Slider: GCC<SliderOptions> = (options) => {
   } = options;
 
   return (context) => {
-    const {
-      scales: [scale],
-      value,
-      theme,
-      coordinate,
-    } = context;
-    const { bbox } = value;
-
-    const { width, height } = bbox;
-    const { slider: sliderTheme = {} } = theme;
-    const defaultFormatter = scale.getFormatter?.() || ((v) => v + '');
-    const formatter =
-      typeof labelFormatter === 'string'
-        ? format(labelFormatter)
-        : labelFormatter;
-
-    const isHorizontal = orientation === 'horizontal';
-    const reverse = isTranspose(coordinate) && isHorizontal;
-    const { trackSize = sliderTheme.trackSize } = style;
-    const [x0, y0] = inferPosition(bbox, position, trackSize);
-    return new SliderComponent({
-      className: 'slider',
-      style: Object.assign({}, sliderTheme, {
-        x: x0,
-        y: y0,
-        trackLength: isHorizontal ? width : height,
-        orientation,
-        formatter: (v) => {
-          const f = formatter || defaultFormatter;
-          const v1 = reverse ? 1 - v : v;
-          const tick = invert(scale, v1, true);
-          return f(tick);
-        },
-        sparklineData: inferSparklineData(options, context),
-        ...style,
-        ...rest,
-      }),
-    }) as unknown as DisplayObject;
+      throw new Error("STUB");
   };
 };
 
@@ -86,27 +49,16 @@ function markValue(markState, channels: string[]) {
   const [value] = Array.from(markState.entries())
     .filter(
       ([mark]) =>
-        mark.type === 'line' ||
-        mark.type === 'area' ||
-        mark.type === 'interval',
+        { throw new Error("STUB"); },
     )
-    .filter(([mark]) => mark.slider)
+    .filter(([mark]) => { throw new Error("STUB"); })
     .map(([mark]) => {
-      const { encode, slider } = mark;
-      if (slider?.x) {
-        const channel = (name) => {
-          const channel = encode[name];
-          return [name, channel ? channel.value : undefined];
-        };
-        return Object.fromEntries(channels.map(channel));
-      }
+        throw new Error("STUB");
     });
 
   if (!value?.series) return value?.y;
   const result = value.series.reduce((acc, curr, index) => {
-    acc[curr] = acc[curr] || [];
-    acc[curr].push(value.y[index]);
-    return acc;
+      throw new Error("STUB");
   }, {});
   return Object.values(result);
 }

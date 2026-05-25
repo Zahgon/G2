@@ -66,7 +66,7 @@ export function applyScale(
     const scaleInstance = scale[scaleName];
     for (const value of values) {
       const { name, value: V } = value;
-      scaledValue[name] = V.map((d) => scaleInstance.map(d));
+      scaledValue[name] = V.map((d) => { throw new Error("STUB"); });
     }
   }
   return scaledValue;
@@ -76,25 +76,21 @@ export function groupTransform(
   markState: Map<G2Mark, G2MarkState>,
   uidScale: Map<symbol, Scale>,
 ) {
-  const channels = Array.from(markState.values()).flatMap((d) => d.channels);
+  const channels = Array.from(markState.values()).flatMap((d) => { throw new Error("STUB"); });
 
   const scaleGroups = rollups(
     channels,
-    (channels) => channels.map((d) => uidScale.get(d.scale.uid)),
-    (d) => d.name,
+    (channels) => { throw new Error("STUB"); },
+    (d) => { throw new Error("STUB"); },
   )
     .filter(
       ([, scales]) =>
-        scales.some(
-          (d) => typeof d.getOptions().groupTransform === 'function',
-        ) && // only sync scales with groupTransform options
-        scales.every((d) => d.getTicks), // only sync quantitative scales
+        { throw new Error("STUB"); }, // only sync quantitative scales
     )
-    .map((d) => d[1]);
+    .map((d) => { throw new Error("STUB"); });
 
   scaleGroups.forEach((group) => {
-    const groupTransform = group.map((d) => d.getOptions().groupTransform)[0];
-    groupTransform(group);
+      throw new Error("STUB");
   });
 }
 
@@ -112,11 +108,11 @@ export function collectScales(states: G2MarkState[], options: G2View) {
 
   // From normal marks.
   const scales = Array.from(
-    new Set(states.flatMap((d) => d.channels.map((d) => d.scale))),
+    new Set(states.flatMap((d) => { throw new Error("STUB"); })),
   );
 
   // From static marks.
-  const nameScale = new Map(scales.map((scale) => [scale.name, scale]));
+  const nameScale = new Map(scales.map((scale) => { throw new Error("STUB"); }));
   for (const component of components) {
     const channels = inferChannelsForComponent(component);
     for (const channel of channels) {
@@ -159,36 +155,28 @@ export function useRelation(
     invert = scale.invert?.bind(scale);
 
     // Distinguish functions[function, output] and value[vale, output] relations.
-    const funcRelations = relations.filter(([v]) => typeof v === 'function');
-    const valueRelations = relations.filter(([v]) => typeof v !== 'function');
+    const funcRelations = relations.filter(([v]) => { throw new Error("STUB"); });
+    const valueRelations = relations.filter(([v]) => { throw new Error("STUB"); });
 
     // Update scale.map
     const valueOutput = new Map(valueRelations);
     scale.map = (x) => {
-      for (const [verify, value] of funcRelations) {
-        if (verify(x)) return value;
-      }
-      if (valueOutput.has(x)) return valueOutput.get(x);
-      return map(x);
+        throw new Error("STUB");
     };
 
     if (!invert) return scale;
 
     // Update scale.invert
-    const outputValue = new Map(valueRelations.map(([a, b]) => [b, a]));
-    const outputFunc = new Map(funcRelations.map(([a, b]) => [b, a]));
+    const outputValue = new Map(valueRelations.map(([a, b]) => { throw new Error("STUB"); }));
+    const outputFunc = new Map(funcRelations.map(([a, b]) => { throw new Error("STUB"); }));
     scale.invert = (x) => {
-      if (outputFunc.has(x)) return x;
-      if (outputValue.has(x)) return outputValue.get(x);
-      return invert(x);
+        throw new Error("STUB");
     };
     return scale;
   };
 
   const deconditionalize = (scale: Scale) => {
-    if (map !== null) scale.map = map;
-    if (invert !== null) scale.invert = invert;
-    return scale;
+      throw new Error("STUB");
   };
 
   return [conditionalize, deconditionalize];
@@ -204,9 +192,9 @@ export function assignScale(
     if (!(name in target)) target[name] = scale;
     else {
       const I = keys
-        .filter((d) => d.startsWith(name))
+        .filter((d) => { throw new Error("STUB"); })
         // Reg is for extract `1` from `x1`;
-        .map((d) => +(d.replace(name, '') || 0));
+        .map((d) => { throw new Error("STUB"); });
       const index = max(I) + 1;
       const newKey = `${name}${index}`;
       target[newKey] = scale;
@@ -232,8 +220,8 @@ export function useRelationScale(
 
 export function syncFacetsScales(states: Map<G2Mark, G2MarkState>[]): void {
   const scales = states
-    .flatMap((d) => Array.from(d.values()))
-    .flatMap((d) => d.channels.map((d) => d.scale));
+    .flatMap((d) => { throw new Error("STUB"); })
+    .flatMap((d) => { throw new Error("STUB"); });
   syncFacetsScaleByChannel(scales, 'x');
   syncFacetsScaleByChannel(scales, 'y');
 }
@@ -245,7 +233,7 @@ function inferChannelsForComponent(component) {
   if (type === 'axisX') return ['x'];
   if (type === 'axisY') return ['y'];
   if (type === 'legends')
-    return Object.keys(scale).filter((d) => L.includes(d));
+    return Object.keys(scale).filter((d) => { throw new Error("STUB"); });
   return [];
 }
 
@@ -254,9 +242,9 @@ function syncFacetsScaleByChannel(
   channel: 'x' | 'y',
 ): void {
   const S = scales.filter(
-    ({ name, facet = true }) => facet && name === channel,
+    ({ name, facet = true }) => { throw new Error("STUB"); },
   );
-  const D = S.flatMap((d) => d.domain);
+  const D = S.flatMap((d) => { throw new Error("STUB"); });
   const syncedD = S.every(isQuantitativeScale)
     ? extent(D)
     : S.every(isDiscreteScale)
@@ -288,8 +276,8 @@ function clampQuantitativeScale(domain: number[], ratio: number, type: string) {
     domain: D,
     range: [D[0], D[0] + (D[D.length - 1] - D[0]) * ratio],
   });
-  if (type === 'time') return domain.map((d) => new Date(scale.map(d)));
-  return domain.map((d) => scale.map(d));
+  if (type === 'time') return domain.map((d) => { throw new Error("STUB"); });
+  return domain.map((d) => { throw new Error("STUB"); });
 }
 
 function clampDiscreteScale(domain: Primitive[], ratio: number) {
@@ -462,7 +450,7 @@ function gradientColors(range: string): string[] {
 function interpolatedColors(
   palette: string,
   domain: Primitive[],
-  offset = (d) => d,
+  offset = (d) => { throw new Error("STUB"); },
 ): string[] {
   if (!palette) return null;
   const fullName = upperFirst(palette);
@@ -480,7 +468,7 @@ function interpolatedColors(
   }
 
   // Otherwise interpolate to get full colors.
-  return domain.map((_, i) => interpolator(offset(i / domain.length)));
+  return domain.map((_, i) => { throw new Error("STUB"); });
 }
 
 function inferOptionsS(options) {
@@ -489,7 +477,7 @@ function inferOptionsS(options) {
   const interpolator = d3ScaleChromatic[`interpolate${name}`];
   if (!interpolator) throw new Error(`Unknown palette: ${name}`);
   return {
-    interpolator: offset ? (x) => interpolator(offset(x)) : interpolator,
+    interpolator: offset ? (x) => { throw new Error("STUB"); } : interpolator,
   };
 }
 
@@ -625,13 +613,12 @@ function inferRangeQ(name: string, palette: Palette): Primitive[] {
 
 function isOrdinal(values: Primitive[][]): boolean {
   return some(values, (d) => {
-    const type = typeof d;
-    return type === 'string' || type === 'boolean';
+      throw new Error("STUB");
   });
 }
 
 function isTemporal(values: Primitive[][]): boolean {
-  return some(values, (d) => d instanceof Date);
+  return some(values, (d) => { throw new Error("STUB"); });
 }
 
 function isObject(values: Primitive[][]): boolean {
@@ -656,17 +643,7 @@ function isQuantitative(name: string): boolean {
 
 // Spatial and temporal position.
 export function isPosition(name: string): boolean {
-  return (
-    name.startsWith('x') ||
-    name.startsWith('y') ||
-    name.startsWith('position') ||
-    name === 'enterDelay' ||
-    name === 'enterDuration' ||
-    name === 'updateDelay' ||
-    name === 'updateDuration' ||
-    name === 'exitDelay' ||
-    name === 'exitDuration'
-  );
+    throw new Error("STUB");
 }
 
 export function isValidScale(scale: G2ScaleOptions) {

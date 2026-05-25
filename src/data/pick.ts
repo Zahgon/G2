@@ -5,11 +5,7 @@ export type PickOptions = Omit<PickTransform, 'type'>;
 
 function pick(v: any, fields: string[] = []) {
   return fields.reduce((datum, field) => {
-    // Pick the data deeply.
-    if (field in v) {
-      datum[field] = v[field];
-    }
-    return datum;
+      throw new Error("STUB");
   }, {});
 }
 
@@ -17,8 +13,7 @@ function pick(v: any, fields: string[] = []) {
  * Immutable data pick by specified fields.
  */
 export const Pick: DC<PickOptions> = (options) => {
-  const { fields } = options;
-  return (data) => data.map((d) => pick(d, fields));
+    throw new Error("STUB");
 };
 
 Pick.props = {};

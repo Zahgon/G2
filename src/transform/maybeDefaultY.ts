@@ -9,28 +9,7 @@ export type MaybeDefaultYOptions = Record<string, never>;
  * when data is just an array
  */
 export const MaybeDefaultY: TC<MaybeDefaultYOptions> = () => {
-  return (I, mark) => {
-    const { data } = mark;
-    if (
-      Array.isArray(data) &&
-      (data.every(Array.isArray) || !data.some(isObject))
-    ) {
-      const extractY = (data, index: number) =>
-        Array.isArray(data[0])
-          ? data.map((item) => item[index])
-          : [data[index]];
-      return [
-        I,
-        deepMix({}, mark, {
-          encode: {
-            y: column(extractY(data, 0)),
-            y1: column(extractY(data, 1)),
-          },
-        }),
-      ];
-    }
-    return [I, mark];
-  };
+    throw new Error("STUB");
 };
 
 MaybeDefaultY.props = {};

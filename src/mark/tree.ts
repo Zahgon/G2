@@ -9,7 +9,7 @@ import {
 import { maybeAnimation, subTooltip } from '../utils/mark';
 
 const DEFAULT_LAYOUT_OPTIONS: TreeTransformOptions = {
-  sortBy: (a, b) => b.value - a.value,
+  sortBy: (a, b) => { throw new Error("STUB"); },
 };
 
 const DEFAULT_NODE_OPTIONS = {
@@ -41,68 +41,7 @@ const DEFAULT_LABEL_OPTIONS = {
 export type TreeOptions = Omit<TreeMark, 'type'>;
 
 export const Tree: CC<TreeOptions> = (options) => {
-  const {
-    data,
-    encode = {},
-    scale = {},
-    style = {},
-    layout = {},
-    nodeLabels = [],
-    linkLabels = [],
-    animate = {},
-    tooltip = {},
-  } = options;
-  const valueEncode = encode?.value;
-  const { nodes, edges } = TreeTransform({
-    ...DEFAULT_LAYOUT_OPTIONS,
-    ...layout,
-    field: valueEncode,
-  })(data);
-
-  const nodeTooltip = subTooltip(
-    tooltip,
-    'node',
-    {
-      title: 'name',
-      items: ['value'],
-    },
-    true,
-  );
-
-  const linkTooltip = subTooltip(tooltip, 'link', {
-    title: '',
-    items: [
-      (d) => ({ name: 'source', value: d.source.name }),
-      (d) => ({ name: 'target', value: d.target.name }),
-    ],
-  });
-
-  return [
-    deepMix({}, DEFAULT_LINK_OPTIONS, {
-      data: edges,
-      encode: subObject(encode, 'link'),
-      scale: subObject(scale, 'link'),
-      labels: linkLabels,
-      style: { stroke: '#999', ...subObject(style, 'link') },
-      tooltip: linkTooltip,
-      animate: maybeAnimation(animate, 'link'),
-    }),
-    deepMix({}, DEFAULT_NODE_OPTIONS, {
-      data: nodes,
-      scale: subObject(scale, 'node'),
-      encode: subObject(encode, 'node'),
-      labels: [
-        {
-          ...DEFAULT_LABEL_OPTIONS,
-          ...subObject(style, 'label'),
-        },
-        ...nodeLabels,
-      ],
-      style: { ...subObject(style, 'node') },
-      tooltip: nodeTooltip,
-      animate: maybeAnimation(animate, 'node'),
-    }),
-  ];
+    throw new Error("STUB");
 };
 
 Tree.props = {};

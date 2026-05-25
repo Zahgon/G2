@@ -6,8 +6,7 @@ export type LegendContinuousBlockOptions = LegendContinuousOptions;
 export const LegendContinuousBlock: GCC<LegendContinuousBlockOptions> = (
   options,
 ) => {
-  return (...args) =>
-    LegendContinuous(Object.assign({}, { block: true }, options))(...args);
+    throw new Error("STUB");
 };
 
 LegendContinuousBlock.props = {

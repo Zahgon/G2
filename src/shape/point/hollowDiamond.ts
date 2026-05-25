@@ -7,14 +7,7 @@ export type HollowDiamondOptions = Record<string, any>;
  * ◇
  */
 export const HollowDiamond: SC<HollowDiamondOptions> = (options, context) => {
-  return Color(
-    {
-      colorAttribute: 'stroke',
-      symbol: 'diamond',
-      ...options,
-    },
-    context,
-  );
+    throw new Error("STUB");
 };
 
 HollowDiamond.props = {

@@ -13,13 +13,7 @@ export type FoldOptions = Omit<FoldTransform, 'type'>;
  * and `value` (contains the original data value.)
  */
 export const Fold: DC<FoldOptions> = (options) => {
-  const { fields, key = 'key', value = 'value' } = options;
-  return (data) => {
-    if (isEmpty(fields)) return data;
-    return data.flatMap((d) =>
-      fields.map((f) => ({ ...d, [key]: f, [value]: d[f] })),
-    );
-  };
+    throw new Error("STUB");
 };
 
 Fold.props = {};

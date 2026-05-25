@@ -10,7 +10,7 @@ export function preprocessOption<T extends G2ViewTree = G2ViewTree>(
   // If there are children, recursively convert each child node.
   if (convertedOptions.children && Array.isArray(convertedOptions.children)) {
     convertedOptions.children = convertedOptions.children.map((child) =>
-      preprocessOption(child),
+      { throw new Error("STUB"); },
     );
   }
 

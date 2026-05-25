@@ -5,7 +5,7 @@ import { ScaleComponent as SC } from '../runtime';
 export type ConstantOptions = Omit<ConstantScaleSpec, 'type'>;
 
 export const Constant: SC<ConstantOptions> = (options) => {
-  return new ConstantScale(options);
+    throw new Error("STUB");
 };
 
 Constant.props = {};

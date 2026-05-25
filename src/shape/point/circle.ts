@@ -20,26 +20,7 @@ export const BaseCircle: SC<ColorOptions> = (options, context) => {
 
   const { coordinate, document } = context;
   return (points, value, defaults) => {
-    const { lineWidth, color: defaultColor } = defaults;
-    const finalLineWidth = style.stroke ? lineWidth || 1 : lineWidth;
-    const { color = defaultColor, transform, opacity } = value;
-    const [cx, cy] = getOrigin(points);
-    const r = getRadius(mode, points, value, coordinate);
-    const finalRadius = r || style.r || defaults.r;
-    return select(document.createElement('circle', {}))
-      .call(applyStyle, defaults)
-      .style('fill', 'transparent')
-      .style('cx', cx)
-      .style('cy', cy)
-      .style('r', finalRadius)
-      .style('lineWidth', finalLineWidth)
-      .style('transform', transform)
-      .style('transformOrigin', `${cx} ${cy}`)
-      .style('stroke', color)
-      .style(toOpacityKey(options), opacity)
-      .style(colorAttribute, color)
-      .call(applyStyle, style)
-      .node();
+      throw new Error("STUB");
   };
 };
 
@@ -47,7 +28,7 @@ export const BaseCircle: SC<ColorOptions> = (options, context) => {
  * ●
  */
 export const Circle: SC<PointOptions> = (options, context) => {
-  return BaseCircle({ colorAttribute: 'fill', ...options }, context);
+    throw new Error("STUB");
 };
 
 Circle.props = {

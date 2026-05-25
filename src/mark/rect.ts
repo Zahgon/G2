@@ -17,20 +17,7 @@ const shape = {
 export type RectOptions = Omit<RectMark, 'type'>;
 
 export const Rect: MC<RectOptions> = () => {
-  return (index, scale, value, coordinate) => {
-    const { x: X, x1: X1, y: Y, y1: Y1 } = value;
-
-    const P = Array.from(index, (i) => {
-      const p1 = [+X[i], +Y[i]];
-      const p2 = [+X1[i], +Y[i]];
-      const p3 = [+X1[i], +Y1[i]];
-      const p4 = [+X[i], +Y1[i]];
-
-      return [p1, p2, p3, p4].map((d) => coordinate.map(d)) as Vector2[];
-    });
-
-    return [index, P];
-  };
+    throw new Error("STUB");
 };
 
 Rect.props = {

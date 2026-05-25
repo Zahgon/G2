@@ -6,20 +6,12 @@ const cache = flru(3);
  */
 export function lru<T = any, V = any>(
   fn: (...args: T[]) => V,
-  keyFn: (...args: T[]) => string = (...args) => `${args[0]}`,
+  keyFn: (...args: T[]) => string = (...args) => { throw new Error("STUB"); },
   maxSize = 16,
 ) {
   const cache = flru(maxSize);
 
   return (...args) => {
-    const key = keyFn(...args);
-    let v = cache.get(key);
-
-    if (cache.has(key)) return cache.get(key);
-
-    v = fn(...args);
-    cache.set(key, v);
-
-    return v;
+      throw new Error("STUB");
   };
 }

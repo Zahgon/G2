@@ -24,13 +24,7 @@ export type LinkOptions = Omit<LineMark, 'type'>;
  */
 export const Link: MC<LinkOptions> = (options) => {
   return (index, scale, value, coordinate) => {
-    const { x: X, y: Y, x1: X1 = X, y1: Y1 = Y } = value;
-    const offset = createBandOffset(scale, value, options);
-    const P = index.map((i) => [
-      coordinate.map(offset([+X[i], +Y[i]], i)) as Vector2,
-      coordinate.map(offset([+X1[i], +Y1[i]], i)) as Vector2,
-    ]);
-    return [index, P];
+      throw new Error("STUB");
   };
 };
 

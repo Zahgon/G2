@@ -10,16 +10,7 @@ import { Curve } from './curve';
 export type SmoothOptions = Record<string, any>;
 
 export const Smooth: SC<SmoothOptions> = (options, context) => {
-  const { ...rest } = options;
-  const { coordinate } = context;
-  return (...params) => {
-    const curve = isPolar(coordinate)
-      ? curveCatmullRomClosed
-      : isTranspose(coordinate)
-      ? curveMonotoneY
-      : curveMonotoneX;
-    return Curve({ curve, ...rest }, context)(...params);
-  };
+    throw new Error("STUB");
 };
 
 Smooth.props = {

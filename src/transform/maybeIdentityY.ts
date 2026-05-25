@@ -9,13 +9,7 @@ export type MaybeIdentityYOptions = Record<string, never>;
  * This is useful for point geometry.
  */
 export const MaybeIdentityY: TC<MaybeIdentityYOptions> = () => {
-  return (I, mark) => {
-    const { encode } = mark;
-    const { y1 } = encode;
-    if (y1) return [I, mark];
-    const [Y] = columnOf(encode, 'y');
-    return [I, deepMix({}, mark, { encode: { y1: column([...Y]) } })];
-  };
+    throw new Error("STUB");
 };
 
 MaybeIdentityY.props = {};

@@ -16,7 +16,7 @@ const shape = {
 export type RangeXOptions = Omit<RangeXMark, 'type'>;
 
 export const RangeX: MC<RangeXOptions> = () => {
-  return AbstractRange({ extendY: true });
+    throw new Error("STUB");
 };
 
 RangeX.props = {

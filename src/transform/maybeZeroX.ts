@@ -9,18 +9,7 @@ export type MaybeZeroXOptions = Record<string, never>;
  * This is useful for interval geometry.
  */
 export const MaybeZeroX: TC<MaybeZeroXOptions> = () => {
-  return (I, mark) => {
-    const { encode } = mark;
-    const { x } = encode;
-    if (x !== undefined) return [I, mark];
-    return [
-      I,
-      deepMix({}, mark, {
-        encode: { x: inferredColumn(constant(I, 0)) },
-        scale: { x: { guide: null } },
-      }),
-    ];
-  };
+    throw new Error("STUB");
 };
 
 MaybeZeroX.props = {};

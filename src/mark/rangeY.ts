@@ -16,7 +16,7 @@ const shape = {
 export type RangeYOptions = Omit<RangeYMark, 'type'>;
 
 export const RangeY: MC<RangeYOptions> = () => {
-  return AbstractRange({ extendX: true });
+    throw new Error("STUB");
 };
 
 RangeY.props = {
